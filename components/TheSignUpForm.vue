@@ -133,6 +133,8 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
       password: accountData.password,
     });
 
+    console.log("retrieved token");
+
     await fetch(`${config.public.medusaUrl}/store/customers`, {
       credentials: "include",
       method: "POST",
@@ -148,12 +150,15 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
       }),
     });
 
+    console.log("fetch completed");
+
     loading.value = false;
     snackbarMessage.value = "Zarejestrowano pomyślnie";
     snackbarColor.value = "success";
     snackbarVisible.value = true;
     router.push(ROUTES.LOGIN_PAGE);
   } catch (e) {
+    console.error(e);
     const { message, color, timeout } = handleFetchError(e);
     if (message !== "") {
       snackarStore.showSnackbar(message, color, timeout);
