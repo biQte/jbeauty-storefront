@@ -1,0 +1,41 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxi dev --inspect",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@medusajs/client-types": "^0.2.12",
+    "@medusajs/js-sdk": "^2.0.1",
+    "@medusajs/types": "^2.0.1",
+    "@nuxtjs/dotenv": "^1.4.2",
+    "@pinia/nuxt": "^0.5.5",
+    "@stripe/stripe-js": "^4.9.0",
+    "@vee-validate/yup": "^4.13.2",
+    "email-validator": "^2.0.4",
+    "nuxt": "^3.13.0",
+    "pinia": "^2.2.4",
+    "stripe": "^17.3.1",
+    "vee-validate": "^4.13.2",
+    "vue": "^3.5.12",
+    "vue-router": "latest",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@vueuse/core": "^11.2.0",
+    "@vueuse/nuxt": "^11.2.0",
+    "autoprefixer": "^10.4.20",
+    "nuxt-vuetify": "^1.0.1",
+    "postcss": "^8.4.47",
+    "sass-embedded": "^1.79.4",
+    "tailwindcss": "^3.4.13",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vuetify": "^3.7.2"
+  }
+}
