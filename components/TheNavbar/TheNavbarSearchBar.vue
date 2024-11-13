@@ -5,6 +5,8 @@ const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
 const router = useRouter();
 
+const config = useRuntimeConfig();
+
 const emit = defineEmits(["closeDialog"]);
 
 const snackarStore = useSnackbarStore();
@@ -82,7 +84,10 @@ const navigateToSearchPage = () => {
         >
           <div class="product-result-content">
             <v-img
-              :src="product.thumbnail!"
+              :src="product.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
               width="50"
               height="50"
               cover

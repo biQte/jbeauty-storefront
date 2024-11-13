@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       medusaUrl: process.env.NUXT_MEDUSA_URL,
       medusaPublishableKey: process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
       stripePublicKey: process.env.NUXT_PUBLIC_STRIPE_KEY,
+      storeUrl: process.env.NUXT_STORE_URL,
     },
     nitro: {
       envExpansion: true,

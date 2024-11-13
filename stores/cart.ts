@@ -41,8 +41,10 @@ export const useCartStore = defineStore("cart", () => {
     try {
       const cartResponse = await medusaClient.store.cart.create({
         items,
-        region_id: "reg_01JB4P2DW6KD26916HWVTQH288",
-        sales_channel_id: "sc_01JB4NT3TED1JT059QYMRFA4ND",
+        // region_id: "reg_01JB4P2DW6KD26916HWVTQH288",
+        // sales_channel_id: "sc_01JB4NT3TED1JT059QYMRFA4ND",
+        region_id: "reg_01JCGTJ48DSFDXBFQ0N6RS2A5H",
+        sales_channel_id: "sc_01JCEY81HZ4GRS6YE12VQ0TTGJ",
       });
 
       cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;

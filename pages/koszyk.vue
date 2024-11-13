@@ -12,6 +12,7 @@ const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
 
 const { width, height } = useWindowSize();
+const config = useRuntimeConfig();
 
 const selectedShippingOption = ref<string>();
 const router = useRouter();
@@ -279,7 +280,10 @@ onMounted(async () => {
                 <v-img
                   class="product-cover-image"
                   cover
-                  :src="item.thumbnail!"
+                  :src="item.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
                 ></v-img>
                 {{ item.product_title }}
               </NuxtLink>
@@ -339,7 +343,13 @@ onMounted(async () => {
           <tr v-for="item in cartStore.cartObject.items" :key="item.id">
             <th>
               <NuxtLink :to="`/produkt/${item.product_handle}`">
-                <v-img :src="item.thumbnail!" cover></v-img>
+                <v-img
+                  :src="item.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
+                  cover
+                ></v-img>
                 <p>{{ item.product_title }}</p>
               </NuxtLink>
               <p>

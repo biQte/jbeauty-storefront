@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
+const config = useRuntimeConfig();
 
 const { width, height } = useWindowSize();
 
@@ -79,7 +80,15 @@ watch(currentPage, (newPage) => {
     <div class="products-wrapper">
       <v-card v-for="product in products" :key="product.id" width="340px">
         <NuxtLink :to="`/produkt/${product.handle}`">
-          <v-img :src="product.thumbnail!" cover width="340" height="340" />
+          <v-img
+            :src="product.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
+            cover
+            width="340"
+            height="340"
+          />
           <v-card-item>
             <v-card-title>{{ product.title }}</v-card-title>
             <v-card-subtitle

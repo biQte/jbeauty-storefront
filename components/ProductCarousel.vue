@@ -9,6 +9,8 @@ const props = defineProps<{
 }>();
 const { width } = useWindowSize();
 
+const config = useRuntimeConfig();
+
 const chunkedProducts = computed(() => {
   const chunkSize =
     width.value >= 1600
@@ -69,7 +71,17 @@ function chunkArray(arr: any[], size: number) {
             width="340px"
           >
             <NuxtLink :to="`/produkt/${product.handle}`">
-              <v-img :src="product.thumbnail" cover width="340" height="340" />
+              <v-img
+                :src="
+                  product.thumbnail.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )
+                "
+                cover
+                width="340"
+                height="340"
+              />
               <v-card-item>
                 <v-card-title>{{ product.title }}</v-card-title>
                 <v-card-subtitle>{{ formatPrice(product) }}</v-card-subtitle>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { type StoreProduct } from "@medusajs/types";
 
+const config = useRuntimeConfig();
+
 const props = defineProps<{
   products: StoreProduct[];
 }>();
@@ -12,7 +14,10 @@ const props = defineProps<{
       <NuxtLink :to="`/produkt/${product.handle}`">
         <v-card width="340px">
           <v-img
-            :src="product.thumbnail!"
+            :src="product.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
             width="340"
             height="340"
             cover

@@ -6,6 +6,7 @@ const route = useRoute();
 
 const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
+const config = useRuntimeConfig();
 
 const orderId = ref<string>(route.params.zamowienie as string);
 const { width, height } = useWindowSize();

@@ -10,6 +10,7 @@ const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const router = useRouter();
 const snackbarStore = useSnackbarStore();
+const config = useRuntimeConfig();
 
 const { width, height } = useWindowSize();
 const productsObject = ref<Product[]>();
@@ -272,7 +273,12 @@ const toggleDetails = () => {
                   :key="image.id"
                   width="150"
                   alt=""
-                  :src="image.url"
+                  :src="
+                    image.url.replace(
+                      'http://localhost:9000',
+                      config.public.medusaUrl
+                    )
+                  "
                   class="cursor-pointer"
                   @click="imageToShow = image.id"
                   v-show="!loading"
@@ -314,7 +320,16 @@ const toggleDetails = () => {
                     v-for="image in product?.images"
                     :key="image.id"
                   >
-                    <v-img contain class="w-full" :src="image.url">
+                    <v-img
+                      contain
+                      class="w-full"
+                      :src="
+                        image.url.replace(
+                          'http://localhost:9000',
+                          config.public.medusaUrl
+                        )
+                      "
+                    >
                       <v-overlay
                         activator="parent"
                         absolute
@@ -329,7 +344,12 @@ const toggleDetails = () => {
                           contain
                           :width="width"
                           :height="height"
-                          :src="image.url"
+                          :src="
+                            image.url.replace(
+                              'http://localhost:9000',
+                              config.public.medusaUrl
+                            )
+                          "
                         ></v-img>
                       </v-overlay>
                     </v-img>
@@ -348,6 +368,9 @@ const toggleDetails = () => {
           <h1 v-show="!loading" class="font-semibold text-3xl">
             {{ product?.title }}
           </h1>
+          <h3 v-show="!loading" class="font-semibold text-2xl">
+            {{ product?.subtitle }}
+          </h3>
           <p v-show="!loading && product?.variants" class="text-lg mt-2 mb-4">
             {{ "PLN" }}
             {{

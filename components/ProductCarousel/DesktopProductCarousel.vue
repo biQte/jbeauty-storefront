@@ -5,6 +5,8 @@ const props = defineProps<{
   products: StoreProduct[];
 }>();
 
+const config = useRuntimeConfig();
+
 const chunkProducts = (products: StoreProduct[], chunkSize: number) => {
   const chunks = [];
   for (let i = 0; i < products.length; i += chunkSize) {
@@ -26,7 +28,10 @@ const chunkProducts = (products: StoreProduct[], chunkSize: number) => {
           <NuxtLink :to="`/produkt/${product.handle}`">
             <v-card width="340px">
               <v-img
-                :src="product.thumbnail!"
+                :src="product.thumbnail!.replace(
+                    'http://localhost:9000',
+                    config.public.medusaUrl
+                  )"
                 width="340"
                 height="340"
                 cover

@@ -61,7 +61,7 @@ onMounted(async () => {
 
 <template>
   <div class="navbar-wrapper">
-    <div class="mobile-wrapper" v-if="width <= 1280">
+    <div class="mobile-wrapper" v-if="width <= 1400">
       <div class="hamburger-and-logo-wrapper">
         <v-menu
           v-model="mobileMenu"
@@ -138,11 +138,11 @@ onMounted(async () => {
                 >Nowości</v-btn
               >
               <v-btn
-                to="/inspiracje"
+                to="/kody-rabatowe"
                 @click="closeMenu"
                 class="mobile-menu-item"
                 variant="text"
-                >Inspiracje</v-btn
+                >Kody rabatowe</v-btn
               >
               <v-btn
                 to="/kontakt"
@@ -154,15 +154,15 @@ onMounted(async () => {
             </ul>
           </v-card>
         </v-menu>
-        <NuxtLink to="/" class="logo">JBEAUTY</NuxtLink>
+        <NuxtLink to="/" class="logo">JBeauty</NuxtLink>
       </div>
       <div class="mobile-action-buttons">
         <TheNavbarTheMobileNavbarActionList />
       </div>
     </div>
-    <div class="desktop-wrapper" v-if="width > 1280">
+    <div class="desktop-wrapper" v-if="width > 1400">
       <div class="navbar-wrapper-top">
-        <NuxtLink to="/"><div class="logo">JBEAUTY</div></NuxtLink>
+        <NuxtLink to="/"><div class="logo">JBeauty</div></NuxtLink>
         <div class="search-bar">
           <TheNavbarSearchBar />
         </div>
@@ -217,10 +217,10 @@ onMounted(async () => {
           <v-btn
             class="menu-link"
             variant="text"
-            :to="`/inspiracje`"
+            :to="`/kody-rabatowe`"
             :active="false"
             size="small"
-            >Inspiracje</v-btn
+            >Kody rabatowe</v-btn
           >
           <v-btn
             class="menu-link"
@@ -245,7 +245,7 @@ onMounted(async () => {
   width: 100%;
   min-height: 80px;
   background-color: #ffffff;
-  @media only screen and (max-width: 1280px) {
+  @media only screen and (max-width: 1400px) {
     flex-direction: row;
   }
 
@@ -270,7 +270,8 @@ onMounted(async () => {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
       text-align: center;
-      font-size: 3rem;
+      font-size: 4rem;
+      font-family: "Great Vibes", cursive;
       //font-weight: bold;
     }
 
@@ -314,7 +315,8 @@ onMounted(async () => {
       align-items: center;
       justify-content: center;
       .logo {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        font-family: "Great Vibes", cursive;
       }
     }
   }

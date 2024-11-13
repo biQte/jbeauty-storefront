@@ -13,10 +13,7 @@ const { width, height } = useWindowSize();
     interval="3000"
     cycle
   >
-    <v-carousel-item
-      src="https://vividsklep.pl/wp-content/uploads/2024/03/402652876_749359350558640_700289256991602556_n.jpg"
-      cover
-    >
+    <v-carousel-item src="@/assets/img/carousel-item1.jpg" cover>
       <!-- <div class="carousel-item-component">
         <div class="content-wrapper">
           <div class="title-wrapper">Tego kurde tytuł</div>
@@ -28,10 +25,7 @@ const { width, height } = useWindowSize();
       </div> -->
     </v-carousel-item>
 
-    <v-carousel-item
-      src="https://vividsklep.pl/wp-content/uploads/2024/07/83047ec0370a5224d1ecd5dd9afe06230f759995_2024_06_25_bestsellerowe_pedzle_2w1_1920x1648_baner.webp"
-      cover
-    >
+    <v-carousel-item src="@/assets/img/carousel-item2.jpg" cover>
       <!-- <v-container class="fill-height d-flex flex-column">
         <v-row class="flex-grow-1" align="start">Tego kurde tytuł</v-row>
         <v-row class="flex-grow-1" align="center"
@@ -43,11 +37,8 @@ const { width, height } = useWindowSize();
       </v-container> -->
     </v-carousel-item>
 
-    <!-- <v-carousel-item
-      src="https://www.mandarinstone.com/app/uploads/fly-images/291910/Website-Banner-1695x1121px_Outdoor-1920x1080-f50_50.jpg"
-      cover
-    >
-      <v-container class="fill-height d-flex flex-column">
+    <v-carousel-item src="@/assets/img/carousel-item3.jpg" cover>
+      <!--  <v-container class="fill-height d-flex flex-column">
         <v-row class="flex-grow-1" align="start">Tego kurde tytuł</v-row>
         <v-row class="flex-grow-1" align="center"
           >Tego kurde faja bele mole jakiś krótki opis</v-row
@@ -55,8 +46,8 @@ const { width, height } = useWindowSize();
         <v-row class="flex-grow-1" align="end"
           ><v-btn>Jakiś kurde CTA</v-btn></v-row
         >
-      </v-container>
-    </v-carousel-item> -->
+      </v-container> -->
+    </v-carousel-item>
   </v-carousel>
 </template>
 

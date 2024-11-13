@@ -27,23 +27,21 @@
     <div class="footer-wrapper-bottom">
       <div class="about">
         <h4>O nas</h4>
-        <p>blablabla</p>
-        <p>blablabla</p>
-        <p>blablabla</p>
-        <p>blablabla</p>
-        <p>blablabla</p>
-        <p>blablabla</p>
+        <p>Regulamin</p>
+        <p>Dostawa i płatność</p>
+        <p>Odstąpienie od umowy</p>
+        <p>Polityka prywatności</p>
+        <p>Polityka Cookies</p>
       </div>
       <div class="contact">
         <h4>Kontakt</h4>
-        <p>blablabla</p>
-        <p>blablabla</p>
-        <p>blablabla</p>
+        <p>E-mail: info@jbeautysklep.pl</p>
+        <p>Telefon: 792 669 926</p>
       </div>
       <div class="personal">
         <h4>Dane osobowe</h4>
-        <p>blablabla</p>
-        <p>blablabla</p>
+        <p>Konto</p>
+        <p>Zamówienia</p>
       </div>
     </div>
     <div class="legal">
