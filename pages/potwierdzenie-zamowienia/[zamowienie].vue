@@ -147,7 +147,7 @@ onMounted(async () => {
               }}
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>W tym podatek VAT(23%)</td>
             <td>
               {{
@@ -157,7 +157,7 @@ onMounted(async () => {
                 }).format(order?.tax_total!)
               }}
             </td>
-          </tr>
+          </tr> -->
         </tbody>
         <thead>
           <tr>

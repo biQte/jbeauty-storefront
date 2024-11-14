@@ -1034,7 +1034,8 @@ onMounted(() => {});
           }).format(
             Math.floor(
               cartStore.cartObject.item_total +
-                cartStore.cartObject.discount_total * 1.23
+                cartStore.cartObject.discount_total * 1.23 +
+                cartStore.cartObject.shipping_methods![0].amount
             )
           ) + " "
         }}</span>
@@ -1044,7 +1045,7 @@ onMounted(() => {});
             new Intl.NumberFormat("pl-PL", {
               style: "currency",
               currency: "PLN",
-            }).format(cartStore.cartObject?.item_total)
+            }).format(cartStore.cartObject?.total)
           }}</span
         >
       </h4>
