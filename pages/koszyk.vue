@@ -197,7 +197,7 @@ const getPromotionAmount = (promotionId: string) => {
     // @ts-expect-error
     .filter((adjustment) => adjustment.promotion_id === promotionId)
     // @ts-expect-error
-    .reduce((sum, adjustment) => sum + adjustment.amount * 1.23, 0);
+    .reduce((sum, adjustment) => sum + adjustment.amount, 0);
 
   return discountAmount;
 };
