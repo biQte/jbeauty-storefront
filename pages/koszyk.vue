@@ -413,6 +413,15 @@ onMounted(async () => {
         <!-- <div class="totals"> -->
         <v-card :max-width="width * 0.8" class="totals" style="padding: 15px">
           <v-card-title>Podsumowanie koszyka</v-card-title>
+          <h3>
+            Suma produktów:
+            {{
+              new Intl.NumberFormat("pl-PL", {
+                style: "currency",
+                currency: "PLN",
+              }).format(Math.floor(cartStore.cartObject.item_subtotal!))
+            }}
+          </h3>
           <!-- @vue-skip -->
           <h3
             v-if="cartStore.cartObject.promotions"
@@ -430,26 +439,7 @@ onMounted(async () => {
               icon="mdi-close"
             ></v-icon>
           </h3>
-          <h3>
-            Suma produktów:
-            <span v-if="cartStore.cartObject.discount_total" class="strike">{{
-              new Intl.NumberFormat("pl-PL", {
-                style: "currency",
-                currency: "PLN",
-              }).format(
-                Math.floor(
-                  cartStore.cartObject.item_total! +
-                    cartStore.cartObject.discount_total * 1.23
-                )
-              )
-            }}</span>
-            {{
-              new Intl.NumberFormat("pl-PL", {
-                style: "currency",
-                currency: "PLN",
-              }).format(cartStore.cartObject.item_total!)
-            }}
-          </h3>
+
           <!-- <div class="shipping-options">
             <v-radio-group
               label="Wybierz sposób dostawy"
@@ -479,7 +469,7 @@ onMounted(async () => {
               new Intl.NumberFormat("pl-PL", {
                 style: "currency",
                 currency: "PLN",
-              }).format(getTotalAmount)
+              }).format(cartStore.cartObject.item_total)
             }}
             (Zawiera 23% VAT)
           </h3>
