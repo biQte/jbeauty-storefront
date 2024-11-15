@@ -254,7 +254,7 @@ onMounted(async () => {
         </h2>
         <p v-if="!sessionStore.isAuthenticated">
           Masz konto?
-          <v-btn size="small" color="info" :to="ROUTES.LOGIN_PAGE"
+          <v-btn size="small" color="primary" :to="ROUTES.LOGIN_PAGE"
             >Zaloguj się</v-btn
           >
         </p>
@@ -302,6 +302,7 @@ onMounted(async () => {
                 <v-btn
                   @click="decreaseQuantity(item.id)"
                   size="x-small"
+                  rounded
                   icon="mdi-minus"
                 ></v-btn>
                 {{ item.quantity }}
@@ -407,7 +408,7 @@ onMounted(async () => {
             hide-details
             :width="200"
           ></v-text-field>
-          <v-btn @click="applyDiscount" color="info">Zapisz</v-btn>
+          <v-btn @click="applyDiscount" color="primary">Zapisz</v-btn>
         </div>
 
         <!-- <div class="totals"> -->
@@ -493,7 +494,7 @@ onMounted(async () => {
       "
     >
       <h1>Twój koszyk jest pusty</h1>
-      <v-btn color="info" :to="ROUTES.ROOT_PAGE">Kontynuuj zakupy</v-btn>
+      <v-btn color="primary" :to="ROUTES.ROOT_PAGE">Kontynuuj zakupy</v-btn>
     </div>
     <div class="loader" v-if="cartStore.loading">
       <v-progress-circular indeterminate></v-progress-circular>

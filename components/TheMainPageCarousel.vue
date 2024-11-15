@@ -13,41 +13,8 @@ const { width, height } = useWindowSize();
     interval="3000"
     cycle
   >
-    <v-carousel-item src="@/assets/img/carousel-item1.jpg" cover>
-      <!-- <div class="carousel-item-component">
-        <div class="content-wrapper">
-          <div class="title-wrapper">Tego kurde tytuł</div>
-          <div class="text-wrapper">
-            Tego kurde faja bele mole jakiś krótki opis
-          </div>
-          <div class="button-wrapper"><v-btn>CTA</v-btn></div>
-        </div>
-      </div> -->
-    </v-carousel-item>
-
-    <v-carousel-item src="@/assets/img/carousel-item2.jpg" cover>
-      <!-- <v-container class="fill-height d-flex flex-column">
-        <v-row class="flex-grow-1" align="start">Tego kurde tytuł</v-row>
-        <v-row class="flex-grow-1" align="center"
-          >Tego kurde faja bele mole jakiś krótki opis</v-row
-        >
-        <v-row class="flex-grow-1" align="end"
-          ><v-btn>Jakiś kurde CTA</v-btn></v-row
-        >
-      </v-container> -->
-    </v-carousel-item>
-
-    <v-carousel-item src="@/assets/img/carousel-item3.jpg" cover>
-      <!--  <v-container class="fill-height d-flex flex-column">
-        <v-row class="flex-grow-1" align="start">Tego kurde tytuł</v-row>
-        <v-row class="flex-grow-1" align="center"
-          >Tego kurde faja bele mole jakiś krótki opis</v-row
-        >
-        <v-row class="flex-grow-1" align="end"
-          ><v-btn>Jakiś kurde CTA</v-btn></v-row
-        >
-      </v-container> -->
-    </v-carousel-item>
+    <v-carousel-item src="@/assets/img/web.png" cover></v-carousel-item>
+    <v-carousel-item src="@/assets/img/web.jpg" cover></v-carousel-item>
   </v-carousel>
 </template>
 
