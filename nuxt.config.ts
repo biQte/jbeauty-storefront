@@ -17,6 +17,7 @@ export default defineNuxtConfig({
           async: true,
         },
       ],
+      title: "JBeauty",
     },
   },
   runtimeConfig: {
@@ -49,7 +50,10 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vueuse/nuxt",
   ],
-  plugins: ["~/plugins/medusa.ts", "~/plugins/stripe.ts"],
+  plugins: [
+    "~/plugins/medusa.ts",
+    // "~/plugins/stripe.ts"
+  ],
   css: ["~/assets/css/main.css", "@/assets/css/base.scss"],
   postcss: {
     plugins: {
@@ -68,6 +72,9 @@ export default defineNuxtConfig({
     vue: {
       template: {
         transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tag) => ["inpost-geowidget"].includes(tag),
+        },
       },
     },
   },

@@ -7,7 +7,7 @@ import {
   boolean as yupBoolean,
   type InferType,
 } from "yup";
-import type { HttpTypes } from "@medusajs/types";
+import type { HttpTypes, CartDTO } from "@medusajs/types";
 import { ROUTES } from "../constants/routes";
 import { FetchError } from "@medusajs/js-sdk";
 import { Stripe } from "stripe";
@@ -62,6 +62,7 @@ const setupStripe = async () => {
 
   console.log(
     "client secret",
+    // @ts-expect-error
     cartStore.cartObject?.payment_collection?.payment_sessions?.[0].data
       .client_secret as string
   );
@@ -69,6 +70,7 @@ const setupStripe = async () => {
   console.log("cart", cartStore.cartObject);
 
   elements = stripe.elements({
+    // @ts-expect-error
     clientSecret: cartStore.cartObject?.payment_collection
       ?.payment_sessions?.[0].data.client_secret as string,
     appearance,
@@ -428,17 +430,14 @@ const submitForm = handleSubmit(async (values) => {
         wantsInvoice.value.value && !differentThanShipping.value.value
           ? companyName.value.value
           : undefined,
-      metadata:
-        wantsInvoice.value.value && !differentThanShipping.value.value
-          ? {
-              vatNumber:
-                wantsInvoice.value.value && !differentThanShipping.value.value
-                  ? vatNumber.value.value
-                  : undefined,
-              wantsInvoice: !!wantsInvoice.value.value,
-              differentThanShipping: !!differentThanShipping.value.value,
-            }
-          : undefined,
+      metadata: {
+        vatNumber:
+          wantsInvoice.value.value && !differentThanShipping.value.value
+            ? vatNumber.value.value
+            : undefined,
+        wantsInvoice: !!wantsInvoice.value.value,
+        differentThanShipping: !!differentThanShipping.value.value,
+      },
     };
 
     const billingAddress: HttpTypes.StoreAddAddress =
@@ -562,6 +561,7 @@ const nextStep = async () => {
           : "pp_system_default"
       );
       if (
+        // @ts-expect-error
         cartStore.cartObject.payment_collection?.payment_sessions?.[0].provider_id.includes(
           "stripe"
         )
@@ -965,7 +965,9 @@ onMounted(() => {});
                   new Intl.NumberFormat("pl-PL", {
                     style: "currency",
                     currency: "PLN",
-                  }).format(product.unit_price * product.quantity)
+                  }).format(
+                    Number(product.unit_price) * Number(product.quantity)
+                  )
                 }}
               </td>
             </tr>
@@ -1056,9 +1058,9 @@ onMounted(() => {});
             currency: "PLN",
           }).format(
             Math.floor(
-              cartStore.cartObject.item_total +
-                cartStore.cartObject.discount_total * 1.23 +
-                cartStore.cartObject.shipping_methods![0].amount
+              Number(cartStore.cartObject.item_total) +
+                Number(cartStore.cartObject.discount_total) * 1.23 +
+                Number(cartStore.cartObject.shipping_methods![0].amount)
             )
           ) + " "
         }}</span>
@@ -1100,6 +1102,7 @@ onMounted(() => {});
             v-if="
               step < 3 ||
               (step === 3 &&
+                // @ts-expect-error
                 !cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
                   'stripe'
                 ))
@@ -1115,6 +1118,7 @@ onMounted(() => {});
         id="payment-element"
         v-show="
           step === 3 &&
+          // @ts-expect-error
           cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
             'stripe'
           )
@@ -1127,6 +1131,7 @@ onMounted(() => {});
         :size="width < 720 ? 'small' : 'large'"
         v-show="
           step === 3 &&
+          // @ts-expect-error
           cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
             'stripe'
           )

@@ -184,7 +184,7 @@ onMounted(async () => {
     <div class="v-list-row">
       <v-list>
         <v-list-item>
-          <template v-slot:title>Dane odbiorcy</template>
+          <template v-slot:title><b>Dane odbiorcy</b></template>
         </v-list-item>
         <v-list-item>
           {{ order?.shipping_address?.first_name }}
@@ -200,10 +200,41 @@ onMounted(async () => {
           {{ order?.shipping_address?.postal_code }},
           {{ order?.shipping_address?.city }}
         </v-list-item>
+        <v-list-item
+          v-if="order?.shipping_address?.metadata?.wantsInvoice as boolean && !order?.shipping_address?.metadata?.differentThanShipping as boolean"
+        >
+          {{ order?.shipping_address?.company }}
+          {{ order?.shipping_address?.metadata?.vatNumber }}
+        </v-list-item>
+      </v-list>
+      <v-list
+        v-if="order?.shipping_address?.metadata?.wantsInvoice as boolean && order?.shipping_address?.metadata?.differentThanShipping as boolean"
+      >
+        <v-list-item>
+          <template v-slot:title><b>Dane do faktury</b></template>
+        </v-list-item>
+        <!-- <v-list-item>
+          {{ order?.billing_address?.first_name }}
+          {{ order?.billing_address?.last_name }}
+        </v-list-item> -->
+        <v-list-item>
+          {{ order?.billing_address?.address_1 }}
+          <span v-if="order?.billing_address?.address_2"
+            >, {{ order?.billing_address?.address_2 }}</span
+          >
+        </v-list-item>
+        <v-list-item>
+          {{ order?.billing_address?.postal_code }},
+          {{ order?.billing_address?.city }}
+        </v-list-item>
+        <v-list-item>
+          {{ order?.billing_address?.metadata?.vatNumber }},
+          {{ order?.billing_address?.company }}
+        </v-list-item>
       </v-list>
       <v-list>
         <v-list-item>
-          <template v-slot:title>Dane kontaktowe</template>
+          <template v-slot:title><b>Dane kontaktowe</b></template>
         </v-list-item>
         <v-list-item>
           {{ order?.shipping_address?.phone }}
@@ -214,7 +245,7 @@ onMounted(async () => {
       </v-list>
       <v-list>
         <v-list-item>
-          <template v-slot:title>Metoda dostawy</template>
+          <template v-slot:title><b>Metoda dostawy</b></template>
         </v-list-item>
         <v-list-item>
           {{ order?.shipping_methods?.[0].name }} ({{

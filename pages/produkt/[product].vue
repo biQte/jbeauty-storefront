@@ -319,6 +319,7 @@ const toggleDetails = () => {
                     class="w-full"
                     v-for="image in product?.images"
                     :key="image.id"
+                    @click="imageToShow = image.id"
                   >
                     <v-img
                       contain
@@ -372,7 +373,6 @@ const toggleDetails = () => {
             {{ product?.subtitle }}
           </h3>
           <p v-show="!loading && product?.variants" class="text-lg mt-2 mb-4">
-            {{ "PLN" }}
             {{
               new Intl.NumberFormat("pl-PL", {
                 style: "currency",

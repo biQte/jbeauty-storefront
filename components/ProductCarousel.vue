@@ -84,7 +84,12 @@ function chunkArray(arr: any[], size: number) {
               />
               <v-card-item>
                 <v-card-title>{{ product.title }}</v-card-title>
-                <v-card-subtitle>{{ formatPrice(product) }}</v-card-subtitle>
+                <v-card-subtitle
+                  >{{ formatPrice(product)
+                  }}<b v-if="product.variants?.[0].inventory_quantity! < 1">
+                    - Brak w magazynie</b
+                  ></v-card-subtitle
+                >
               </v-card-item>
             </NuxtLink>
           </v-card>

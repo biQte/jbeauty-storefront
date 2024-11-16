@@ -27,7 +27,7 @@ export interface DiscountInner {
 export const useCartStore = defineStore("cart", () => {
   const nuxtApp = useNuxtApp();
   const medusaClient = nuxtApp.$medusaClient;
-  const cartObject = ref<undefined | HttpTypes.StoreCart>(undefined);
+  const cartObject = ref<undefined | CartDTO>(undefined);
   const triedToFetchCart = ref<boolean>(false);
   const quantity = ref<number>(0);
   const config = useRuntimeConfig();
@@ -47,7 +47,7 @@ export const useCartStore = defineStore("cart", () => {
         sales_channel_id: "sc_01JCEY81HZ4GRS6YE12VQ0TTGJ",
       });
 
-      cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       localStorage.setItem("cart_id", cartObject.value.id);
 
@@ -80,7 +80,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -103,7 +103,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -124,7 +124,7 @@ export const useCartStore = defineStore("cart", () => {
         { quantity }
       );
 
-      cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -144,7 +144,7 @@ export const useCartStore = defineStore("cart", () => {
         lineItemId
       );
 
-      cartObject.value = cartResponse.parent as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.parent as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -173,7 +173,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -209,7 +209,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -227,7 +227,7 @@ export const useCartStore = defineStore("cart", () => {
         { option_id }
       );
 
-      cartObject.value = cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cart as unknown as CartDTO;
 
       calculateQuantity();
     } catch (e) {
@@ -250,9 +250,10 @@ export const useCartStore = defineStore("cart", () => {
 
       const cartResponse = await medusaClient.store.cart.retrieve(cartId, {
         // fields: "*items.variant,+items.product.variants.inventory_quantity",
+        fields: "+billing_address.metadata,+shipping_address.metadata",
       });
 
-      cartObject.value = cartResponse.cart as unknown as HttpTypes.StoreCart;
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -272,7 +273,7 @@ export const useCartStore = defineStore("cart", () => {
     if (!items || items === undefined || items.length === 0) quantity.value = 0;
     else
       for (const item of items!) {
-        counter += item.quantity;
+        counter += Number(item.quantity);
       }
 
     quantity.value = counter;
@@ -310,7 +311,7 @@ export const useCartStore = defineStore("cart", () => {
 
     availableShippingOptions.value = [];
 
-    if (cartObject.value.item_total > freeShippingTreshold.value) {
+    if (Number(cartObject.value.item_total) > freeShippingTreshold.value) {
       for (const option of shippingOptions.value!) {
         if (
           // @ts-expect-error
@@ -364,6 +365,7 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
+      // @ts-expect-error
       let paymentCollectionId = cartObject.value.payment_collection?.id;
 
       if (!paymentCollectionId) {
@@ -387,6 +389,7 @@ export const useCartStore = defineStore("cart", () => {
       }
 
       await medusaClient.store.payment.initiatePaymentSession(
+        // @ts-expect-error
         cartObject.value,
         {
           provider_id: selectedPaymentProviderId,

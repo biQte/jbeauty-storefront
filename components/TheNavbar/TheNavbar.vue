@@ -29,6 +29,8 @@ watch(mobileMenu, (newValue) => {
   }
 });
 
+const config = useRuntimeConfig();
+
 const closeMenu = () => {
   mobileMenu.value = false;
 };
@@ -36,20 +38,51 @@ const closeMenu = () => {
 onMounted(async () => {
   const cartId = localStorage.getItem("cart_id");
 
-  const { product_categories } = await medusaClient.store.category.list({
-    handle: "produkty",
-    // include_descendants_tree: true,
-  });
+  // const { product_categories } = await medusaClient.store.category.retrieve(
+  // {
+  // handle: "produkty",
+  // q: "pcat_01JCGXYYM4YXHB7W40TMC5WCXT",
+  // include_descendants_tree: true,
+  // fields: "*category_children",
+  // }
+  // );
+
+  // const searchParams = new URLSearchParams({
+  //   handle: "produkty",
+  //   fields: "*category_children",
+  // });
+  // parent_category_id=pcat_01JCGXYYM4YXHB7W40TMC5WCXT
+  // @ts-expect-error
+  const { product_categories } = await $fetch(
+    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=pcat_01JCGXYYM4YXHB7W40TMC5WCXT&fields=*category_children`,
+    {
+      credentials: "include",
+      headers: {
+        "x-publishable-api-key": config.public.medusaPublishableKey,
+      },
+    }
+  );
 
   productCategories.value = product_categories;
 
-  brands.value = await medusaClient.store.category.list({
-    handle: "marki",
-    // include_descendants_tree: true,
-  });
+  // brands.value = await medusaClient.store.category.list({
+  // handle: "marki",
+  // include_descendants_tree: true,
+  // });
+
+  brands.value = await $fetch(
+    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=pcat_01JCGXZRFYYS8XBCJZZZJ29NCH&fields=*category_children`,
+    {
+      credentials: "include",
+      headers: {
+        "x-publishable-api-key": config.public.medusaPublishableKey,
+      },
+    }
+  );
 
   console.log(productCategories.value);
   console.log(brands.value.product_categories);
+  console.log(brands.value);
 
   if (!cartStore.cartObject && cartId !== null) {
     await cartStore.fetchCart();
@@ -82,7 +115,19 @@ onMounted(async () => {
               @click="mobileMenu = false"
             ></v-btn>
             <ul class="mobile-menu">
-              <div class="d-flex align-center">
+              <ul class="product-categories">
+                <TheNavbarMobileCategoryItem
+                  :category="productCategories[0]"
+                  @close-menu="closeMenu"
+                />
+              </ul>
+              <ul class="product-categories">
+                <TheNavbarMobileCategoryItem
+                  :category="brands.product_categories[0]"
+                  @close-menu="closeMenu"
+                />
+              </ul>
+              <!-- <div class="d-flex align-center">
                 <v-btn
                   to="/kategoria/produkty"
                   @click="closeMenu"
@@ -97,17 +142,20 @@ onMounted(async () => {
               </div>
               <v-expand-transition>
                 <ul v-show="productCategoryMenuOpen" class="product-categories">
-                  <v-btn
+                  <li
                     v-for="category in productCategories[0].category_children"
                     :key="category.id"
-                    variant="text"
-                    @click="closeMenu"
-                    :to="`/kategoria/${category.handle}`"
-                    >{{ category.name }}</v-btn
                   >
+                    <v-btn
+                      variant="text"
+                      @click="closeMenu"
+                      :to="`/kategoria/${category.handle}`"
+                      >{{ category.name }}</v-btn
+                    >
+                  </li>
                 </ul>
-              </v-expand-transition>
-              <div class="d-flex align-center">
+              </v-expand-transition> -->
+              <!-- <div class="d-flex align-center">
                 <v-btn to="/kategoria/marki" @click="closeMenu" variant="text"
                   >Marki</v-btn
                 >
@@ -119,17 +167,20 @@ onMounted(async () => {
               </div>
               <v-expand-transition>
                 <ul v-show="brandCategoryMenuOpen" class="product-categories">
-                  <v-btn
+                  <li
                     v-for="category in brands.product_categories[0]
                       .category_children"
                     :key="category.id"
-                    @click="closeMenu"
-                    variant="text"
-                    :to="`/kategoria/${category.handle}`"
-                    >{{ category.name }}</v-btn
                   >
+                    <v-btn
+                      @click="closeMenu"
+                      variant="text"
+                      :to="`/kategoria/${category.handle}`"
+                      >{{ category.name }}</v-btn
+                    >
+                  </li>
                 </ul>
-              </v-expand-transition>
+              </v-expand-transition> -->
               <v-btn
                 to="/nowosci"
                 @click="closeMenu"
@@ -270,7 +321,7 @@ onMounted(async () => {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
       text-align: center;
-      font-size: 4rem;
+      font-size: 3rem;
       font-family: "Great Vibes", cursive;
       //font-weight: bold;
     }
@@ -315,7 +366,7 @@ onMounted(async () => {
       align-items: center;
       justify-content: center;
       .logo {
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-family: "Great Vibes", cursive;
       }
     }
