@@ -21,12 +21,12 @@ frame-ancestors * data: blob:;
           `,
         },
       ],
-      link: [
-        {
-          href: "https://geowidget.inpost.pl/inpost-geowidget.css",
-          rel: "stylesheet",
-        },
-      ],
+      // link: [
+      //   {
+      //     href: "https://geowidget.inpost.pl/inpost-geowidget.css",
+      //     rel: "stylesheet",
+      //   },
+      // ],
       title: "JBeauty",
     },
   },
@@ -69,7 +69,7 @@ frame-ancestors * data: blob:;
   },
   plugins: [
     "~/plugins/medusa.ts",
-    "~/plugins/inpostGeowidget.ts",
+    // "~/plugins/inpostGeowidget.ts",
     // "~/plugins/stripe.ts"
   ],
   css: ["~/assets/css/main.css", "@/assets/css/base.scss"],
