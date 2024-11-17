@@ -671,6 +671,8 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerProvince.value = addressDetails.province;
   parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
+  document.removeEventListener("onpointselect", pointSelectListener);
+  pointSelectListener = null;
 };
 
 let pointSelectListener: any = null;
