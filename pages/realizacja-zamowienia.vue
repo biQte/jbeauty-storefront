@@ -856,27 +856,25 @@ onMounted(() => {});
               .includes('paczkomat')
           "
         >
-          <v-dialog max-width="800">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn v-bind="activatorProps" color="warning"
-                >Wybierz paczkomat</v-btn
-              >
-            </template>
+          <!-- <v-dialog max-width="800"> -->
+          <!-- <template v-slot:activator="{ props: activatorProps }"> v-bind="activatorProps" -->
+          <v-btn color="warning">Wybierz paczkomat</v-btn>
+          <!-- </template> -->
 
-            <template v-slot:default="{ isActive }">
-              <v-card title="Wybierz paczkomat" min-height="500">
-                <div class="geowidget">
-                  <inpost-geowidget
-                    id="geowidget"
-                    partner_id="97774"
-                    token="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDY4MDU0NjEsImlhdCI6MTczMTQ0NTQ2MSwianRpIjoiMTVjMWFlZmMtOThhNS00M2U3LTgzZTAtMWEzNjljMjJmNmQyIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYzhjMjY2MzgtZjU2Yi00ZWE1LTkxNDMtY2QwNzE0ZmQ4OTQ4Iiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImM4YzI2NjM4LWY1NmItNGVhNS05MTQzLWNkMDcxNGZkODk0OCIsImFsbG93ZWRfcmVmZXJyZXJzIjoiKi5qYmVhdXR5c2tsZXAucGwsamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.i7qx97l8nV6aZuH1kHZFy-aKgxo9LaIWhgWPeY97GUcEYvsNwt4_SGdbONDualggQHuktW6yNPB1sEAr7ROL94y2BByjMb1u_oYxo-AafkQiqqGaBKwVHhsQb1BTe5zGsrnOGOCHRUBQmevmQOWALatoWv6x9WI8rSjNc-cDHe9fWaQX8THyYkXNZ0DiuSBEuSgtxtg5gFn6xBv6R_RGqvEPpl_h980e0RCQRAGLA-XFqeEJUPn0rrxFHEyYiNJwkF_lpgjgCekJ6kkYU52YxQy5UZdyuwMc1ZaHEGeeaE25kr0LX1OVpp4vliJxFi5jM_jPRNCjXD3buhvVh9p6Fg"
-                    language="pl"
-                    config="parcelcollect"
-                  ></inpost-geowidget>
-                </div>
-              </v-card>
-            </template>
-          </v-dialog>
+          <!-- <template v-slot:default="{ isActive }"> -->
+          <v-card title="Wybierz paczkomat" min-height="500">
+            <div class="geowidget">
+              <inpost-geowidget
+                id="geowidget"
+                partner_id="97774"
+                token="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDY4MDU0NjEsImlhdCI6MTczMTQ0NTQ2MSwianRpIjoiMTVjMWFlZmMtOThhNS00M2U3LTgzZTAtMWEzNjljMjJmNmQyIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYzhjMjY2MzgtZjU2Yi00ZWE1LTkxNDMtY2QwNzE0ZmQ4OTQ4Iiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImM4YzI2NjM4LWY1NmItNGVhNS05MTQzLWNkMDcxNGZkODk0OCIsImFsbG93ZWRfcmVmZXJyZXJzIjoiKi5qYmVhdXR5c2tsZXAucGwsamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.i7qx97l8nV6aZuH1kHZFy-aKgxo9LaIWhgWPeY97GUcEYvsNwt4_SGdbONDualggQHuktW6yNPB1sEAr7ROL94y2BByjMb1u_oYxo-AafkQiqqGaBKwVHhsQb1BTe5zGsrnOGOCHRUBQmevmQOWALatoWv6x9WI8rSjNc-cDHe9fWaQX8THyYkXNZ0DiuSBEuSgtxtg5gFn6xBv6R_RGqvEPpl_h980e0RCQRAGLA-XFqeEJUPn0rrxFHEyYiNJwkF_lpgjgCekJ6kkYU52YxQy5UZdyuwMc1ZaHEGeeaE25kr0LX1OVpp4vliJxFi5jM_jPRNCjXD3buhvVh9p6Fg"
+                language="pl"
+                config="parcelcollect"
+              ></inpost-geowidget>
+            </div>
+          </v-card>
+          <!-- </template> -->
+          <!-- </v-dialog> -->
         </div>
       </form>
       <!-- <div class="saved-address" v-if="!displayForm">
