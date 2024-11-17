@@ -15,7 +15,6 @@ export default defineNuxtConfig({
         {
           src: "https://geowidget.inpost.pl/inpost-geowidget.js",
           defer: true,
-          async: true,
         },
       ],
       title: "JBeauty",
