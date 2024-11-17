@@ -663,42 +663,41 @@ const widgetHtml = ref<string>(
     `
 );
 
-const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
-  parcelLockerName.value = name;
-  parcelLockerCity.value = addressDetails.city;
-  parcelLockerPostalCode.value = addressDetails.post_code;
-  parcelLockerBuildingNumber.value = addressDetails.building_number;
-  parcelLockerProvince.value = addressDetails.province;
-  parcelLockerStreet.value = addressDetails.street;
+const setOrChangeParcelLocker = (event: any) => {
+  parcelLockerName.value = event.name;
+  parcelLockerCity.value = event.addressDetails.city;
+  parcelLockerPostalCode.value = event.addressDetails.post_code;
+  parcelLockerBuildingNumber.value = event.addressDetails.building_number;
+  parcelLockerProvince.value = event.addressDetails.province;
+  parcelLockerStreet.value = event.addressDetails.street;
   showParcelLockerDialog.value = false;
-  document.removeEventListener("onpointselect", pointSelectListener);
 };
 
-let pointSelectListener: any = null;
+// let pointSelectListener: any = null;
 
-const addEventListenerForPointSelect = () => {
-  // if (pointSelectListener) {
-  //   document.removeEventListener("onpointselect", pointSelectListener);
-  // }
+// const addEventListenerForPointSelect = () => {
+//   // if (pointSelectListener) {
+//   //   document.removeEventListener("onpointselect", pointSelectListener);
+//   // }
 
-  pointSelectListener = (event: any) => {
-    setOrChangeParcelLocker(event.detail.name, event.detail.address_details);
-  };
+//   pointSelectListener = (event: any) => {
+//     setOrChangeParcelLocker(event.detail.name, event.detail.address_details);
+//   };
 
-  document.addEventListener("onpointselect", pointSelectListener);
-};
+//   document.addEventListener("onpointselect", pointSelectListener);
+// };
 
-watch(showParcelLockerDialog, (newValue) => {
-  if (newValue) {
-    // When dialog opens, add event listener
-    addEventListenerForPointSelect();
-  } else {
-    // When dialog closes, remove event listener
-    if (pointSelectListener) {
-      document.removeEventListener("onpointselect", pointSelectListener);
-    }
-  }
-});
+// watch(showParcelLockerDialog, (newValue) => {
+//   if (newValue) {
+//     // When dialog opens, add event listener
+//     addEventListenerForPointSelect();
+//   } else {
+//     // When dialog closes, remove event listener
+//     if (pointSelectListener) {
+//       document.removeEventListener("onpointselect", pointSelectListener);
+//     }
+//   }
+// });
 
 onMounted(() => {
   isClient.value = true;
@@ -713,7 +712,7 @@ onMounted(() => {
   //     event["detail"]["address_details"]
   //   );
   // });
-  addEventListenerForPointSelect();
+  // addEventListenerForPointSelect();
 });
 </script>
 
@@ -979,6 +978,7 @@ onMounted(() => {
                 :sandbox="false"
                 :language="'pl'"
                 :token="'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDcyMjI1ODMsImlhdCI6MTczMTg2MjU4MywianRpIjoiNzYzYjgxYmQtNzZmMC00MDhkLWFhMDAtMDJhOWYzMWU3MTI1IiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYTVmMmQyMmEtYzAxMi00NTY5LTk5NmYtZTc0OTA4NTI0NGJjIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImE1ZjJkMjJhLWMwMTItNDU2OS05OTZmLWU3NDkwODUyNDRiYyIsImFsbG93ZWRfcmVmZXJyZXJzIjoiamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.Hi1EmMvBsGwJO8JyaqV0AukG2iWJ9uhSStqBe4MCJG-4i6Ndb4jjEx_tYmUxuymKJeKKnLiti1PnQE3ZOMgFNJsnb1ZPKfcM0kGe-llD5RnbKsBqPQEJYon2vxMAeG_-ZjYy9NjwhhVZ35XD-1ERA-6Ah-7EgquUwl_fgN6i81ameJHD0yu4oci4t_DBMWQ8eHwaL1HOB3uMIksVIVTvbrAU4rZ5WKLSrVpw2j50mWxMAgrk-2c94NnO4zWM8nmjYPjw-H-JkFORLXHDFaQyVdC_aYCvdnJe7l0r2iSAQNvlT_F4iwjc3QKZ0Zfb9yCeVXPzbEBqml9xGenNOSxpyA'"
+                @point-selected="setOrChangeParcelLocker"
               />
               <!-- <div class="geowidget" :v-html="widgetHtml"> -->
               <!--

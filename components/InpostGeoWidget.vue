@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 
+const emit = defineEmits<{
+  (event: "pointSelected", data: any): void;
+}>();
+
 // Props for dynamic configuration
 const props = defineProps({
   token: {
@@ -68,6 +72,10 @@ function initializeWidget() {
 
     geoElement.addEventListener("inpost.geowidget.init", (event: any) => {
       console.log("GeoWidget initialized with API:", event.detail.api);
+
+      document.addEventListener("onpointselect", (event: any) =>
+        emit("pointSelected", event)
+      );
     });
   } else {
     console.error("GeoWidget wrapper not found.");
@@ -106,13 +114,14 @@ onMounted(() => {
   );
 });
 
-// onUnmounted(() => {
-//   const geoElement = document.getElementById(widgetId);
-//   if (geoElement) {
-//     geoElement.remove();
-//     console.log("GeoWidget removed.");
-//   }
-// });
+onUnmounted(() => {
+  const geoElement = document.getElementById(widgetId);
+  if (geoElement) {
+    geoElement.remove();
+    console.log("GeoWidget removed.");
+  }
+});
+document.removeEventListener("onpointselect", () => {});
 </script>
 
 <template>
