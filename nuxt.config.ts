@@ -27,12 +27,6 @@ frame-ancestors * data: blob:;
           rel: "stylesheet",
         },
       ],
-      script: [
-        {
-          src: "https://geowidget.inpost.pl/inpost-geowidget.js",
-          defer: true,
-        },
-      ],
       title: "JBeauty",
     },
   },
@@ -75,6 +69,7 @@ frame-ancestors * data: blob:;
   },
   plugins: [
     "~/plugins/medusa.ts",
+    "~/plugins/inpostGeowidget.ts",
     // "~/plugins/stripe.ts"
   ],
   css: ["~/assets/css/main.css", "@/assets/css/base.scss"],
