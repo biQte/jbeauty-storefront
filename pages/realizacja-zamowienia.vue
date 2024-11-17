@@ -663,13 +663,13 @@ const widgetHtml = ref<string>(
     `
 );
 
-const setOrChangeParcelLocker = (event: any) => {
-  parcelLockerName.value = event.name;
-  parcelLockerCity.value = event.addressDetails.city;
-  parcelLockerPostalCode.value = event.addressDetails.post_code;
-  parcelLockerBuildingNumber.value = event.addressDetails.building_number;
-  parcelLockerProvince.value = event.addressDetails.province;
-  parcelLockerStreet.value = event.addressDetails.street;
+const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
+  parcelLockerName.value = name;
+  parcelLockerCity.value = addressDetails.city;
+  parcelLockerPostalCode.value = addressDetails.post_code;
+  parcelLockerBuildingNumber.value = addressDetails.building_number;
+  parcelLockerProvince.value = addressDetails.province;
+  parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
 };
 
@@ -699,19 +699,28 @@ const setOrChangeParcelLocker = (event: any) => {
 //   }
 // });
 
+let parcelLockerEventListener: any = null;
+
+watch(parcelLockerEventListener, (newValue) => {
+  console.log(newValue);
+});
+
 onMounted(() => {
   isClient.value = true;
 
   // const widget = document.getElementById("geowidget");
   // console.log("widget", widget);
-  // document.addEventListener("onpointselect", (event) => {
-  //   setOrChangeParcelLocker(
-  //     // @ts-expect-error
-  //     event["detail"]["name"],
-  //     // @ts-expect-error
-  //     event["detail"]["address_details"]
-  //   );
-  // });
+  parcelLockerEventListener = document.addEventListener(
+    "onpointselect",
+    (event) => {
+      setOrChangeParcelLocker(
+        // @ts-expect-error
+        event["detail"]["name"],
+        // @ts-expect-error
+        event["detail"]["address_details"]
+      );
+    }
+  );
   // addEventListenerForPointSelect();
 });
 </script>
@@ -978,7 +987,6 @@ onMounted(() => {
                 :sandbox="false"
                 :language="'pl'"
                 :token="'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDcyMjI1ODMsImlhdCI6MTczMTg2MjU4MywianRpIjoiNzYzYjgxYmQtNzZmMC00MDhkLWFhMDAtMDJhOWYzMWU3MTI1IiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYTVmMmQyMmEtYzAxMi00NTY5LTk5NmYtZTc0OTA4NTI0NGJjIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImE1ZjJkMjJhLWMwMTItNDU2OS05OTZmLWU3NDkwODUyNDRiYyIsImFsbG93ZWRfcmVmZXJyZXJzIjoiamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.Hi1EmMvBsGwJO8JyaqV0AukG2iWJ9uhSStqBe4MCJG-4i6Ndb4jjEx_tYmUxuymKJeKKnLiti1PnQE3ZOMgFNJsnb1ZPKfcM0kGe-llD5RnbKsBqPQEJYon2vxMAeG_-ZjYy9NjwhhVZ35XD-1ERA-6Ah-7EgquUwl_fgN6i81ameJHD0yu4oci4t_DBMWQ8eHwaL1HOB3uMIksVIVTvbrAU4rZ5WKLSrVpw2j50mWxMAgrk-2c94NnO4zWM8nmjYPjw-H-JkFORLXHDFaQyVdC_aYCvdnJe7l0r2iSAQNvlT_F4iwjc3QKZ0Zfb9yCeVXPzbEBqml9xGenNOSxpyA'"
-                @point-selected="setOrChangeParcelLocker"
               />
               <!-- <div class="geowidget" :v-html="widgetHtml"> -->
               <!--
