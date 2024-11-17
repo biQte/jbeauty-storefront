@@ -102,7 +102,7 @@ watch(currentPage, (newPage) => {
                   )
                 }}
                 <b v-if="product.variants?.[0].inventory_quantity! < 1">
-                  - Brak w magazynie</b
+                  - Chwilowo niedostępny</b
                 ></v-card-subtitle
               >
             </v-card-item>

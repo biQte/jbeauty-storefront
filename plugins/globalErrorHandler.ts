@@ -17,6 +17,11 @@ export default defineNuxtPlugin((nuxtApp) => {
           "Podany adres email jest już zajęty",
           "error"
         );
+      } else if (error.message.includes("ProductVariant id not found")) {
+        snackbarStore.showSnackbar(
+          "Jeden z wybranych produktów jest już niedostępny",
+          "error"
+        );
       } else {
         snackbarStore.showSnackbar(error.message, "error", 5000);
       }
@@ -34,6 +39,11 @@ export default defineNuxtPlugin((nuxtApp) => {
           "Podany adres email jest już zajęty",
           "error"
         );
+      } else if (event.reason.message.includes("ProductVariant id not found")) {
+        snackbarStore.showSnackbar(
+          "Jeden z wybranych produktów jest już niedostępny",
+          "error"
+        );
       } else {
         snackbarStore.showSnackbar(event.reason.message, "error", 5000);
       }
@@ -47,6 +57,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       } else if (event.message === "Identity with email already exists") {
         snackbarStore.showSnackbar(
           "Podany adres email jest już zajęty",
+          "error"
+        );
+      } else if (event.message.includes("ProductVariant id not found")) {
+        snackbarStore.showSnackbar(
+          "Jeden z wybranych produktów jest już niedostępny",
           "error"
         );
       } else {

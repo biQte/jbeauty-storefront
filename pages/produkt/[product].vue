@@ -392,7 +392,7 @@ const toggleDetails = () => {
             >
               {{
                 product?.variants?.[0].inventory_quantity! < 1
-                  ? "Brak w magazynie"
+                  ? "Chwilowo niedostępny"
                   : "Dodaj do koszyka"
               }}
             </v-btn>
