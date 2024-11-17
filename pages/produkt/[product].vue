@@ -23,12 +23,17 @@ const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
 
-const showOverlay = (index: number) => {
-  currentIndex.value = index;
+const showOverlay = () => {
   activeOverlay.value = true;
 };
 
+watch(activeOverlay, (newValue) => {
+  console.log(newValue);
+  console.log(currentIndex.value);
+});
+
 onMounted(async () => {
+  // activeOverlay.value = false;
   try {
     const { products } = await medusaClient.store.product.list({
       handle: route.params.product as string,
@@ -314,7 +319,7 @@ const toggleDetails = () => {
                 <v-carousel
                   hide-delimiters
                   :show-arrows="product?.images?.length > 1 ? 'hover' : false"
-                  v-if="!loading"
+                  v-show="!loading"
                   v-model="currentIndex"
                 >
                   <v-carousel-item
@@ -326,7 +331,7 @@ const toggleDetails = () => {
                       contain
                       class="w-full"
                       :src="image.url"
-                      @click="showOverlay(index)"
+                      @click="showOverlay"
                     >
                       <v-overlay
                         v-model="activeOverlay"
