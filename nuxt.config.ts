@@ -26,6 +26,8 @@ export default defineNuxtConfig({
       medusaPublishableKey: process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
       stripePublicKey: process.env.NUXT_PUBLIC_STRIPE_KEY,
       storeUrl: process.env.NUXT_STORE_URL,
+      productsCategoryID: process.env.NUXT_PRODUCTS_CATEGORY_ID,
+      brandsCategoryID: process.env.NUXT_BRANDS_CATEGORY_ID,
     },
     nitro: {
       envExpansion: true,

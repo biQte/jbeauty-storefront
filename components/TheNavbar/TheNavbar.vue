@@ -54,7 +54,7 @@ onMounted(async () => {
   // parent_category_id=pcat_01JCGXYYM4YXHB7W40TMC5WCXT
   // @ts-expect-error
   const { product_categories } = await $fetch(
-    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=pcat_01JCGXYYM4YXHB7W40TMC5WCXT&fields=*category_children`,
+    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.productsCategoryID}&fields=*category_children`,
     {
       credentials: "include",
       headers: {
@@ -71,7 +71,7 @@ onMounted(async () => {
   // });
 
   brands.value = await $fetch(
-    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=pcat_01JCGXZRFYYS8XBCJZZZJ29NCH&fields=*category_children`,
+    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.brandsCategoryID}&fields=*category_children`,
     {
       credentials: "include",
       headers: {
@@ -85,7 +85,7 @@ onMounted(async () => {
   console.log(brands.value);
 
   if (!cartStore.cartObject && cartId !== null) {
-    await cartStore.fetchCart();
+    cartStore.fetchCart();
   }
 
   console.log("cart", cartStore.cartObject);

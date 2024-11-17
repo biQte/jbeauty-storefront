@@ -72,7 +72,9 @@ const loadBestsellingProducts = async () => {
           </NuxtLink>
         </div>
       </div> -->
-      <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      <v-lazy>
+        <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      </v-lazy>
     </div>
   </div>
 </template>
