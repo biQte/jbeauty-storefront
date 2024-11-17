@@ -62,6 +62,7 @@ function initializeWidget() {
     geoElement.setAttribute("token", props.token);
     geoElement.setAttribute("language", props.language);
     geoElement.setAttribute("config", props.config);
+    geoElement.setAttribute("onpoint", "onpointselect");
     geoElement.id = widgetId;
     wrapperDiv.appendChild(geoElement);
 
