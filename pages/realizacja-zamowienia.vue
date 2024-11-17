@@ -671,6 +671,14 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerProvince.value = addressDetails.province;
   parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
+  document.addEventListener("onpointselect", (event) => {
+    setOrChangeParcelLocker(
+      // @ts-expect-error
+      event["detail"]["name"],
+      // @ts-expect-error
+      event["detail"]["address_details"]
+    );
+  });
 };
 
 onMounted(() => {
@@ -679,11 +687,6 @@ onMounted(() => {
   const widget = document.getElementById("geowidget");
   console.log("widget", widget);
   document.addEventListener("onpointselect", (event) => {
-    // @ts-expect-error
-    console.log(event["detail"]["name"]);
-    // @ts-expect-error
-    console.log(event["detail"]["address_details"]);
-
     setOrChangeParcelLocker(
       // @ts-expect-error
       event["detail"]["name"],

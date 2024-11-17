@@ -537,4 +537,8 @@ const toggleDetails = () => {
     flex-direction: column;
   }
 }
+
+ul {
+  list-style-type: disc !important;
+}
 </style>
