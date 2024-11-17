@@ -621,11 +621,6 @@ onMounted(() => {});
 </script>
 
 <template>
-  <link
-    rel="stylesheet"
-    href="https://geowidget.inpost.pl/inpost-geowidget.css"
-  />
-  <script src="https://geowidget.inpost.pl/inpost-geowidget.js" defer></script>
   <v-stepper
     v-if="!cartStore.loading && !stripeLoadingSuccess"
     v-model="step"
