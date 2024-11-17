@@ -671,6 +671,8 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerProvince.value = addressDetails.province;
   parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
+
+  listenForParcelLockerSelect();
 };
 
 // let pointSelectListener: any = null;
@@ -705,22 +707,35 @@ watch(parcelLockerEventListener, (newValue) => {
   console.log(newValue);
 });
 
+const listenForParcelLockerSelect = () => {
+  document.removeEventListener("onpointselect", () => {});
+
+  document.addEventListener("onpointselect", (event: any) => {
+    setOrChangeParcelLocker(
+      event["detail"]["name"],
+      event["detail"]["address_details"]
+    );
+  });
+};
+
 onMounted(() => {
   isClient.value = true;
 
   // const widget = document.getElementById("geowidget");
   // console.log("widget", widget);
-  parcelLockerEventListener = document.addEventListener(
-    "onpointselect",
-    (event) => {
-      setOrChangeParcelLocker(
-        // @ts-expect-error
-        event["detail"]["name"],
-        // @ts-expect-error
-        event["detail"]["address_details"]
-      );
-    }
-  );
+  // parcelLockerEventListener = document.addEventListener(
+  //   "onpointselect",
+  //   (event) => {
+  //     setOrChangeParcelLocker(
+  //       // @ts-expect-error
+  //       event["detail"]["name"],
+  //       // @ts-expect-error
+  //       event["detail"]["address_details"]
+  //     );
+  //   }
+  // );
+
+  listenForParcelLockerSelect();
   // addEventListenerForPointSelect();
 });
 </script>
