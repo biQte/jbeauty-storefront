@@ -636,10 +636,11 @@ onMounted(() => {
 
   const widget = document.getElementById("geowidget");
   console.log("widget", widget);
-  document.addEventListener("onpointselect", (event) =>
+  document.addEventListener("onpointselect", (event) => {
+    console.log(event);
     // @ts-expect-error
-    console.log(event["detail"]["address_details"])
-  );
+    console.log(event["detail"]["address_details"]);
+  });
 });
 </script>
 
