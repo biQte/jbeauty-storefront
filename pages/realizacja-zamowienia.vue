@@ -636,9 +636,7 @@ onMounted(() => {
 
   const widget = document.getElementById("geowidget");
   console.log("widget", widget);
-
-  // @ts-expect-error
-  document.addEventListener('onpointselect', (event) => alert(event.details.name));
+  document.addEventListener("onpointselect", (event) => console.log(event));
 });
 </script>
 
