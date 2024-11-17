@@ -2,6 +2,7 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 export default defineNuxtConfig({
+  ssr: true,
   app: {
     head: {
       link: [
@@ -51,7 +52,12 @@ export default defineNuxtConfig({
     },
     "@pinia/nuxt",
     "@vueuse/nuxt",
+    "nuxt-delay-hydration",
   ],
+  delayHydration: {
+    debug: true,
+    mode: "init",
+  },
   plugins: [
     "~/plugins/medusa.ts",
     // "~/plugins/stripe.ts"
