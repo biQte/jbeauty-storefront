@@ -20,7 +20,13 @@ const options = ref<ProductOption[] | null>(null);
 const showDialog = ref<boolean>(false);
 const showDescription = ref<boolean>(true);
 const showDetails = ref<boolean>(true);
-const showOverlay = ref<boolean>(false);
+const activeOverlay = ref<boolean>(false);
+const currentIndex = ref<number>(0);
+
+const showOverlay = (index: number) => {
+  currentIndex.value = index;
+  activeOverlay.value = true;
+};
 
 onMounted(async () => {
   try {
@@ -269,18 +275,13 @@ const toggleDetails = () => {
                 class="w-auto h-full object-center object-cover px-4 space-y-4"
               >
                 <img
-                  v-for="image in product?.images || []"
+                  v-for="(image, index) in product?.images || []"
                   :key="image.id"
                   width="150"
                   alt=""
-                  :src="
-                    image.url.replace(
-                      'http://localhost:9000',
-                      config.public.medusaUrl
-                    )
-                  "
+                  :src="image.url"
                   class="cursor-pointer"
-                  @click="imageToShow = image.id"
+                  @click="currentIndex = index"
                   v-show="!loading"
                 />
                 <div
@@ -314,25 +315,21 @@ const toggleDetails = () => {
                   hide-delimiters
                   :show-arrows="product?.images?.length > 1 ? 'hover' : false"
                   v-if="!loading"
+                  v-model="currentIndex"
                 >
                   <v-carousel-item
                     class="w-full"
-                    v-for="image in product?.images"
+                    v-for="(image, index) in product?.images"
                     :key="image.id"
-                    @click="imageToShow = image.id"
                   >
                     <v-img
                       contain
                       class="w-full"
-                      :src="
-                        image.url.replace(
-                          'http://localhost:9000',
-                          config.public.medusaUrl
-                        )
-                      "
+                      :src="image.url"
+                      @click="showOverlay(index)"
                     >
                       <v-overlay
-                        activator="parent"
+                        v-model="activeOverlay"
                         absolute
                         location-strategy="static"
                         target="[0,0]"
@@ -345,12 +342,7 @@ const toggleDetails = () => {
                           contain
                           :width="width"
                           :height="height"
-                          :src="
-                            image.url.replace(
-                              'http://localhost:9000',
-                              config.public.medusaUrl
-                            )
-                          "
+                          :src="product?.images?.[currentIndex].url"
                         ></v-img>
                       </v-overlay>
                     </v-img>
