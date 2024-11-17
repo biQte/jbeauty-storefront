@@ -106,13 +106,13 @@ onMounted(() => {
   );
 });
 
-onUnmounted(() => {
-  const geoElement = document.getElementById(widgetId);
-  if (geoElement) {
-    geoElement.remove();
-    console.log("GeoWidget removed.");
-  }
-});
+// onUnmounted(() => {
+//   const geoElement = document.getElementById(widgetId);
+//   if (geoElement) {
+//     geoElement.remove();
+//     console.log("GeoWidget removed.");
+//   }
+// });
 </script>
 
 <template>
