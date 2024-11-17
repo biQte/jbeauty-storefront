@@ -672,19 +672,19 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
   document.removeEventListener("onpointselect", pointSelectListener);
-  pointSelectListener = null;
 };
 
 let pointSelectListener: any = null;
 
 const addEventListenerForPointSelect = () => {
-  if (pointSelectListener) {
-    document.removeEventListener("onpointselect", pointSelectListener);
-  }
+  // if (pointSelectListener) {
+  //   document.removeEventListener("onpointselect", pointSelectListener);
+  // }
 
   pointSelectListener = (event: any) => {
     setOrChangeParcelLocker(event.detail.name, event.detail.address_details);
   };
+
   document.addEventListener("onpointselect", pointSelectListener);
 };
 
