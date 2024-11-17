@@ -77,36 +77,38 @@ watch(currentPage, (newPage) => {
     :width="width * 0.9"
   >
     <h1>Wyniki wyszukiwania: "{{ query }}"</h1>
-    <div class="products-wrapper">
-      <v-card v-for="product in products" :key="product.id" width="340px">
-        <NuxtLink :to="`/produkt/${product.handle}`">
-          <v-img
-            :src="product.thumbnail!.replace(
+    <div class="products-container">
+      <div class="products-wrapper">
+        <v-card v-for="product in products" :key="product.id" width="340px">
+          <NuxtLink :to="`/produkt/${product.handle}`">
+            <v-img
+              :src="product.thumbnail!.replace(
                     'http://localhost:9000',
                     config.public.medusaUrl
                   )"
-            cover
-            width="340"
-            height="340"
-          />
-          <v-card-item>
-            <v-card-title>{{ product.title }}</v-card-title>
-            <v-card-subtitle
-              >{{
-                new Intl.NumberFormat("pl-PL", {
-                  style: "currency",
-                  currency: "PLN",
-                }).format(
-                  product.variants?.[0].calculated_price?.original_amount!
-                )
-              }}
-              <b v-if="product.variants?.[0].inventory_quantity! < 1">
-                - Brak w magazynie</b
-              ></v-card-subtitle
-            >
-          </v-card-item>
-        </NuxtLink>
-      </v-card>
+              cover
+              width="340"
+              height="340"
+            />
+            <v-card-item>
+              <v-card-title>{{ product.title }}</v-card-title>
+              <v-card-subtitle
+                >{{
+                  new Intl.NumberFormat("pl-PL", {
+                    style: "currency",
+                    currency: "PLN",
+                  }).format(
+                    product.variants?.[0].calculated_price?.original_amount!
+                  )
+                }}
+                <b v-if="product.variants?.[0].inventory_quantity! < 1">
+                  - Brak w magazynie</b
+                ></v-card-subtitle
+              >
+            </v-card-item>
+          </NuxtLink>
+        </v-card>
+      </div>
     </div>
     <div v-if="totalPages > 1" class="text-center">
       <v-pagination
@@ -126,20 +128,34 @@ watch(currentPage, (newPage) => {
   gap: 2rem;
   height: 100%;
   width: 100%;
-  .products-wrapper {
-    height: 100%;
-    width: 100%;
+  .products-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: start;
-    flex-wrap: wrap;
-    gap: 2rem;
+    width: 100%;
+    @media only screen and (max-width: 720px) {
+      justify-content: start;
+    }
+    .products-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      width: 100%;
+      gap: 15px;
+      max-width: 90%;
+
+      & > * {
+        width: 340px;
+        margin-bottom: 0.5rem;
+      }
+    }
   }
 }
 
 h1 {
   font-size: 2rem;
   padding: 0 2rem;
+  width: 100%;
+  text-align: start;
 
   @media only screen and (max-width: 720px) {
     padding: 0;
