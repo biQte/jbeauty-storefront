@@ -244,6 +244,13 @@ const companyhouseNumber = useField<string>("companyHouseNumber");
 const companyAppartmentNumber = useField<string>("companyAppartmentNumber");
 const companyPhoneNumber = useField<string>("companyPhoneNumber");
 
+const parcelLockerName = ref<string>("");
+const parcelLockerCity = ref<string>("");
+const parcelLockerPostalCode = ref<string>("");
+const parcelLockerBuildingNumber = ref<string>("");
+const parcelLockerProvince = ref<string>("");
+const parcelLockerStreet = ref<string>("");
+
 function updatePostalCode(value: string) {
   const digitsOnly = value.replace(/\D/g, "");
 
@@ -409,6 +416,24 @@ watch(
           ? newOptions.cartObject.billing_address.company
           : "";
       }
+
+      if (
+        newOptions.cartObject.shipping_address?.metadata
+          ?.parcelLockerName as string
+      ) {
+        parcelLockerName.value = newOptions.cartObject.shipping_address
+          ?.metadata?.parcelLockerName as string;
+        parcelLockerCity.value = newOptions.cartObject.shipping_address
+          ?.metadata?.parcelLockerCity as string;
+        parcelLockerBuildingNumber.value = newOptions.cartObject
+          .shipping_address?.metadata?.parcelLockerBuildingNumber as string;
+        parcelLockerPostalCode.value = newOptions.cartObject.shipping_address
+          ?.metadata?.parcelLockerPostalCode as string;
+        parcelLockerProvince.value = newOptions.cartObject.shipping_address
+          ?.metadata?.parcelLockerProvince as string;
+        parcelLockerStreet.value = newOptions.cartObject.shipping_address
+          ?.metadata?.parcelLockerStreet as string;
+      }
     }
   },
   { immediate: true }
@@ -438,6 +463,12 @@ const submitForm = handleSubmit(async (values) => {
             : undefined,
         wantsInvoice: !!wantsInvoice.value.value,
         differentThanShipping: !!differentThanShipping.value.value,
+        parcelLockerName: parcelLockerName.value,
+        parcelLockerCity: parcelLockerCity.value,
+        parcelLockerBuildingNumber: parcelLockerBuildingNumber.value,
+        parcelLockerPostalCode: parcelLockerPostalCode.value,
+        parcelLockerProvince: parcelLockerProvince.value,
+        parcelLockerStreet: parcelLockerStreet.value,
       },
     };
 
@@ -631,15 +662,32 @@ const widgetHtml = ref<string>(
     `
 );
 
+const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
+  parcelLockerName.value = name;
+  parcelLockerCity.value = addressDetails.city;
+  parcelLockerPostalCode.value = addressDetails.post_code;
+  parcelLockerBuildingNumber.value = addressDetails.building_number;
+  parcelLockerProvince.value = addressDetails.province;
+  parcelLockerStreet.value = addressDetails.street;
+};
+
 onMounted(() => {
   isClient.value = true;
 
   const widget = document.getElementById("geowidget");
   console.log("widget", widget);
   document.addEventListener("onpointselect", (event) => {
-    console.log(event);
+    // @ts-expect-error
+    console.log(event["detail"]["name"]);
     // @ts-expect-error
     console.log(event["detail"]["address_details"]);
+
+    setOrChangeParcelLocker(
+      // @ts-expect-error
+      event["detail"]["name"],
+      // @ts-expect-error
+      event["detail"]["address_details"]
+    );
   });
 });
 </script>
@@ -880,6 +928,21 @@ onMounted(() => {
               .includes('paczkomat')
           "
         >
+          <v-list v-if="parcelLockerName.length > 1">
+            <v-list-item>
+              <v-list-item-title>Wybrany paczkomat</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              {{ parcelLockerName }}
+            </v-list-item>
+            <v-list-item>
+              {{ parcelLockerPostalCode }}, {{ parcelLockerCity }}
+            </v-list-item>
+            <v-list-item>
+              {{ parcelLockerStreet }} {{ parcelLockerBuildingNumber }}
+            </v-list-item>
+          </v-list>
+
           <v-dialog max-width="800">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="warning"
