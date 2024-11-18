@@ -82,4 +82,14 @@ body {
 .v-card-title {
   white-space: normal !important;
   font-weight: 400 !important;
+
+  h2 {
+    font-size: 1rem;
+  }
+}
+
+.v-card-subtitle {
+  p {
+    font-size: 1rem !important;
+  }
 }

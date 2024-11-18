@@ -152,7 +152,12 @@ console.log("product on cateogory page: ", products);
         :width="width"
       >
         <div class="products-wrapper">
-          <v-card v-for="product in products" :key="product.id" width="340px">
+          <v-card
+            id="category-card"
+            v-for="product in products"
+            :key="product.id"
+            width="340px"
+          >
             <NuxtLink :to="`/produkt/${product.handle}`">
               <v-img
                 :src="product.thumbnail!.replace(
@@ -165,17 +170,21 @@ console.log("product on cateogory page: ", products);
               />
               <v-card-item>
                 <v-card-title
-                  ><h2>{{ product.title }}</h2></v-card-title
+                  ><h2>
+                    {{ product.title }}
+                  </h2></v-card-title
                 >
                 <v-card-subtitle
-                  >{{
-                    new Intl.NumberFormat("pl-PL", {
-                      style: "currency",
-                      currency: "PLN",
-                    }).format(
-                      product.variants?.[0].calculated_price?.original_amount!
-                    )
-                  }}
+                  ><div class="product-price">
+                    {{
+                      new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      }).format(
+                        product.variants?.[0].calculated_price?.original_amount!
+                      )
+                    }}
+                  </div>
                   <b v-if="product.variants?.[0].inventory_quantity! < 1">
                     - Chwilowo niedostępny</b
                   ></v-card-subtitle
@@ -231,5 +240,13 @@ h1 {
   @media only screen and (max-width: 720px) {
     padding: 0;
   }
+}
+
+h2 {
+  font-size: 1rem !important;
+}
+
+.product-price {
+  font-size: 1rem !important;
 }
 </style>
