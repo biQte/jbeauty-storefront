@@ -47,6 +47,8 @@ const allLoaded = ref<boolean>(false);
 
 const fetchProducts = async () => {
   try {
+    console.log("fetch products called");
+
     // if (loading.value || allLoaded.value) return;
 
     loading.value = true;
@@ -99,12 +101,15 @@ const calculatePages = (count: number): number => {
   return Math.ceil(count / limit.value);
 };
 
-const loadMoreProducts = async () => {
+// @ts-expect-error
+const loadMoreProducts = async ({ done }) => {
   console.log("load more products called");
 
   if (!allLoaded.value) {
     await fetchProducts();
   }
+  done("ok");
+  // }
 };
 
 // onMounted(() => {
