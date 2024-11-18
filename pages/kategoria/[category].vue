@@ -3,6 +3,8 @@ import { type StoreProduct } from "@medusajs/types";
 
 const route = useRoute();
 
+const router = useRouter();
+
 const nuxtApp = useNuxtApp();
 
 const medusaClient = nuxtApp.$medusaClient;
@@ -63,10 +65,13 @@ const fetchProducts = async () => {
 };
 
 const setPage = (page: number) => {
+  // if (page > 0 && page <= totalPages.value) {
+  //   currentPage.value = page;
+  //   queryOffset.value = (page - 1) * limit.value;
+  //   fetchProducts();
+  // }
   if (page > 0 && page <= totalPages.value) {
-    currentPage.value = page;
-    queryOffset.value = (page - 1) * limit.value;
-    fetchProducts();
+    router.push({ query: { ...route.query, strona: page } });
   }
 };
 
@@ -75,12 +80,15 @@ const calculatePages = (count: number): number => {
 };
 
 onMounted(() => {
+  const pageFromQuery = parseInt(route.query.strona as string) || 1;
+  currentPage.value = pageFromQuery;
+  queryOffset.value = (pageFromQuery - 1) * limit.value;
   fetchProducts();
 });
 
-watch(currentPage, (newPage) => {
-  setPage(newPage);
-});
+// watch(currentPage, (newPage) => {
+//   setPage(newPage);
+// });
 
 // const { products, count, limit, offset } =
 //   await medusaClient.store.product.list({

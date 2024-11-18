@@ -22,6 +22,7 @@ const loadBestsellingProducts = async () => {
   const { products } = await medusaClient.store.product.list({
     fields: "*variants.calculated_price,+variants.inventory_quantity",
     limit: 12,
+    order: "-created_at",
     // q: "sweat",
     // fields: "*",
   });
