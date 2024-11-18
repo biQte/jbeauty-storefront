@@ -175,7 +175,7 @@ console.log("product on cateogory page: ", products);
                   </h2></v-card-title
                 >
                 <v-card-subtitle
-                  ><div class="product-price">
+                  ><span class="product-price">
                     {{
                       new Intl.NumberFormat("pl-PL", {
                         style: "currency",
@@ -184,7 +184,7 @@ console.log("product on cateogory page: ", products);
                         product.variants?.[0].calculated_price?.original_amount!
                       )
                     }}
-                  </div>
+                  </span>
                   <b v-if="product.variants?.[0].inventory_quantity! < 1">
                     - Chwilowo niedostępny</b
                   ></v-card-subtitle
