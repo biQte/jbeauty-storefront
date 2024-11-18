@@ -154,7 +154,6 @@ console.log("product on cateogory page: ", products);
             }
           }
         "
-        :disabled="allLoaded || loading"
         :width="width"
       >
         <div class="products-wrapper">
