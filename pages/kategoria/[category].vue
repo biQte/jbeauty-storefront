@@ -146,7 +146,11 @@ console.log("product on cateogory page: ", products);
   >
     <h1>{{ categoryName }}</h1>
     <div class="products-container">
-      <v-infinite-scroll @load="loadMoreProducts" :width="width">
+      <v-infinite-scroll
+        @load="loadMoreProducts"
+        :disabled="allLoaded || loading"
+        :width="width"
+      >
         <div class="products-wrapper">
           <v-card v-for="product in products" :key="product.id" width="340px">
             <NuxtLink :to="`/produkt/${product.handle}`">
