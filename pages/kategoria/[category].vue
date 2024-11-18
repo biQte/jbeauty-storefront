@@ -147,7 +147,13 @@ console.log("product on cateogory page: ", products);
     <h1>{{ categoryName }}</h1>
     <div class="products-container">
       <v-infinite-scroll
-        @load="loadMoreProducts"
+        @load="
+          () => {
+            if (!allLoaded) {
+              loadMoreProducts;
+            }
+          }
+        "
         :disabled="allLoaded || loading"
         :width="width"
       >
