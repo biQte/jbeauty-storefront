@@ -86,9 +86,9 @@ onMounted(() => {
   fetchProducts();
 });
 
-// watch(currentPage, (newPage) => {
-//   setPage(newPage);
-// });
+watch(currentPage, (newPage) => {
+  setPage(newPage);
+});
 
 // const { products, count, limit, offset } =
 //   await medusaClient.store.product.list({
