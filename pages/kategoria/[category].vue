@@ -73,6 +73,12 @@ const setPage = (page: number) => {
   if (page > 0 && page <= totalPages.value) {
     router.push({ query: { ...route.query, strona: page } });
   }
+
+  fetchProducts();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth", // Możesz zmienić na "auto", jeśli nie chcesz płynnego przewijania
+  });
 };
 
 const calculatePages = (count: number): number => {
