@@ -42,10 +42,18 @@ const products = ref<StoreProduct[]>([]);
 const limit = ref<number>(20);
 const categoryIds = ref<string[]>([]);
 const categoryName = ref<string>("");
+const loading = ref<boolean>(false);
+const allLoaded = ref<boolean>(false);
 
 const fetchProducts = async () => {
   try {
-    await fetchCategories();
+    if (loading.value || allLoaded.value) return;
+
+    loading.value = true;
+
+    if (categoryIds.value.length === 0) {
+      await fetchCategories();
+    }
 
     const result = await medusaClient.store.product.list({
       category_id: categoryIds.value,
@@ -54,48 +62,61 @@ const fetchProducts = async () => {
       offset: queryOffset.value,
     });
 
-    if (result) {
-      products.value = result.products;
-      totalProducts.value = result.count;
-      totalPages.value = calculatePages(totalProducts.value);
+    if (result.products.length < limit.value) {
+      allLoaded.value = true;
     }
+
+    products.value.push(...result.products);
+    totalProducts.value = result.count;
+
+    queryOffset.value += limit.value;
+    loading.value = false;
   } catch (e: any) {
+    loading.value = false;
     snackbarStore.showSnackbar(e.toString(), "error", 5000);
   }
 };
 
-const setPage = (page: number) => {
-  // if (page > 0 && page <= totalPages.value) {
-  //   currentPage.value = page;
-  //   queryOffset.value = (page - 1) * limit.value;
-  //   fetchProducts();
-  // }
-  if (page > 0 && page <= totalPages.value) {
-    router.push({ query: { ...route.query, strona: page } });
-    currentPage.value = page;
-    queryOffset.value = (page - 1) * limit.value;
-    fetchProducts();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-};
+// const setPage = (page: number) => {
+//   // if (page > 0 && page <= totalPages.value) {
+//   //   currentPage.value = page;
+//   //   queryOffset.value = (page - 1) * limit.value;
+//   //   fetchProducts();
+//   // }
+//   if (page > 0 && page <= totalPages.value) {
+//     router.push({ query: { ...route.query, strona: page } });
+//     currentPage.value = page;
+//     queryOffset.value = (page - 1) * limit.value;
+//     fetchProducts();
+//     window.scrollTo({
+//       top: 0,
+//       behavior: "smooth",
+//     });
+//   }
+// };
 
 const calculatePages = (count: number): number => {
   return Math.ceil(count / limit.value);
 };
 
+const loadMoreProducts = async () => {
+  if (!allLoaded.value && !loading.value) {
+    await fetchProducts();
+  }
+};
+
 onMounted(() => {
-  const pageFromQuery = parseInt(route.query.strona as string) || 1;
-  currentPage.value = pageFromQuery;
-  queryOffset.value = (pageFromQuery - 1) * limit.value;
+  // const pageFromQuery = parseInt(route.query.strona as string) || 1;
+  // currentPage.value = pageFromQuery;
+  // queryOffset.value = (pageFromQuery - 1) * limit.value;
   fetchProducts();
+  // products.value.push(...(await fetchProducts()));
+  // products.value = await fetchProducts();
 });
 
-watch(currentPage, (newPage) => {
-  setPage(newPage);
-});
+// watch(currentPage, (newPage) => {
+//   setPage(newPage);
+// });
 
 // const { products, count, limit, offset } =
 //   await medusaClient.store.product.list({
@@ -118,45 +139,46 @@ console.log("product on cateogory page: ", products);
   >
     <h1>{{ categoryName }}</h1>
     <div class="products-container">
-      <div class="products-wrapper">
-        <v-card v-for="product in products" :key="product.id" width="340px">
-          <NuxtLink :to="`/produkt/${product.handle}`">
-            <v-img
-              :src="product.thumbnail!.replace(
+      <v-infinite-scroll
+        @load="loadMoreProducts"
+        :disabled="allLoaded || loading"
+        :width="width"
+      >
+        <div class="products-wrapper">
+          <v-card v-for="product in products" :key="product.id" width="340px">
+            <NuxtLink :to="`/produkt/${product.handle}`">
+              <v-img
+                :src="product.thumbnail!.replace(
                     'http://localhost:9000',
                     config.public.medusaUrl
                   )"
-              cover
-              width="340"
-              height="340"
-            />
-            <v-card-item>
-              <v-card-title>{{ product.title }}</v-card-title>
-              <v-card-subtitle
-                >{{
-                  new Intl.NumberFormat("pl-PL", {
-                    style: "currency",
-                    currency: "PLN",
-                  }).format(
-                    product.variants?.[0].calculated_price?.original_amount!
-                  )
-                }}
-                <b v-if="product.variants?.[0].inventory_quantity! < 1">
-                  - Chwilowo niedostępny</b
-                ></v-card-subtitle
-              >
-            </v-card-item>
-          </NuxtLink>
-        </v-card>
-      </div>
-    </div>
-    <div v-if="totalPages > 1" class="text-center">
-      <v-pagination
-        v-model="currentPage"
-        :length="totalPages"
-        :total-visible="5"
-        rounded
-      ></v-pagination>
+                cover
+                width="340"
+                height="340"
+              />
+              <v-card-item>
+                <v-card-title
+                  ><h2>{{ product.title }}</h2></v-card-title
+                >
+                <v-card-subtitle
+                  >{{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      product.variants?.[0].calculated_price?.original_amount!
+                    )
+                  }}
+                  <b v-if="product.variants?.[0].inventory_quantity! < 1">
+                    - Chwilowo niedostępny</b
+                  ></v-card-subtitle
+                >
+              </v-card-item>
+            </NuxtLink>
+          </v-card>
+        </div>
+        <template v-if="!allLoaded" v-slot:loading>Trwa ładowanie...</template>
+      </v-infinite-scroll>
     </div>
   </v-sheet>
 </template>
@@ -178,6 +200,7 @@ console.log("product on cateogory page: ", products);
       justify-content: start;
     }
     .products-wrapper {
+      align-self: center;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       width: 100%;
