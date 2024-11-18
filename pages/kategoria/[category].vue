@@ -100,19 +100,21 @@ const calculatePages = (count: number): number => {
 };
 
 const loadMoreProducts = async () => {
+  console.log("load more products called");
+
   if (!allLoaded.value && !loading.value) {
     await fetchProducts();
   }
 };
 
-onMounted(() => {
-  // const pageFromQuery = parseInt(route.query.strona as string) || 1;
-  // currentPage.value = pageFromQuery;
-  // queryOffset.value = (pageFromQuery - 1) * limit.value;
-  fetchProducts();
-  // products.value.push(...(await fetchProducts()));
-  // products.value = await fetchProducts();
-});
+// onMounted(() => {
+//   // const pageFromQuery = parseInt(route.query.strona as string) || 1;
+//   // currentPage.value = pageFromQuery;
+//   // queryOffset.value = (pageFromQuery - 1) * limit.value;
+//   fetchProducts();
+//   // products.value.push(...(await fetchProducts()));
+//   // products.value = await fetchProducts();
+// });
 
 // watch(currentPage, (newPage) => {
 //   setPage(newPage);
