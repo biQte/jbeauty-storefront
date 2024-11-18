@@ -49,7 +49,7 @@ const fetchProducts = async () => {
   try {
     console.log("fetch products called");
 
-    // if (loading.value || allLoaded.value) return;
+    if (loading.value || allLoaded.value) return;
 
     loading.value = true;
 
