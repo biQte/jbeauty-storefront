@@ -500,6 +500,7 @@ const submitForm = handleSubmit(async (values) => {
       email.value.value,
       billingAddress,
       shippingAddress,
+      undefined,
       undefined
     );
   } catch (e) {
@@ -978,7 +979,7 @@ onMounted(() => {
         >
           <v-list v-if="parcelLockerName.length > 1">
             <v-list-item>
-              <v-list-item-title>Wybrany paczkomat</v-list-item-title>
+              <v-list-item-title><b>Wybrany paczkomat</b></v-list-item-title>
             </v-list-item>
             <v-list-item>
               {{ parcelLockerName }}

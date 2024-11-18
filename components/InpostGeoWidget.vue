@@ -57,6 +57,10 @@ function loadStylesheet(href: string, onLoad: () => void, onError: () => void) {
   }
 }
 
+// const resetWidget = () => {
+//   const wrapperDiv = document.getElementById(wrapperId);
+// };
+
 // Initialize GeoWidget
 function initializeWidget() {
   const wrapperDiv = document.getElementById(wrapperId);
@@ -111,11 +115,11 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  const geoElement = document.getElementById(widgetId);
-  if (geoElement) {
-    geoElement.remove();
-    console.log("GeoWidget removed.");
-  }
+  //   const geoElement = document.getElementById(widgetId);
+  //   if (geoElement) {
+  //     geoElement.remove();
+  //     console.log("GeoWidget removed.");
+  //   }
 });
 </script>
 
