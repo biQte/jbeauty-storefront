@@ -72,13 +72,14 @@ const setPage = (page: number) => {
   // }
   if (page > 0 && page <= totalPages.value) {
     router.push({ query: { ...route.query, strona: page } });
+    currentPage.value = page;
+    queryOffset.value = (page - 1) * limit.value;
+    fetchProducts();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
-
-  fetchProducts();
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth", // Możesz zmienić na "auto", jeśli nie chcesz płynnego przewijania
-  });
 };
 
 const calculatePages = (count: number): number => {
