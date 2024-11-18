@@ -63,7 +63,8 @@ export const useCartStore = defineStore("cart", () => {
     email: string | undefined,
     billing_address: undefined | HttpTypes.StoreAddAddress,
     shipping_address: undefined | HttpTypes.StoreAddAddress,
-    promo_codes: string[] | undefined
+    promo_codes: string[] | undefined,
+    orderMessage: string | undefined
   ) => {
     try {
       if (!cartObject.value) {
@@ -77,6 +78,9 @@ export const useCartStore = defineStore("cart", () => {
           billing_address,
           shipping_address,
           promo_codes,
+          metadata: {
+            orderMessage,
+          },
         }
       );
 

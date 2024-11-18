@@ -16,6 +16,7 @@ const config = useRuntimeConfig();
 
 const selectedShippingOption = ref<string>();
 const router = useRouter();
+const orderMessage = ref<string>("");
 
 const getTotalAmount = computed(() => {
   if (!cartStore.cartObject) return 0;
@@ -93,7 +94,7 @@ const increaseQuantity = (itemId: string) => {
     (item) => item.id === itemId
   );
   if (currentItem) {
-    changeQuantity(itemId, currentItem.quantity + 1);
+    changeQuantity(itemId, Number(currentItem.quantity) + 1);
   }
 };
 
@@ -102,7 +103,7 @@ const decreaseQuantity = (itemId: string) => {
     (item) => item.id === itemId
   );
   if (currentItem) {
-    changeQuantity(itemId, currentItem.quantity - 1);
+    changeQuantity(itemId, Number(currentItem.quantity) - 1);
   }
 };
 
@@ -120,6 +121,7 @@ watch(sessionStore, async (newValue) => {
   if (newValue.isAuthenticated && !cartStore.cartObject?.customer_id) {
     await cartStore.updateCart(
       newValue.session?.email,
+      undefined,
       undefined,
       undefined,
       undefined
@@ -215,6 +217,16 @@ const proceedToCheckout = async () => {
 
   //   await cartStore.addShippingMethod(selectedShippingOption.value);
 
+  if (orderMessage.value && orderMessage.value.length > 0) {
+    await cartStore.updateCart(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      orderMessage.value
+    );
+  }
+
   router.push(ROUTES.FINALIZE_ORDER_PAGE);
   // } catch (e) {}
 };
@@ -223,9 +235,14 @@ onMounted(async () => {
   await cartStore.fetchCart();
   console.log(cartStore.cartObject);
 
+  if (cartStore.cartObject?.metadata?.orderMessage) {
+    orderMessage.value = cartStore.cartObject?.metadata?.orderMessage as string;
+  }
+
   if (sessionStore.isAuthenticated && !cartStore.cartObject?.customer_id) {
     await cartStore.updateCart(
       sessionStore.session?.email,
+      undefined,
       undefined,
       undefined,
       undefined
@@ -280,10 +297,7 @@ onMounted(async () => {
                 <v-img
                   class="product-cover-image"
                   cover
-                  :src="item.thumbnail!.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )"
+                  :src="item.thumbnail!"
                 ></v-img>
                 {{ item.product_title }}
               </NuxtLink>
@@ -294,7 +308,7 @@ onMounted(async () => {
                 new Intl.NumberFormat("pl-PL", {
                   style: "currency",
                   currency: "PLN",
-                }).format(item.unit_price)
+                }).format(Number(item.unit_price))
               }}
             </th>
             <th>
@@ -318,7 +332,7 @@ onMounted(async () => {
                 new Intl.NumberFormat("pl-PL", {
                   style: "currency",
                   currency: "PLN",
-                }).format(item.unit_price * item.quantity)
+                }).format(Number(item.unit_price) * Number(item.quantity))
               }}
             </th>
             <th>
@@ -344,14 +358,8 @@ onMounted(async () => {
           <tr v-for="item in cartStore.cartObject.items" :key="item.id">
             <th>
               <NuxtLink :to="`/produkt/${item.product_handle}`">
-                <v-img
-                  :src="item.thumbnail!.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )"
-                  cover
-                ></v-img>
-                <p>{{ item.product_title }}</p>
+                <v-img :src="item.thumbnail!" width="80" cover></v-img>
+                <p style="width: 100px">{{ item.product_title }}</p>
               </NuxtLink>
               <p>
                 Cena:
@@ -359,7 +367,7 @@ onMounted(async () => {
                   new Intl.NumberFormat("pl-PL", {
                     style: "currency",
                     currency: "PLN",
-                  }).format(item.unit_price)
+                  }).format(Number(item.unit_price))
                 }}
               </p>
               <p>
@@ -368,7 +376,7 @@ onMounted(async () => {
                   new Intl.NumberFormat("pl-PL", {
                     style: "currency",
                     currency: "PLN",
-                  }).format(item.unit_price * item.quantity)
+                  }).format(Number(item.unit_price) * Number(item.quantity))
                 }}
               </p>
             </th>
@@ -398,17 +406,33 @@ onMounted(async () => {
       </v-table>
 
       <div class="summary">
-        <div class="discount-code-section">
-          <v-text-field
-            label="Kod rabatowy"
-            variant="outlined"
-            clearable
-            density="compact"
-            v-model="discountInput"
-            hide-details
-            :width="200"
-          ></v-text-field>
-          <v-btn @click="applyDiscount" color="primary">Zapisz</v-btn>
+        <div class="code-and-message-wrapper">
+          <div class="discount-code-section">
+            <v-text-field
+              label="Kod rabatowy"
+              variant="outlined"
+              clearable
+              density="compact"
+              v-model="discountInput"
+              hide-details
+              :width="200"
+            ></v-text-field>
+            <v-btn @click="applyDiscount" color="primary">Zapisz</v-btn>
+          </div>
+          <br />
+          <div class="order-message-wrapper">
+            <v-textarea
+              label="Wiadomość do zamówienia"
+              variant="outlined"
+              density="compact"
+              v-model="orderMessage"
+              hide-details
+              auto-grow
+              clearable
+              :counter="500"
+            >
+            </v-textarea>
+          </div>
         </div>
 
         <!-- <div class="totals"> -->
@@ -420,7 +444,7 @@ onMounted(async () => {
               new Intl.NumberFormat("pl-PL", {
                 style: "currency",
                 currency: "PLN",
-              }).format(Math.floor(cartStore.cartObject.item_subtotal!))
+              }).format(Math.floor(Number(cartStore.cartObject.item_subtotal!)))
             }}
           </h3>
           <!-- @vue-skip -->
@@ -470,7 +494,7 @@ onMounted(async () => {
               new Intl.NumberFormat("pl-PL", {
                 style: "currency",
                 currency: "PLN",
-              }).format(cartStore.cartObject.item_total)
+              }).format(Number(cartStore.cartObject.item_total))
             }}
             (Zawiera 23% VAT)
           </h3>
