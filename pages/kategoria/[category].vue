@@ -47,7 +47,7 @@ const allLoaded = ref<boolean>(false);
 
 const fetchProducts = async () => {
   try {
-    if (loading.value || allLoaded.value) return;
+    // if (loading.value || allLoaded.value) return;
 
     loading.value = true;
 
@@ -102,7 +102,7 @@ const calculatePages = (count: number): number => {
 const loadMoreProducts = async () => {
   console.log("load more products called");
 
-  if (!allLoaded.value && !loading.value) {
+  if (!allLoaded.value) {
     await fetchProducts();
   }
 };
