@@ -419,7 +419,7 @@ onMounted(async () => {
             ></v-text-field>
             <v-btn @click="applyDiscount" color="primary">Zapisz</v-btn>
           </div>
-          <br />
+          <!-- <br />
           <div class="order-message-wrapper">
             <v-textarea
               label="Wiadomość do zamówienia"
@@ -432,7 +432,7 @@ onMounted(async () => {
               :counter="500"
             >
             </v-textarea>
-          </div>
+          </div> -->
         </div>
 
         <!-- <div class="totals"> -->

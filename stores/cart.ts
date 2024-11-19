@@ -34,7 +34,7 @@ export const useCartStore = defineStore("cart", () => {
   const shippingOptions = ref<ShippingOptionDTO[] | null>([]);
   const availableShippingOptions = ref<ShippingOptionDTO[] | null>();
   const loading = ref<boolean>(false);
-  const freeShippingTreshold = ref<number>(200);
+  const freeShippingTreshold = ref<number>(250);
   const availablePaymentProviders = ref<StorePaymentProvider[] | null>();
 
   const createCart = async (items: Item[] | undefined) => {
@@ -254,7 +254,8 @@ export const useCartStore = defineStore("cart", () => {
 
       const cartResponse = await medusaClient.store.cart.retrieve(cartId, {
         // fields: "*items.variant,+items.product.variants.inventory_quantity",
-        fields: "+billing_address.metadata,+shipping_address.metadata",
+        fields:
+          "*items.product.variants,+billing_address.metadata,+shipping_address.metadata",
       });
 
       cartObject.value = cartResponse.cart as unknown as CartDTO;

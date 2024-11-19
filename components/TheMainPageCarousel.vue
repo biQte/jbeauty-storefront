@@ -6,15 +6,26 @@ const { width, height } = useWindowSize();
 
 <template>
   <!-- show-arrows="hover" -->
+  <!-- :height="width * (9 / 16) * 0.7" -->
   <v-carousel
     show-arrows="hover"
     hide-delimiter-background
-    :height="width * (9 / 16) * 0.7"
     interval="3000"
+    :height="Math.round(width * (3 / 10)) + 'px'"
     cycle
   >
-    <v-carousel-item src="@/assets/img/web.png" cover></v-carousel-item>
-    <v-carousel-item src="@/assets/img/web.jpg" cover></v-carousel-item>
+    <v-carousel-item
+      src="@/assets/img/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
+      contain
+    ></v-carousel-item>
+    <v-carousel-item
+      src="@/assets/img/VYNN_VV_EasyFiberGel_banery_www_-2000x600.jpg"
+      contain
+    ></v-carousel-item>
+    <v-carousel-item
+      src="@/assets/img/VYNN_VV_MegaBaseX3_banery_www_2000x600.jpg"
+      contain
+    ></v-carousel-item>
   </v-carousel>
 </template>
 
