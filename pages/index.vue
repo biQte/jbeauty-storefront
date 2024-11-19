@@ -77,6 +77,7 @@ const loadBestsellingProducts = async () => {
         <ProductCarousel :products="bestsellingProducts" :loading="loading" />
       </v-lazy>
     </div>
+    <div class="info-banner">Troche tu pusto więc dopisuję bo się prują</div>
   </div>
 </template>
 
