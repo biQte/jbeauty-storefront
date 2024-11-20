@@ -73,10 +73,7 @@ function chunkArray(arr: any[], size: number) {
             <NuxtLink :to="`/produkt/${product.handle}`">
               <v-img
                 :src="
-                  product.thumbnail.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )
+                  product.thumbnail!
                 "
                 cover
                 width="340"

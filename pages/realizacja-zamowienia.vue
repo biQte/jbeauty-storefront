@@ -34,7 +34,7 @@ console.log(config.public.stripePublicKey);
 
 let stripeLoadingSuccess = ref<boolean>(true);
 
-const stripePromise = loadStripe(config.public.stripePublicKey);
+const stripePromise = loadStripe(String(config.public.stripePublicKey));
 
 const setupStripe = async () => {
   stripe = await stripePromise;

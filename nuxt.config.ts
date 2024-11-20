@@ -30,10 +30,16 @@ frame-ancestors * data: blob:;
       title: "JBeauty",
     },
   },
+  router: {
+    options: {
+      scrollBehaviorType: "smooth",
+    },
+  },
   runtimeConfig: {
     public: {
       medusaUrl: process.env.NUXT_MEDUSA_URL,
-      medusaPublishableKey: process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
+      medusaPublishableKey:
+        String(process.env.NUXT_MEDUSA_PUBLISHABLE_KEY) || undefined,
       stripePublicKey: process.env.NUXT_PUBLIC_STRIPE_KEY,
       storeUrl: process.env.NUXT_STORE_URL,
       productsCategoryID: process.env.NUXT_PRODUCTS_CATEGORY_ID,
@@ -62,6 +68,7 @@ frame-ancestors * data: blob:;
     "@pinia/nuxt",
     "@vueuse/nuxt",
     "nuxt-delay-hydration",
+    "nuxt-anchorscroll",
   ],
   delayHydration: {
     debug: true,

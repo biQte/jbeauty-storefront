@@ -68,7 +68,7 @@ const login = async (loginData: InferType<typeof loginSchema>) => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          "x-publishable-api-key": config.public.medusaPublishableKey,
+          "x-publishable-api-key": String(config.public.medusaPublishableKey),
         },
       }
     );

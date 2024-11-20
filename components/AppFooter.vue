@@ -28,12 +28,18 @@
       <div class="about">
         <h4>O nas</h4>
         <NuxtLink to="/regulamin"><p>Regulamin</p></NuxtLink>
-        <p>Dostawa i płatność</p>
-        <p>Odstąpienie od umowy</p>
+        <NuxtLink to="/regulamin#shipping-and-payments"
+          ><p>Dostawa i płatność</p></NuxtLink
+        >
+        <NuxtLink to="/regulamin#withdrawal"
+          ><p>Odstąpienie od umowy</p></NuxtLink
+        >
         <NuxtLink to="/polityka-prywatnosci"
           ><p>Polityka prywatności</p></NuxtLink
         >
-        <p>Polityka Cookies</p>
+        <NuxtLink to="/polityka-prywatnosci#cookies"
+          ><p>Polityka Cookies</p></NuxtLink
+        >
       </div>
       <div class="contact">
         <h4>Kontakt</h4>

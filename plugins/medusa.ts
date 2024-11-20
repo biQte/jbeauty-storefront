@@ -18,9 +18,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const medusaClient = new Medusa({
-    baseUrl: config.public.medusaUrl,
+    baseUrl: String(config.public.medusaUrl),
     debug: true,
-    publishableKey: config.public.medusaPublishableKey,
+    publishableKey: String(config.public.medusaPublishableKey),
     auth: {
       type: "session",
       jwtTokenStorageMethod: "session",

@@ -28,10 +28,7 @@ const chunkProducts = (products: StoreProduct[], chunkSize: number) => {
           <NuxtLink :to="`/produkt/${product.handle}`">
             <v-card width="340px">
               <v-img
-                :src="product.thumbnail!.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )"
+                :src="product.thumbnail!"
                 width="340"
                 height="340"
                 cover

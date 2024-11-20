@@ -43,7 +43,7 @@ export const useSessionStore = defineStore("session", () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": config.public.medusaPublishableKey,
+            "x-publishable-api-key": String(config.public.medusaPublishableKey),
           },
         }
       );

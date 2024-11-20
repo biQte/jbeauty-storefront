@@ -84,10 +84,7 @@ const navigateToSearchPage = () => {
         >
           <div class="product-result-content">
             <v-img
-              :src="product.thumbnail!.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )"
+              :src="product.thumbnail!"
               width="50"
               height="50"
               cover

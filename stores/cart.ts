@@ -168,7 +168,7 @@ export const useCartStore = defineStore("cart", () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": config.public.medusaPublishableKey,
+            "x-publishable-api-key": String(config.public.medusaPublishableKey),
           },
           method: "POST",
           body: {
@@ -204,7 +204,7 @@ export const useCartStore = defineStore("cart", () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": config.public.medusaPublishableKey,
+            "x-publishable-api-key": String(config.public.medusaPublishableKey),
           },
           method: "DELETE",
           body: {
@@ -303,7 +303,7 @@ export const useCartStore = defineStore("cart", () => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": config.public.medusaPublishableKey,
+            "x-publishable-api-key": String(config.public.medusaPublishableKey),
           },
           query: {
             cart_id: cartObject.value?.id,
@@ -392,7 +392,9 @@ export const useCartStore = defineStore("cart", () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-publishable-api-key": config.public.medusaPublishableKey,
+              "x-publishable-api-key": String(
+                config.public.medusaPublishableKey
+              ),
             },
             body: JSON.stringify({
               cart_id: cartObject.value.id,
@@ -431,7 +433,7 @@ export const useCartStore = defineStore("cart", () => {
         {
           credentials: "include",
           headers: {
-            "x-publishable-api-key": config.public.medusaPublishableKey,
+            "x-publishable-api-key": String(config.public.medusaPublishableKey),
           },
           method: "POST",
         }

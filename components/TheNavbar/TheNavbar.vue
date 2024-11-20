@@ -58,7 +58,7 @@ onMounted(async () => {
     {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": config.public.medusaPublishableKey,
+        "x-publishable-api-key": String(config.public.medusaPublishableKey),
       },
     }
   );
@@ -75,7 +75,7 @@ onMounted(async () => {
     {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": config.public.medusaPublishableKey,
+        "x-publishable-api-key": String(config.public.medusaPublishableKey),
       },
     }
   );

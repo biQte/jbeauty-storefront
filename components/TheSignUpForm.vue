@@ -141,7 +141,7 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "x-publishable-api-key": config.public.medusaPublishableKey,
+        "x-publishable-api-key": String(config.public.medusaPublishableKey),
       },
       body: JSON.stringify({
         first_name: accountData.firstName,
