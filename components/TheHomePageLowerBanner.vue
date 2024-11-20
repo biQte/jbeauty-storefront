@@ -14,14 +14,17 @@ const config = useRuntimeConfig();
         >
       </div>
     </div>
-    <div class="right banner">
+    <NuxtLink
+      :to="`/produkt/pb-nails-top-do-zeli-i-hybryd-the-best-top-coat-8ml`"
+      class="right banner"
+    >
       <div class="overlay">
         <p>The best coat</p>
         <v-btn :elevation="24" size="x-large" color="transparent"
           >Zobacz więcej</v-btn
         >
       </div>
-    </div>
+    </NuxtLink>
   </div>
 </template>
 

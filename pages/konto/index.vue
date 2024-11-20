@@ -5,6 +5,8 @@ const loading = ref<boolean>(false);
 
 const nuxtApp = useNuxtApp();
 
+const route = useRoute();
+
 const sessionStore = useSessionStore();
 
 const snackbarStore = useSnackbarStore();
@@ -86,6 +88,12 @@ const logout = async () => {
     console.log(e);
   }
 };
+
+onMounted(() => {
+  if (route.query.showOrders) {
+    showOrders.value = true;
+  }
+});
 </script>
 
 <template>

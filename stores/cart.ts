@@ -254,9 +254,19 @@ export const useCartStore = defineStore("cart", () => {
 
       const cartResponse = await medusaClient.store.cart.retrieve(cartId, {
         // fields: "*items.variant,+items.product.variants.inventory_quantity",
-        fields:
-          "*items.product.variants,+billing_address.metadata,+shipping_address.metadata",
+        fields: "+billing_address.metadata,+shipping_address.metadata",
       });
+
+      // const cartResponse = await $fetch(
+      //   `${config.public.medusaUrl}/store/carts/${cartId}?fields=+items.variant.inventory_quantity`,
+      //   {
+      //     credentials: "include",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       "x-publishable-api-key": config.public.medusaPublishableKey,
+      //     },
+      //   }
+      // );
 
       cartObject.value = cartResponse.cart as unknown as CartDTO;
 

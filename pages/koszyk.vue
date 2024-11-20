@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ROUTES } from "~/constants/routes";
 import { useWindowSize } from "@vueuse/core";
+import { type StoreProduct } from "@medusajs/types";
 
 definePageMeta({
   isAccessibleAfterLogin: true,
@@ -10,6 +11,9 @@ const loading = ref<boolean>(false);
 const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
+const nuxtApp = useNuxtApp();
+const medusaClient = nuxtApp.$medusaClient;
+const products = ref<StoreProduct[]>([]);
 
 const { width, height } = useWindowSize();
 const config = useRuntimeConfig();
@@ -54,6 +58,21 @@ watch(
           ? newOptions.availableShippingOptions[0].id
           : null;
     }
+    if (!products.value || products.value.length < 1) {
+      const productIds = cartStore!.cartObject!.items!.map(
+        (item) => item.product_id
+      );
+
+      medusaClient.store.product
+        .list({
+          fields: "+variants.inventory_quantity",
+          // @ts-expect-error
+          id: productIds,
+        })
+        .then((response) => {
+          products.value = response.products;
+        });
+    }
   },
   { immediate: true }
 );
@@ -89,12 +108,41 @@ const changeQuantity = async (itemId: string, quantity: number) => {
   }
 };
 
-const increaseQuantity = (itemId: string) => {
+const increaseQuantity = async (itemId: string) => {
   const currentItem = cartStore.cartObject?.items?.find(
     (item) => item.id === itemId
   );
-  if (currentItem) {
+
+  if (!products.value || products.value.length < 1) {
+    const productIds = cartStore!.cartObject!.items!.map(
+      (item) => item.product_id
+    );
+
+    products.value = (
+      await medusaClient.store.product.list({
+        fields: "+variants.inventory_quantity",
+        // @ts-expect-error
+        id: productIds,
+      })
+    ).products;
+  }
+
+  if (!currentItem) return;
+  const itemInProducts = products.value.find(
+    (product) => product.id === currentItem.product_id
+  );
+  if (!itemInProducts) return;
+  if (
+    Number(itemInProducts.variants?.[0].inventory_quantity) >=
+    Number(currentItem.quantity) + 1
+  ) {
     changeQuantity(itemId, Number(currentItem.quantity) + 1);
+  } else {
+    snackbarStore.showSnackbar(
+      "Brak więcej sztuk w magazynie",
+      "primary",
+      3000
+    );
   }
 };
 

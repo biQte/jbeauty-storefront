@@ -42,11 +42,11 @@ onMounted(async () => {
                 class="product-wrapper"
                 :to="`/produkt/${item.product_handle}`"
               >
-                <!-- <v-img
+                <v-img
                   class="product-cover-image"
                   cover
                   :src="item.thumbnail!"
-                ></v-img> -->
+                ></v-img>
                 {{ item.product_title }}
               </NuxtLink>
             </th>
@@ -80,7 +80,7 @@ onMounted(async () => {
             <th>
               <br />
               <NuxtLink :to="`/produkt/${item.product_handle}`">
-                <!-- <v-img :src="item.thumbnail!" cover></v-img> -->
+                <v-img :src="item.thumbnail!" cover></v-img>
                 <p>{{ item.product_title }}</p>
               </NuxtLink>
               <br />
@@ -311,10 +311,10 @@ onMounted(async () => {
         justify-content: center;
         padding: 1rem;
         gap: 0.5rem;
-        // .product-cover-image {
-        //   width: clamp(80px, 100px, 105px);
-        //   height: clamp(80px, 100px, 105px);
-        // }
+        .product-cover-image {
+          width: clamp(80px, 100px, 105px);
+          height: clamp(80px, 100px, 105px);
+        }
       }
     }
   }

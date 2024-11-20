@@ -27,26 +27,32 @@
     <div class="footer-wrapper-bottom">
       <div class="about">
         <h4>O nas</h4>
-        <p>Regulamin</p>
+        <NuxtLink to="/regulamin"><p>Regulamin</p></NuxtLink>
         <p>Dostawa i płatność</p>
         <p>Odstąpienie od umowy</p>
-        <p>Polityka prywatności</p>
+        <NuxtLink to="/polityka-prywatnosci"
+          ><p>Polityka prywatności</p></NuxtLink
+        >
         <p>Polityka Cookies</p>
       </div>
       <div class="contact">
         <h4>Kontakt</h4>
-        <p>E-mail: info@jbeautysklep.pl</p>
-        <p>Telefon: 792 669 926</p>
+        <a href="mailto:info@jbeautysklep.pl"
+          ><p>E-mail: info@jbeautysklep.pl</p></a
+        >
+        <a href="tel:+48792669926">
+          <p>Telefon: 792 669 926</p>
+        </a>
       </div>
       <div class="personal">
         <h4>Dane osobowe</h4>
-        <p>Konto</p>
-        <p>Zamówienia</p>
+        <NuxtLink to="/konto"><p>Konto</p></NuxtLink>
+        <NuxtLink to="/konto?showOrders=true"><p>Zamówienia</p></NuxtLink>
       </div>
     </div>
     <div class="legal">
-      <p>&copy;JBeauty Joanna Bilska 2024.</p>
-      <p>Wszystkie prawa zastrzeżone.</p>
+      <p>&copy;JBeauty Joanna Bilska {{ new Date().getFullYear() }}.</p>
+      <p>Wszelkie prawa zastrzeżone.</p>
     </div>
   </div>
 </template>

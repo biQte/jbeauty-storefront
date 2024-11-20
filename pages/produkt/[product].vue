@@ -41,6 +41,10 @@ onMounted(async () => {
       fields: "*variants.calculated_price,+variants.inventory_quantity",
     });
 
+    if (!products) {
+      snackbarStore.showSnackbar("Nie znaleziono produktu", "error", 5000);
+    }
+
     console.log(products[0]);
 
     productsObject.value = products[0] as unknown as Product[];
@@ -99,8 +103,15 @@ const decreaseQuantity = () => {
 };
 
 const increaseQuantity = () => {
-  if (counter.value < product.value?.variants?.[0].inventory_quantity!)
+  if (counter.value < product.value?.variants?.[0].inventory_quantity!) {
     counter.value++;
+  } else {
+    snackbarStore.showSnackbar(
+      "Brak więcej sztuk w magazynie",
+      "primary",
+      3000
+    );
+  }
 };
 
 const toggleDescription = () => {

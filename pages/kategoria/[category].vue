@@ -97,6 +97,10 @@ const fetchProducts = async () => {
 //   }
 // };
 
+watch(loading, (newValue) => {
+  console.log("loading", newValue);
+});
+
 const calculatePages = (count: number): number => {
   return Math.ceil(count / limit.value);
 };
@@ -105,11 +109,14 @@ const calculatePages = (count: number): number => {
 const loadMoreProducts = async ({ done }) => {
   console.log("load more products called");
 
+  console.log(allLoaded.value);
+
   if (!allLoaded.value) {
     await fetchProducts();
+    done("ok");
+  } else {
+    done("empty");
   }
-  done("ok");
-  // }
 };
 
 // onMounted(() => {
@@ -148,8 +155,11 @@ console.log("product on cateogory page: ", products);
     <div class="products-container">
       <v-infinite-scroll
         @load="loadMoreProducts"
-        :disabled="allLoaded || loading"
+        :disabled="allLoaded"
+        mode="intersect"
         :width="width"
+        empty-text=""
+        side="end"
       >
         <div class="products-wrapper">
           <v-card
@@ -159,15 +169,7 @@ console.log("product on cateogory page: ", products);
             width="340px"
           >
             <NuxtLink :to="`/produkt/${product.handle}`">
-              <v-img
-                :src="product.thumbnail!.replace(
-                    'http://localhost:9000',
-                    config.public.medusaUrl
-                  )"
-                cover
-                width="340"
-                height="340"
-              />
+              <v-img :src="product.thumbnail!" cover width="340" height="340" />
               <v-card-item>
                 <v-card-title
                   ><h2>
@@ -193,7 +195,7 @@ console.log("product on cateogory page: ", products);
             </NuxtLink>
           </v-card>
         </div>
-        <template v-if="!allLoaded" v-slot:loading>Trwa ładowanie...</template>
+        <template v-slot:loading>Trwa ładowanie...</template>
       </v-infinite-scroll>
     </div>
   </v-sheet>
@@ -218,7 +220,7 @@ console.log("product on cateogory page: ", products);
     .products-wrapper {
       align-self: center;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(340px, 340px));
       width: 100%;
       gap: 15px;
       max-width: 90%;

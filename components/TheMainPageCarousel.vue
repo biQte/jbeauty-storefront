@@ -14,18 +14,24 @@ const { width, height } = useWindowSize();
     :height="Math.round(width * (3 / 10)) + 'px'"
     cycle
   >
-    <v-carousel-item
-      src="@/assets/img/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
-      contain
-    ></v-carousel-item>
-    <v-carousel-item
-      src="@/assets/img/VYNN_VV_EasyFiberGel_banery_www_-2000x600.jpg"
-      contain
-    ></v-carousel-item>
-    <v-carousel-item
-      src="@/assets/img/VYNN_VV_MegaBaseX3_banery_www_2000x600.jpg"
-      contain
-    ></v-carousel-item>
+    <NuxtLink :to="`/victoria-vynn-just-base`">
+      <v-carousel-item
+        src="@/assets/img/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
+        contain
+      ></v-carousel-item>
+    </NuxtLink>
+    <NuxtLink :to="`/victoria-vynn-easy-fiber-gel`">
+      <v-carousel-item
+        src="@/assets/img/VYNN_VV_EasyFiberGel_banery_www_-2000x600.jpg"
+        contain
+      ></v-carousel-item>
+    </NuxtLink>
+    <NuxtLink :to="`/victoria-vynn-mega-base-shimmer`">
+      <v-carousel-item
+        src="@/assets/img/VYNN_VV_MegaBaseX3_banery_www_2000x600.jpg"
+        contain
+      ></v-carousel-item>
+    </NuxtLink>
   </v-carousel>
 </template>
 

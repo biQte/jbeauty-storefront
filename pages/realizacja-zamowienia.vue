@@ -578,6 +578,21 @@ const nextStep = async () => {
     }
 
     if (step.value === 2) {
+      if (
+        cartStore.availableShippingOptions
+          ?.find(
+            (shippingOption) =>
+              shippingOption.id ===
+              cartStore.cartObject?.shipping_methods![0].shipping_option_id
+          )
+          ?.name.toLowerCase()
+          .includes("paczkomat") &&
+        !parcelLockerName.value
+      ) {
+        snackbarStore.showSnackbar("Należy wybrać paczkomat", "error", 5000);
+        loadingStep.value = false;
+        return;
+      }
       await submit();
       await cartStore.retrievePaymentProviders();
 
@@ -990,6 +1005,10 @@ onMounted(() => {
             <v-list-item>
               {{ parcelLockerStreet }} {{ parcelLockerBuildingNumber }}
             </v-list-item>
+            <p>
+              W przypadku problemu ze zmianą paczkomatu, proszę odświeżyć
+              stronę.
+            </p>
           </v-list>
 
           <v-btn @click="showParcelLockerDialog = true" color="warning"
@@ -1234,9 +1253,15 @@ onMounted(() => {
             @click="nextStep"
             color="primary"
             :disabled="
-              !meta.valid &&
-              step === 2 &&
-              !cartStore.cartObject?.shipping_address?.first_name
+              (!meta.valid &&
+                step === 2 &&
+                !cartStore.cartObject?.shipping_address?.first_name) ||
+              (step === 2 &&
+                cartStore.availableShippingOptions
+                  ?.find((option) => option.id === selectedShippingOption)
+                  ?.name.toLowerCase()
+                  .includes('paczkomat') &&
+                !parcelLockerName)
             "
             v-if="
               step < 3 ||
