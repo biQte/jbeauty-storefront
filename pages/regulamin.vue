@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Regulamin",
+  ogTitle: "JBeauty - Regulamin",
+});
+
 const nuxtApp = useNuxtApp();
 
 nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {

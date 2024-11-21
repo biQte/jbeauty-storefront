@@ -94,6 +94,11 @@ onMounted(() => {
     showOrders.value = true;
   }
 });
+
+useSeoMeta({
+  title: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
+  ogTitle: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
+});
 </script>
 
 <template>

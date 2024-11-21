@@ -13,6 +13,11 @@ const snackbarStore = useSnackbarStore();
 
 const query = ref(route.query.q as string) || ""; // Pobieramy parametr wyszukiwania z URL
 
+useSeoMeta({
+  title: `JBeauty - Wyniki wyszukiwania: ${query.value}`,
+  ogTitle: `JBeauty - Wyniki wyszukiwania: ${query.value}`,
+});
+
 const queryOffset = ref<number>(0);
 const currentPage = ref<number>(1);
 const totalProducts = ref<number>(0);

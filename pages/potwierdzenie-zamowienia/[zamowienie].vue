@@ -2,6 +2,11 @@
 import type { OrderDTO, StoreOrder } from "@medusajs/types";
 import { useWindowSize } from "@vueuse/core";
 
+useSeoMeta({
+  title: "JBeauty - Potwierdzenie zamówienia",
+  ogTitle: "JBeuaty - Potwierdzenie zamówienia",
+});
+
 const route = useRoute();
 
 const nuxtApp = useNuxtApp();

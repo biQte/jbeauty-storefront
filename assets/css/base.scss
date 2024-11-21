@@ -97,3 +97,9 @@ body {
 .v-infinite-scroll {
   overflow-y: hidden !important;
 }
+
+.v-window-item.v-window-item--active.v-carousel-item {
+  &:hover {
+    cursor: pointer;
+  }
+}

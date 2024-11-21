@@ -9,6 +9,11 @@ import {
 } from "yup";
 import { ROUTES } from "../constants/routes";
 
+useSeoMeta({
+  title: "JBeauty - Resetowanie hasła",
+  ogTitle: "JBeauty - Resetowanie hasła",
+});
+
 const { width } = useWindowSize();
 const config = useRuntimeConfig();
 const router = useRouter();

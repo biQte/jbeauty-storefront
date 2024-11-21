@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Logowanie",
+  ogTitle: "JBeauty - Logowanie",
+});
+
 definePageMeta({
   isAccesibleAfterLogin: false,
 });

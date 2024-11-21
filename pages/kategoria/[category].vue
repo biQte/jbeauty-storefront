@@ -143,6 +143,11 @@ const loadMoreProducts = async ({ done }) => {
 //   });
 
 console.log("product on cateogory page: ", products);
+
+useSeoMeta({
+  title: "JBeauty - Kategoria",
+  ogTitle: "JBeauty - Kategoria",
+});
 </script>
 
 <template>

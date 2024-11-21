@@ -2,6 +2,7 @@
 import { mergeProps } from "vue";
 import type { ProductCategory } from "@medusajs/client-types";
 import { useWindowSize } from "@vueuse/core";
+
 const loading = ref<boolean>(false);
 
 const cartStore = useCartStore();
@@ -389,6 +390,6 @@ onMounted(async () => {
 }
 
 .logo {
-  color: $primary-color;
+  color: $logo-color;
 }
 </style>

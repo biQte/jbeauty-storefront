@@ -107,7 +107,7 @@ const increaseQuantity = () => {
     counter.value++;
   } else {
     snackbarStore.showSnackbar(
-      "Brak więcej sztuk w magazynie",
+      "Brak większej ilości sztuk w magazynie",
       "primary",
       3000
     );
@@ -121,6 +121,11 @@ const toggleDescription = () => {
 const toggleDetails = () => {
   showDetails.value = !showDetails.value;
 };
+
+useSeoMeta({
+  title: `JBeauty - Produkt`,
+  ogTitle: `JBeauty - Produkt`,
+});
 </script>
 
 <!-- <template>

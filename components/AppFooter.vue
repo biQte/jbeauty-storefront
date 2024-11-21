@@ -7,7 +7,7 @@
       <div class="socials">
         <a href="https://www.tiktok.com/@jbeautysklep.pl" target="_blank"
           ><svg
-            fill="#e42f7b"
+            fill="#ff5c8a"
             width="32px"
             height="32px"
             viewBox="0 0 24 24"
@@ -20,7 +20,7 @@
           </svg>
         </a>
         <a href="https://www.instagram.com/jbeautysklep/" target="_blank">
-          <v-icon icon="mdi-instagram" size="32" color="#e42fb7"></v-icon>
+          <v-icon icon="mdi-instagram" size="32" color="#ff5c8a"></v-icon>
         </a>
       </div>
     </div>
@@ -66,7 +66,7 @@
 <style lang="scss" scoped>
 .footer-wrapper {
   margin-top: 5rem;
-  background-color: #ffeff8;
+  background-color: $secondary-color;
   padding-top: 1rem;
   // margin-bottom: 2rem;
   display: flex;
@@ -105,8 +105,8 @@
   }
 
   .legal {
-    background-color: #e42f7b;
-    color: white;
+    background-color: $secondary-color;
+    color: black;
     width: 100%;
     align-items: center;
     justify-content: center;

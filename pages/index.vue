@@ -1,10 +1,32 @@
 <script setup lang="ts">
+// useHead({
+//   title: "JBeauty - Z pasji do paznokci",
+//   // meta: [
+//   //   {
+//   //     name: "description",
+//   //     content:
+//   //       "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
+//   //   },
+//   // ],
+// });
+
+useSeoMeta({
+  title: "JBeauty - Z pasji do paznokci",
+  ogTitle: "JBeauty - Z pasji do paznokci",
+  description:
+    "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
+  ogDescription:
+    "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
+  // ogImage: ""
+});
+
 definePageMeta({
   isAccessibleAfterLogin: true,
 });
 const loading = ref<boolean>(true);
 
 const bestsellingProducts = ref();
+const recommendedProducts = ref();
 const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
 
@@ -13,6 +35,7 @@ const { width, height } = useWindowSize();
 onMounted(async () => {
   loading.value = true;
   bestsellingProducts.value = await loadBestsellingProducts();
+  recommendedProducts.value = await loadRecommendedProducts();
   console.log(bestsellingProducts.value);
 
   loading.value = false;
@@ -27,6 +50,20 @@ const loadBestsellingProducts = async () => {
     // fields: "*",
   });
   console.log([products]);
+
+  return products;
+};
+
+const loadRecommendedProducts = async () => {
+  const { product_categories } = await medusaClient.store.category.list({
+    handle: "polecane",
+  });
+
+  const { products } = await medusaClient.store.product.list({
+    fields: "*variants.calculated_price,+variants.inventory_quantity",
+    limit: 12,
+    category_id: product_categories[0].id,
+  });
 
   return products;
 };
@@ -79,6 +116,13 @@ const loadBestsellingProducts = async () => {
     </div>
     <TheHomePageBanner />
     <TheHomePageLowerBanner />
+    <br />
+    <div class="recommended-products bestsellers-wrapper">
+      <h2>Polecane</h2>
+      <v-lazy>
+        <ProductCarousel :products="recommendedProducts" :loading="loading" />
+      </v-lazy>
+    </div>
   </div>
 </template>
 
@@ -89,10 +133,7 @@ const loadBestsellingProducts = async () => {
     flex-direction: column;
     gap: 2rem;
     margin-top: 2rem;
-    h2 {
-      margin-left: 10%;
-      font-size: 2rem;
-    }
+
     .products-wrapper {
       display: flex;
       flex-direction: row;
@@ -102,5 +143,9 @@ const loadBestsellingProducts = async () => {
       gap: 2rem;
     }
   }
+}
+h2 {
+  margin-left: 10%;
+  font-size: 2rem;
 }
 </style>

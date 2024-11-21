@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Nie pamiętam hasła",
+  ogTitle: "JBeauty - Nie pamiętam hasła",
+});
+
 const { width } = useWindowSize();
 
 const snackarStore = useSnackbarStore();

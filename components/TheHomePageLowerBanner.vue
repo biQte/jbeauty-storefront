@@ -6,14 +6,14 @@ const config = useRuntimeConfig();
   <div class="lower-banner-wrapper">
     <!-- <v-img src="@/assets/img/fotos-352.jpg" /> -->
     <!-- <v-img src="@/assets/img/fotos-363.jpg" /> -->
-    <div class="left banner">
+    <NuxtLink class="left banner" :to="`/kategoria/swiateczne-perelki`">
       <div class="overlay">
-        <p>Nie wiem jeszcze</p>
+        <p>Świąteczne perełki</p>
         <v-btn :elevation="24" size="x-large" color="transparent"
           >Zobacz więcej</v-btn
         >
       </div>
-    </div>
+    </NuxtLink>
     <NuxtLink
       :to="`/produkt/pb-nails-top-do-zeli-i-hybryd-the-best-top-coat-8ml`"
       class="right banner"
@@ -43,7 +43,7 @@ const config = useRuntimeConfig();
   .banner {
     width: 100%;
     height: 100%;
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-size: 100%;
     display: flex;
@@ -66,13 +66,14 @@ const config = useRuntimeConfig();
       justify-content: center;
       flex-direction: column;
       text-transform: uppercase;
-      background-color: rgba(228, 48, 122, 0.1);
+      background-color: rgba(0, 0, 0, 0.2);
       color: white;
     }
   }
 
   .left {
-    background-image: url("/public/fotos-352.jpg");
+    background-image: url("/public/product_gallery_3f99f2894a.jpg");
+    background-size: cover;
   }
   .right {
     background-image: url("/public/fotos-363.jpg");

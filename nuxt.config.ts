@@ -28,6 +28,29 @@ frame-ancestors * data: blob:;
       //   },
       // ],
       title: "JBeauty",
+      link: [
+        {
+          rel: "shortcut icon",
+          href: "/public/favicon.ico",
+          type: "image/x-icon",
+        },
+        {
+          rel: "apple-touch-icon",
+          href: "/public/apple-touch-icon.png",
+        },
+        {
+          rel: "icon",
+          href: "/public/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          href: "/public/favicon-16x16.png",
+        },
+        {
+          rel: "manifest",
+          href: "/public/site.webmanifest",
+        },
+      ],
     },
   },
   router: {

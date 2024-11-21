@@ -23,8 +23,9 @@
 
 <style lang="scss" scoped>
 .home-page-banner-wrapper {
-  background-color: #ffeff8;
-  color: $primary-color;
+  background-color: $secondary-color;
+  // color: $primary-color;
+  color: black;
   font-size: 1.2rem;
   display: flex;
   align-items: center;

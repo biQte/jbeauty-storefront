@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Polityka prywatności",
+  ogTitle: "JBeauty - Polityka prywatności",
+});
+
 const nuxtApp = useNuxtApp();
 
 nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {

@@ -1,4 +1,13 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Nowości",
+  ogTitle: "JBeauty - Nowości",
+  description:
+    "Nowości w JBeauty - Odkryj najnowsze produkty do stylizacji paznokci! Lakiery, bazy, topy, akcesoria i narzędzia stworzone dla salonów kosmetycznych i osób prywatnych. Sprawdź nasze świeże propozycje i bądź na bieżąco z trendami w manicure!",
+  ogDescription:
+    "Nowości w JBeauty - Odkryj najnowsze produkty do stylizacji paznokci! Lakiery, bazy, topy, akcesoria i narzędzia stworzone dla salonów kosmetycznych i osób prywatnych. Sprawdź nasze świeże propozycje i bądź na bieżąco z trendami w manicure!",
+});
+
 import { type StoreProduct } from "@medusajs/types";
 
 const nuxtApp = useNuxtApp();

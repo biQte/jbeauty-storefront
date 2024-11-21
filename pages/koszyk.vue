@@ -3,6 +3,11 @@ import { ROUTES } from "~/constants/routes";
 import { useWindowSize } from "@vueuse/core";
 import { type StoreProduct } from "@medusajs/types";
 
+useSeoMeta({
+  title: "JBeauty - Koszyk",
+  ogTitle: "JBeauty - Koszyk",
+});
+
 definePageMeta({
   isAccessibleAfterLogin: true,
 });
@@ -139,7 +144,7 @@ const increaseQuantity = async (itemId: string) => {
     changeQuantity(itemId, Number(currentItem.quantity) + 1);
   } else {
     snackbarStore.showSnackbar(
-      "Brak więcej sztuk w magazynie",
+      "Brak większej ilosci sztuk w magazynie",
       "primary",
       3000
     );
@@ -185,7 +190,7 @@ const applyDiscount = async () => {
   console.log("cart store", cartStore);
 
   try {
-    await cartStore.addPromotions([discountInput.value]);
+    await cartStore.addPromotions([discountInput.value.toUpperCase()]);
   } catch (e) {
     console.log(e);
   }

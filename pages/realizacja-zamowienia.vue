@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "JBeauty - Realizacja zamówienia",
+  ogTitle: "JBeauty - Realizacjia zamówienia",
+});
+
 import { useField, useForm, useIsFormValid } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/yup";
 import {
