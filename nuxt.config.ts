@@ -44,6 +44,8 @@ frame-ancestors * data: blob:;
       storeUrl: process.env.NUXT_STORE_URL,
       productsCategoryID: process.env.NUXT_PRODUCTS_CATEGORY_ID,
       brandsCategoryID: process.env.NUXT_BRANDS_CATEGORY_ID,
+      salesChannelID: process.env.NUXT_SALES_CHANNEL_ID,
+      regionID: process.env.NUXT_REGION_ID,
     },
     nitro: {
       envExpansion: true,
