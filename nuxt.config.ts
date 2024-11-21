@@ -31,24 +31,24 @@ frame-ancestors * data: blob:;
       link: [
         {
           rel: "shortcut icon",
-          href: "/public/favicon.ico",
+          href: "/favicon.ico",
           type: "image/x-icon",
         },
         {
           rel: "apple-touch-icon",
-          href: "/public/apple-touch-icon.png",
+          href: "/apple-touch-icon.png",
         },
         {
           rel: "icon",
-          href: "/public/favicon-32x32.png",
+          href: "/favicon-32x32.png",
         },
         {
           rel: "icon",
-          href: "/public/favicon-16x16.png",
+          href: "/favicon-16x16.png",
         },
         {
           rel: "manifest",
-          href: "/public/site.webmanifest",
+          href: "/site.webmanifest",
         },
       ],
     },

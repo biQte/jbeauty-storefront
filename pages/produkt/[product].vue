@@ -441,7 +441,9 @@ useSeoMeta({
               type="button"
               @click="toggleDescription"
             >
-              <span class="font-medium text-gray-900">Opis</span>
+              <span class="font-medium text-gray-900 description-sign"
+                >OPIS</span
+              >
               <span class="ml-6 flex items-center">
                 <span>{{ showDescription ? "—" : "+" }}</span>
               </span>
@@ -557,5 +559,9 @@ useSeoMeta({
 
 ul {
   list-style-type: disc !important;
+}
+
+.description-sign {
+  font-size: 2rem;
 }
 </style>
