@@ -36,7 +36,6 @@ onMounted(async () => {
   loading.value = true;
   bestsellingProducts.value = await loadBestsellingProducts();
   recommendedProducts.value = await loadRecommendedProducts();
-  console.log(bestsellingProducts.value);
 
   loading.value = false;
 });
@@ -49,7 +48,6 @@ const loadBestsellingProducts = async () => {
     // q: "sweat",
     // fields: "*",
   });
-  console.log([products]);
 
   return products;
 };

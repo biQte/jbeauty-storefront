@@ -81,15 +81,9 @@ onMounted(async () => {
     }
   );
 
-  console.log(productCategories.value);
-  console.log(brands.value.product_categories);
-  console.log(brands.value);
-
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
   }
-
-  console.log("cart", cartStore.cartObject);
 });
 </script>
 

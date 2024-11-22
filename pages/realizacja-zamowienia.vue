@@ -35,8 +35,6 @@ const { width, height } = useWindowSize();
 let stripe: any;
 let elements: any;
 
-console.log(config.public.stripePublicKey);
-
 let stripeLoadingSuccess = ref<boolean>(true);
 
 const stripePromise = loadStripe(String(config.public.stripePublicKey));
@@ -46,7 +44,6 @@ const setupStripe = async () => {
 
   if (!stripe) {
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
-    console.log("error");
 
     return;
   }
@@ -66,15 +63,6 @@ const setupStripe = async () => {
     //   : "card",
   };
 
-  console.log(
-    "client secret",
-    // @ts-expect-error
-    cartStore.cartObject?.payment_collection?.payment_sessions?.[0].data
-      .client_secret as string
-  );
-
-  console.log("cart", cartStore.cartObject);
-
   elements = stripe.elements({
     // @ts-expect-error
     clientSecret: cartStore.cartObject?.payment_collection
@@ -83,7 +71,6 @@ const setupStripe = async () => {
     locale: "pl",
   });
   const paymentElement = elements.create("payment", options);
-  console.log(paymentElement);
 
   paymentElement.mount("#payment-element");
 };
@@ -366,8 +353,6 @@ watch(
         (!newOptions.cartObject.shipping_address.metadata
           ?.differentThanShipping as boolean)
       ) {
-        console.log("wants invoice and same as shipping");
-
         vatNumber.value.value =
           newOptions.cartObject.shipping_address?.metadata &&
           newOptions.cartObject.shipping_address.metadata.vatNumber
@@ -386,8 +371,6 @@ watch(
         (newOptions.cartObject.shipping_address.metadata
           ?.differentThanShipping as boolean)
       ) {
-        console.log("wants invoice but different than shipping");
-
         companyPostalCode.value.value = newOptions.cartObject.billing_address
           ?.postal_code
           ? newOptions.cartObject.billing_address.postal_code
@@ -520,18 +503,13 @@ const submit = async () => {
 const completeCart = async () => {
   try {
     await cartStore.fetchCart();
-    console.log(cartStore.cartObject);
 
     const order = await cartStore.completeCart();
-
-    console.log(order);
 
     if (order!.type === "cart") throw order?.error;
 
     router.push(`${ROUTES.ORDER_CONFIRMATION_PAGE}/${order!.order.id}`);
   } catch (e) {
-    console.log(e);
-
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
   }
 };
@@ -546,11 +524,9 @@ const completeCart = async () => {
 // );
 onMounted(async () => {
   await cartStore.fetchCart();
-  console.log("mounted");
 
   if ((route.query.redirect_status as string) === "succeeded") {
     stripeLoadingSuccess.value = true;
-    console.log("payment successful");
 
     await completeCart();
   }
@@ -601,7 +577,6 @@ const nextStep = async () => {
       await submit();
       await cartStore.retrievePaymentProviders();
 
-      console.log(cartStore.availablePaymentProviders);
       await cartStore.selectPaymentProvider(
         !cartStore.availableShippingOptions
           ?.find(
@@ -620,8 +595,6 @@ const nextStep = async () => {
           "stripe"
         )
       ) {
-        console.log("gets there?");
-
         await setupStripe();
       }
     }
@@ -636,8 +609,6 @@ const nextStep = async () => {
 
     loadingStep.value = false;
   } catch (e) {
-    console.log(e);
-
     loadingStep.value = false;
     throw e;
   }
@@ -646,11 +617,8 @@ const nextStep = async () => {
 const form = ref();
 
 watch(form, (newForm) => {
-  console.log("form", form);
-
   form?.value.addEventListener("submit", async (event: any) => {
     event.preventDefault();
-    console.log("submitting stripe form");
 
     const result = await stripe.confirmPayment({
       //`Elements` instance that was used to create the Payment Element
@@ -662,7 +630,6 @@ watch(form, (newForm) => {
 
     if (result.error) {
       snackbarStore.showSnackbar(result.error, "error", 5000);
-      console.log(result.error);
     } else {
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
@@ -724,9 +691,8 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
 
 let parcelLockerEventListener: any = null;
 
-watch(parcelLockerEventListener, (newValue) => {
-  console.log(newValue);
-});
+// watch(parcelLockerEventListener, (newValue) => {
+// });
 
 const listenForParcelLockerSelect = () => {
   document.removeEventListener("onpointselect", () => {});
@@ -743,7 +709,6 @@ onMounted(() => {
   isClient.value = true;
 
   // const widget = document.getElementById("geowidget");
-  // console.log("widget", widget);
   // parcelLockerEventListener = document.addEventListener(
   //   "onpointselect",
   //   (event) => {
@@ -767,7 +732,7 @@ onMounted(() => {
     v-model="step"
     show-actions
     :items="stepperItems"
-    :width="width < 720 ? width * 0.8 : 950"
+    :width="width < 720 ? width : 950"
     next-text="Dalej"
     prev-text="Wróć"
   >
@@ -1124,14 +1089,30 @@ onMounted(() => {
               <td>{{ product.product_title }}</td>
               <td>{{ product.quantity }}</td>
               <td>
-                {{
-                  new Intl.NumberFormat("pl-PL", {
-                    style: "currency",
-                    currency: "PLN",
-                  }).format(
-                    Number(product.unit_price) * Number(product.quantity)
-                  )
-                }}
+                <span :class="{ strike: product.compare_at_unit_price }">
+                  {{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      Number(
+                        product.compare_at_unit_price
+                          ? product.compare_at_unit_price
+                          : product.unit_price
+                      ) * Number(product.quantity)
+                    )
+                  }}
+                </span>
+                <span class="sale-price" v-if="product.compare_at_unit_price">
+                  &nbsp;{{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      Number(product.unit_price) * Number(product.quantity)
+                    )
+                  }}
+                </span>
               </td>
             </tr>
           </tbody>
@@ -1377,5 +1358,14 @@ h4 {
   #submit {
     align-self: end;
   }
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

@@ -74,7 +74,6 @@ const login = async (loginData: InferType<typeof loginSchema>) => {
     );
 
     loading.value = false;
-    console.log(customer);
 
     snackbarMessage.value = "Zalogowano pomyślnie";
     snackbarColor.value = "success";

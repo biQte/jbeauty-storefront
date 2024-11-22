@@ -27,10 +27,8 @@ const showOverlay = () => {
   activeOverlay.value = true;
 };
 
-watch(activeOverlay, (newValue) => {
-  console.log(newValue);
-  console.log(currentIndex.value);
-});
+// watch(activeOverlay, (newValue) => {
+// });
 
 onMounted(async () => {
   // activeOverlay.value = false;
@@ -44,8 +42,6 @@ onMounted(async () => {
     if (!products) {
       snackbarStore.showSnackbar("Nie znaleziono produktu", "error", 5000);
     }
-
-    console.log(products[0]);
 
     productsObject.value = products[0] as unknown as Product[];
     product.value = productsObject.value as unknown as Product;
@@ -387,15 +383,40 @@ useSeoMeta({
             {{ product?.subtitle }}
           </h3>
           <p v-show="!loading && product?.variants" class="text-lg mt-2 mb-4">
-            {{
-              new Intl.NumberFormat("pl-PL", {
-                style: "currency",
-                currency: "PLN",
-              }).format(
-                // @ts-expect-error
-                product?.variants?.[0].calculated_price.original_amount!
-              )
-            }}
+            <!-- @vue-expect-error -->
+            <span
+              :class="{strike: product?.variants?.[0].calculated_price?.calculated_price
+                          ?.price_list_type === 'sale' && product?.variants?.[0].inventory_quantity! > 0}"
+              >{{
+                new Intl.NumberFormat("pl-PL", {
+                  style: "currency",
+                  currency: "PLN",
+                }).format(
+                  // @ts-expect-error
+                  product?.variants?.[0].calculated_price.original_amount!
+                )
+              }}</span
+            >
+            <!-- @vue-expect-error -->
+            <span
+              v-if="
+                      product?.variants?.[0].calculated_price?.calculated_price
+                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0
+                    "
+              class="sale-price"
+            >
+              <!-- @vue-expect-error -->
+              &nbsp;{{
+                new Intl.NumberFormat("pl-PL", {
+                  style: "currency",
+                  currency: "PLN",
+                }).format(
+                  Number(
+                    product?.variants?.[0].calculated_price?.calculated_amount
+                  )
+                )
+              }}
+            </span>
           </p>
 
           <div class="product-actions" v-show="!loading">
@@ -563,5 +584,14 @@ ul {
 
 .description-sign {
   font-size: 2rem;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

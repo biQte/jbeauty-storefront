@@ -31,7 +31,6 @@ const getIsEmailValidAndAvailable = async (
     // TODO: validate and check availability
     // const available = await medusaClient.auth.exists(email);
     // await medusaClient.auth.
-    // console.log(available);
 
     // if (available.exists) {
     //   return false;
@@ -39,7 +38,6 @@ const getIsEmailValidAndAvailable = async (
 
     return true;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
@@ -133,8 +131,6 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
       password: accountData.password,
     });
 
-    console.log("retrieved token");
-
     await fetch(`${config.public.medusaUrl}/store/customers`, {
       credentials: "include",
       method: "POST",
@@ -149,8 +145,6 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
         email: accountData.email,
       }),
     });
-
-    console.log("fetch completed");
 
     loading.value = false;
     snackbarMessage.value = "Zarejestrowano pomyślnie";

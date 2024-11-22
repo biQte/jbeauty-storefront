@@ -4,8 +4,6 @@ const showCookiesBanner = ref<boolean>(false);
 const getCookiesAcceptationFromStorage = () => {
   const cookies = localStorage.getItem("cookiesAccepted");
 
-  console.log(cookies);
-
   if (!cookies || cookies !== "true") {
     showCookiesBanner.value = true;
   } else {

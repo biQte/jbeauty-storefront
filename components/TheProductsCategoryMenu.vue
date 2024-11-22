@@ -6,9 +6,6 @@ const props = defineProps<{
 }>();
 
 const mainCategories = props.categories[0].category_children;
-
-console.log("kategorie dla produktów: ", props.categories);
-console.log("main categories", props.categories[0].category_children);
 </script>
 
 <template>

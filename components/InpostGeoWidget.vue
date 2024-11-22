@@ -74,9 +74,7 @@ function initializeWidget() {
     geoElement.id = widgetId;
     wrapperDiv.appendChild(geoElement);
 
-    geoElement.addEventListener("inpost.geowidget.init", (event: any) => {
-      console.log("GeoWidget initialized with API:", event.detail.api);
-    });
+    geoElement.addEventListener("inpost.geowidget.init", (event: any) => {});
   } else {
     console.error("GeoWidget wrapper not found.");
   }
@@ -94,9 +92,7 @@ onMounted(() => {
 
   loadStylesheet(
     stylesheetUrl,
-    () => {
-      console.log("GeoWidget stylesheet loaded.");
-    },
+    () => {},
     () => {
       console.error("Failed to load GeoWidget stylesheet.");
     }
@@ -105,7 +101,6 @@ onMounted(() => {
   loadScript(
     scriptUrl,
     () => {
-      console.log("GeoWidget script loaded.");
       initializeWidget();
     },
     () => {
@@ -118,7 +113,6 @@ onUnmounted(() => {
   //   const geoElement = document.getElementById(widgetId);
   //   if (geoElement) {
   //     geoElement.remove();
-  //     console.log("GeoWidget removed.");
   //   }
 });
 </script>

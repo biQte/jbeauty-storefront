@@ -86,10 +86,7 @@ watch(
   () => cartStore.availableShippingOptions,
   (oldValue, newValue) => {
     if (newValue !== undefined || newValue !== null) {
-      console.log("loadedShippingOptions");
     }
-
-    console.log("shipping options", cartStore.availableShippingOptions);
   }
 );
 
@@ -101,14 +98,10 @@ const changeQuantity = async (itemId: string, quantity: number) => {
     return;
   }
 
-  console.log(quantity);
-
   if (typeof quantity !== "number") quantity = parseInt(quantity);
 
   try {
     await cartStore.updateLineItem(itemId, quantity);
-
-    console.log(cartStore.cartObject);
   } finally {
   }
 };
@@ -180,22 +173,16 @@ watch(sessionStore, async (newValue) => {
       undefined
     );
   }
-
-  console.log("something changed in session store");
 });
 
 const applyDiscount = async () => {
   if (!discountInput.value) return;
-
-  console.log("cart store", cartStore);
 
   try {
     await cartStore.addPromotions([discountInput.value.toUpperCase()]);
   } catch (e) {
     console.log(e);
   }
-
-  console.log("cart po aktualizacji", cartStore.cartObject);
 
   if (
     // @ts-expect-error
@@ -229,7 +216,6 @@ const removeDiscount = async (code: string) => {
       (promotion) => promotion.code === code
     );
     if (!discountInCart) {
-      console.log("Kod rabatowy nie został znaleziony w koszyku.");
       return;
     }
 
@@ -258,7 +244,6 @@ const getPromotionAmount = (promotionId: string) => {
 };
 
 // watch(cartStore.loading, (newValue) => {
-//   console.log(newValue);
 // });
 
 const proceedToCheckout = async () => {
@@ -286,7 +271,6 @@ const proceedToCheckout = async () => {
 
 onMounted(async () => {
   await cartStore.fetchCart();
-  console.log(cartStore.cartObject);
 
   if (cartStore.cartObject?.metadata?.orderMessage) {
     orderMessage.value = cartStore.cartObject?.metadata?.orderMessage as string;
@@ -300,8 +284,6 @@ onMounted(async () => {
       undefined,
       undefined
     );
-
-    console.log("associated cart with customer");
   }
 });
 </script>
@@ -357,12 +339,32 @@ onMounted(async () => {
               <!-- </div> -->
             </th>
             <th>
-              {{
-                new Intl.NumberFormat("pl-PL", {
-                  style: "currency",
-                  currency: "PLN",
-                }).format(Number(item.unit_price))
-              }}
+              <span
+                :class="{
+                  strike: item.compare_at_unit_price,
+                }"
+              >
+                {{
+                  new Intl.NumberFormat("pl-PL", {
+                    style: "currency",
+                    currency: "PLN",
+                  }).format(
+                    Number(
+                      item.compare_at_unit_price
+                        ? item.compare_at_unit_price
+                        : item.unit_price
+                    )
+                  )
+                }}
+              </span>
+              <span v-if="item.compare_at_unit_price" class="sale-price">
+                &nbsp;{{
+                  new Intl.NumberFormat("pl-PL", {
+                    style: "currency",
+                    currency: "PLN",
+                  }).format(Number(item.unit_price))
+                }}
+              </span>
             </th>
             <th>
               <div class="quantity-actions-group">
@@ -416,7 +418,27 @@ onMounted(async () => {
               </NuxtLink>
               <p>
                 Cena:
-                {{
+                <span
+                  :class="{
+                    strike: item.compare_at_unit_price,
+                  }"
+                >
+                  {{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      Number(
+                        item.compare_at_unit_price
+                          ? item.compare_at_unit_price
+                          : item.unit_price
+                      )
+                    )
+                  }}
+                </span>
+              </p>
+              <p v-if="item.compare_at_unit_price" class="sale-price">
+                &nbsp;{{
                   new Intl.NumberFormat("pl-PL", {
                     style: "currency",
                     currency: "PLN",
@@ -497,7 +519,7 @@ onMounted(async () => {
               new Intl.NumberFormat("pl-PL", {
                 style: "currency",
                 currency: "PLN",
-              }).format(Math.floor(Number(cartStore.cartObject.item_subtotal!)))
+              }).format(Number(cartStore.cartObject.item_subtotal!))
             }}
           </h3>
           <!-- @vue-skip -->
@@ -707,9 +729,18 @@ onMounted(async () => {
     }
   }
 
-  .strike {
-    text-decoration: line-through;
-    opacity: 0.6;
-  }
+  // .strike {
+  //   text-decoration: line-through;
+  //   opacity: 0.6;
+  // }
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

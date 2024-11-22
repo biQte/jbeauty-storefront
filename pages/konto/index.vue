@@ -40,8 +40,6 @@ const loadOrders = async () => {
     const { orders } = await medusaClient.store.order.list();
 
     ordersList.value = orders;
-
-    console.log("order response", orders);
   } catch (e) {
     snackbarStore.showSnackbar(
       "Wystąpił problem podczas pobierania zamówień",

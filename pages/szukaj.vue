@@ -90,14 +90,42 @@ watch(currentPage, (newPage) => {
             <v-card-item>
               <v-card-title>{{ product.title }}</v-card-title>
               <v-card-subtitle
-                >{{
-                  new Intl.NumberFormat("pl-PL", {
-                    style: "currency",
-                    currency: "PLN",
-                  }).format(
-                    product.variants?.[0].calculated_price?.original_amount!
-                  )
-                }}
+                ><span
+                  class="product-price"
+                  :class="{
+                      strike:
+                        product.variants?.[0].calculated_price?.calculated_price
+                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0,
+                    }"
+                >
+                  {{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      product.variants?.[0].calculated_price?.original_amount!
+                    )
+                  }}
+                </span>
+                <span
+                  v-if="
+                      product.variants?.[0].calculated_price?.calculated_price
+                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0
+                    "
+                  class="sale-price"
+                >
+                  &nbsp;{{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      Number(
+                        product.variants?.[0].calculated_price
+                          ?.calculated_amount
+                      )
+                    )
+                  }}
+                </span>
                 <b v-if="product.variants?.[0].inventory_quantity! < 1">
                   - Chwilowo niedostępny</b
                 ></v-card-subtitle
@@ -157,5 +185,14 @@ h1 {
   @media only screen and (max-width: 720px) {
     padding: 0;
   }
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

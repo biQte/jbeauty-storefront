@@ -15,15 +15,11 @@ const { width, height } = useWindowSize();
 
 const snackbarStore = useSnackbarStore();
 
-console.log(route.params);
-
 const fetchCategories = async () => {
   const { product_categories } = await medusaClient.store.category.list({
     handle: route.params.category as string,
     // include_descendants_tree: true,
   });
-
-  console.log("categories", product_categories);
 
   if (product_categories.length > 0) {
     categoryName.value = product_categories[0].name;
@@ -47,8 +43,6 @@ const allLoaded = ref<boolean>(false);
 
 const fetchProducts = async () => {
   try {
-    console.log("fetch products called");
-
     if (loading.value || allLoaded.value) return;
 
     loading.value = true;
@@ -97,9 +91,8 @@ const fetchProducts = async () => {
 //   }
 // };
 
-watch(loading, (newValue) => {
-  console.log("loading", newValue);
-});
+// watch(loading, (newValue) => {
+// });
 
 const calculatePages = (count: number): number => {
   return Math.ceil(count / limit.value);
@@ -107,10 +100,6 @@ const calculatePages = (count: number): number => {
 
 // @ts-expect-error
 const loadMoreProducts = async ({ done }) => {
-  console.log("load more products called");
-
-  console.log(allLoaded.value);
-
   if (!allLoaded.value) {
     await fetchProducts();
     done("ok");
@@ -141,8 +130,6 @@ const loadMoreProducts = async ({ done }) => {
 //     // offset: 20, // apply offset based on current page
 //     // include_category_children: true,
 //   });
-
-console.log("product on cateogory page: ", products);
 
 useSeoMeta({
   title: "JBeauty - Kategoria",
@@ -182,13 +169,39 @@ useSeoMeta({
                   </h2></v-card-title
                 >
                 <v-card-subtitle
-                  ><span class="product-price">
+                  ><span
+                    class="product-price"
+                    :class="{
+                      strike:
+                        product.variants?.[0].calculated_price?.calculated_price
+                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0,
+                    }"
+                  >
                     {{
                       new Intl.NumberFormat("pl-PL", {
                         style: "currency",
                         currency: "PLN",
                       }).format(
                         product.variants?.[0].calculated_price?.original_amount!
+                      )
+                    }}
+                  </span>
+                  <span
+                    v-if="
+                      product.variants?.[0].calculated_price?.calculated_price
+                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0
+                    "
+                    class="sale-price"
+                  >
+                    &nbsp;{{
+                      new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      }).format(
+                        Number(
+                          product.variants?.[0].calculated_price
+                            ?.calculated_amount
+                        )
                       )
                     }}
                   </span>
@@ -255,5 +268,14 @@ h2 {
 
 .product-price {
   font-size: 1rem !important;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

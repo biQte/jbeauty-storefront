@@ -8,8 +8,6 @@ const nuxtApp = useNuxtApp();
 
 nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {
   if (hash) {
-    console.log(hash);
-
     const targetSelector = hash;
     const targetElement = document.querySelector(targetSelector);
     if (targetElement) {

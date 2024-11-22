@@ -368,8 +368,6 @@ export const useCartStore = defineStore("cart", () => {
 
       availablePaymentProviders.value = payment_providers;
     } catch (e) {
-      console.log(e);
-
       throw e;
     }
   };

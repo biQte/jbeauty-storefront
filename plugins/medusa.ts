@@ -2,8 +2,6 @@ import Medusa from "@medusajs/js-sdk";
 
 // const config = useRuntimeConfig();
 
-// console.log("dziala ale sie pruje", config.public.medusaUrl);
-
 // export const medusaClient = new Medusa({
 //   baseUrl: config.public.medusaUrl,
 //   debug: true,

@@ -82,8 +82,38 @@ function chunkArray(arr: any[], size: number) {
               <v-card-item>
                 <v-card-title>{{ product.title }}</v-card-title>
                 <v-card-subtitle
-                  >{{ formatPrice(product)
-                  }}<b v-if="product.variants?.[0].inventory_quantity! < 1">
+                  ><span
+                    :class="{strike: product.variants?.[0].calculated_price?.calculated_price
+                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0}"
+                    >{{
+                      new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      }).format(
+                        product.variants?.[0].calculated_price?.original_amount!
+                      )
+                    }}</span
+                  >
+                  <span
+                    v-if="
+                      product.variants?.[0].calculated_price?.calculated_price
+                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0
+                    "
+                    class="sale-price"
+                  >
+                    &nbsp;{{
+                      new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      }).format(
+                        Number(
+                          product.variants?.[0].calculated_price
+                            ?.calculated_amount
+                        )
+                      )
+                    }}
+                  </span>
+                  <b v-if="product.variants?.[0].inventory_quantity! < 1">
                     - Chwilowo niedostępny</b
                   ></v-card-subtitle
                 >
@@ -96,20 +126,29 @@ function chunkArray(arr: any[], size: number) {
   </v-carousel>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .product-chunk {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
 }
+
+.strike {
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.2rem;
+  color: $primary-color;
+}
 </style>
 
 <script lang="ts">
-function formatPrice(product: StoreProduct) {
-  return new Intl.NumberFormat("pl-PL", {
-    style: "currency",
-    currency: "PLN",
-  }).format(product.variants?.[0].calculated_price?.original_amount!);
-}
+// function formatPrice(product: StoreProduct) {
+//   return new Intl.NumberFormat("pl-PL", {
+//     style: "currency",
+//     currency: "PLN",
+//   }).format(product.variants?.[0].calculated_price?.original_amount!);
+// }
 </script>
