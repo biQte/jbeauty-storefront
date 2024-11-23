@@ -74,6 +74,10 @@ frame-ancestors * data: blob:;
       envExpansion: true,
     },
   },
+  nitro: {
+    compressPublicAssets: true,
+    minify: true,
+  },
   compatibilityDate: "2024-07-09",
   debug: false,
   imports: {

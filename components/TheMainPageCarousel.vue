@@ -15,7 +15,8 @@ const { width, height } = useWindowSize();
     cycle
     class="carousel"
   >
-    <NuxtLink :to="`/kategoria/victoria-vynn-just-base`">
+    <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
+      <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
       <v-carousel-item
         src="/public/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
         contain
