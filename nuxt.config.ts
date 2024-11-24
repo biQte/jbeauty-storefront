@@ -98,6 +98,7 @@ frame-ancestors * data: blob:;
     "@vueuse/nuxt",
     "nuxt-delay-hydration",
     "nuxt-anchorscroll",
+    "nuxt-gtag",
   ],
   delayHydration: {
     debug: true,
@@ -131,5 +132,9 @@ frame-ancestors * data: blob:;
         },
       },
     },
+  },
+  // @ts-expect-error
+  gtag: {
+    id: "G-CV9TZ8BS61",
   },
 });
