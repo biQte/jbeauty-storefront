@@ -99,6 +99,7 @@ frame-ancestors * data: blob:;
     "nuxt-delay-hydration",
     "nuxt-anchorscroll",
     "nuxt-gtag",
+    "@nuxtjs/sitemap",
   ],
   delayHydration: {
     debug: true,
@@ -133,8 +134,37 @@ frame-ancestors * data: blob:;
       },
     },
   },
-  // @ts-expect-error
   gtag: {
     id: "G-CV9TZ8BS61",
   },
+
+  // sitemap: {
+  //   siteUrl: process.env.NUXT_STORE_URL,
+  //   autoLastMode: true,
+  //   siteMaps: [
+  //     {
+  //       path: "sitemap.xml",
+  //       routes: async () => {
+  //         const categories = ""; // fetch categories
+  //         const products = ""; // fetch products
+
+  //         return [
+  //           ...categories,
+  //           ...products,
+  //           "/",
+  //           "/kontakt",
+  //           "/konto",
+  //           "/kody-rabatowe",
+  //           "/login",
+  //           "/nie-pamietam-hasla",
+  //           "/nowosci",
+  //           "/polityka-prywatnosci",
+  //           "/regulamin",
+  //           "/rejestracja",
+  //           "szukaj",
+  //         ];
+  //       },
+  //     },
+  //   ],
+  // },
 });

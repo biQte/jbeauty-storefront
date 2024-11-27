@@ -183,13 +183,13 @@ onMounted(async () => {
                 variant="text"
                 >Nowości</v-btn
               >
-              <v-btn
+              <!--<v-btn
                 to="/kody-rabatowe"
                 @click="closeMenu"
                 class="mobile-menu-item"
                 variant="text"
                 >Kody rabatowe</v-btn
-              >
+              >-->
               <v-btn
                 to="/kontakt"
                 @click="closeMenu"
@@ -260,14 +260,14 @@ onMounted(async () => {
             size="small"
             >Nowości</v-btn
           >
-          <v-btn
+          <!--<v-btn
             class="menu-link"
             variant="text"
             :to="`/kody-rabatowe`"
             :active="false"
             size="small"
             >Kody rabatowe</v-btn
-          >
+          >-->
           <v-btn
             class="menu-link"
             variant="text"
