@@ -24,6 +24,12 @@ const { width, height } = useWindowSize();
     <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink>
+    <NuxtLink :to="`/kategoria/victoria-vynn-just-base`">
+      <v-carousel-item
+        src="/public/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
+        contain
+      ></v-carousel-item>
+    </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-easy-fiber-gel`">
       <v-carousel-item
         src="/public/VYNN_VV_EasyFiberGel_banery_www_-2000x600.jpg"
