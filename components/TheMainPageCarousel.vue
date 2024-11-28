@@ -15,12 +15,12 @@ const { width, height } = useWindowSize();
     cycle
     class="carousel"
   >
-    <!-- <NuxtLink :to="`/kategoria/pb-nails`">
+    <NuxtLink :to="`/kategoria/pb-nails`">
       <v-carousel-item
         src="/public/black-weekend-web2.jpg"
         contain
       ></v-carousel-item>
-    </NuxtLink> -->
+    </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink>
