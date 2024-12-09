@@ -5,6 +5,8 @@ const props = defineProps({
   error: Object as () => NuxtError,
 });
 
+console.log(props.error?.message);
+
 const pageNotFound = props.error?.statusCode === 404;
 </script>
 
