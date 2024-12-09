@@ -14,6 +14,24 @@ const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
 const mobileMenu = ref<boolean>(false);
 
+const config = useRuntimeConfig();
+
+const { data: pcats } = await useFetch(
+  `/api/categories/${config.public.productsCategoryID}`
+);
+
+productCategories.value = pcats.value;
+
+console.log(productCategories.value);
+console.log("---------------------------------");
+console.log(pcats.value);
+
+const { data: bcats } = await useFetch(
+  `/api/categories/${config.public.brandsCategoryID}`
+);
+
+brands.value = bcats.value;
+
 const productCategoryMenuOpen = ref<boolean>(false);
 const brandCategoryMenuOpen = ref<boolean>(false);
 const toggleProductCategoryMenu = () => {
@@ -30,56 +48,33 @@ watch(mobileMenu, (newValue) => {
   }
 });
 
-const config = useRuntimeConfig();
-
 const closeMenu = () => {
   mobileMenu.value = false;
 };
 
 onMounted(async () => {
   const cartId = localStorage.getItem("cart_id");
-
-  // const { product_categories } = await medusaClient.store.category.retrieve(
-  // {
-  // handle: "produkty",
-  // q: "pcat_01JCGXYYM4YXHB7W40TMC5WCXT",
-  // include_descendants_tree: true,
-  // fields: "*category_children",
-  // }
+  // const { product_categories } = await $fetch(
+  //   `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.productsCategoryID}&fields=*category_children`,
+  //   {
+  //     credentials: "include",
+  //     headers: {
+  //       "x-publishable-api-key": String(config.public.medusaPublishableKey),
+  //     },
+  //   }
   // );
 
-  // const searchParams = new URLSearchParams({
-  //   handle: "produkty",
-  //   fields: "*category_children",
-  // });
-  // parent_category_id=pcat_01JCGXYYM4YXHB7W40TMC5WCXT
-  // @ts-expect-error
-  const { product_categories } = await $fetch(
-    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.productsCategoryID}&fields=*category_children`,
-    {
-      credentials: "include",
-      headers: {
-        "x-publishable-api-key": String(config.public.medusaPublishableKey),
-      },
-    }
-  );
+  // productCategories.value = product_categories;
 
-  productCategories.value = product_categories;
-
-  // brands.value = await medusaClient.store.category.list({
-  // handle: "marki",
-  // include_descendants_tree: true,
-  // });
-
-  brands.value = await $fetch(
-    `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.brandsCategoryID}&fields=*category_children`,
-    {
-      credentials: "include",
-      headers: {
-        "x-publishable-api-key": String(config.public.medusaPublishableKey),
-      },
-    }
-  );
+  // brands.value = await $fetch(
+  //   `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.brandsCategoryID}&fields=*category_children`,
+  //   {
+  //     credentials: "include",
+  //     headers: {
+  //       "x-publishable-api-key": String(config.public.medusaPublishableKey),
+  //     },
+  //   }
+  // );
 
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
@@ -118,64 +113,10 @@ onMounted(async () => {
               </ul>
               <ul class="product-categories">
                 <TheNavbarMobileCategoryItem
-                  :category="brands.product_categories[0]"
+                  :category="brands[0]"
                   @close-menu="closeMenu"
                 />
               </ul>
-              <!-- <div class="d-flex align-center">
-                <v-btn
-                  to="/kategoria/produkty"
-                  @click="closeMenu"
-                  variant="text"
-                  >Produkty</v-btn
-                >
-                <v-btn
-                  variant="text"
-                  icon="mdi-chevron-down"
-                  @click="toggleProductCategoryMenu"
-                ></v-btn>
-              </div>
-              <v-expand-transition>
-                <ul v-show="productCategoryMenuOpen" class="product-categories">
-                  <li
-                    v-for="category in productCategories[0].category_children"
-                    :key="category.id"
-                  >
-                    <v-btn
-                      variant="text"
-                      @click="closeMenu"
-                      :to="`/kategoria/${category.handle}`"
-                      >{{ category.name }}</v-btn
-                    >
-                  </li>
-                </ul>
-              </v-expand-transition> -->
-              <!-- <div class="d-flex align-center">
-                <v-btn to="/kategoria/marki" @click="closeMenu" variant="text"
-                  >Marki</v-btn
-                >
-                <v-btn
-                  variant="text"
-                  icon="mdi-chevron-down"
-                  @click="toggleBrandCategoryMenu"
-                ></v-btn>
-              </div>
-              <v-expand-transition>
-                <ul v-show="brandCategoryMenuOpen" class="product-categories">
-                  <li
-                    v-for="category in brands.product_categories[0]
-                      .category_children"
-                    :key="category.id"
-                  >
-                    <v-btn
-                      @click="closeMenu"
-                      variant="text"
-                      :to="`/kategoria/${category.handle}`"
-                      >{{ category.name }}</v-btn
-                    >
-                  </li>
-                </ul>
-              </v-expand-transition> -->
               <v-btn
                 to="/nowosci"
                 @click="closeMenu"
@@ -183,13 +124,6 @@ onMounted(async () => {
                 variant="text"
                 >Nowości</v-btn
               >
-              <!--<v-btn
-                to="/kody-rabatowe"
-                @click="closeMenu"
-                class="mobile-menu-item"
-                variant="text"
-                >Kody rabatowe</v-btn
-              >-->
               <v-btn
                 to="/kontakt"
                 @click="closeMenu"
@@ -249,7 +183,7 @@ onMounted(async () => {
               >
             </template>
             <TheProductsCategoryMenu
-              :categories="brands.product_categories as unknown as ProductCategory[]"
+              :categories="brands as unknown as ProductCategory[]"
             />
           </v-menu>
           <v-btn

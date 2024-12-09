@@ -15,21 +15,6 @@ const { width, height } = useWindowSize();
 
 const snackbarStore = useSnackbarStore();
 
-const fetchCategories = async () => {
-  const { product_categories } = await medusaClient.store.category.list({
-    handle: route.params.category as string,
-    // include_descendants_tree: true,
-  });
-
-  if (product_categories.length > 0) {
-    categoryName.value = product_categories[0].name;
-    categoryIds.value = [
-      product_categories[0].id,
-      ...product_categories[0].category_children.map((child) => child.id),
-    ];
-  }
-};
-
 const queryOffset = ref<number>(0);
 const currentPage = ref<number>(1);
 const totalProducts = ref<number>(0);
@@ -41,15 +26,23 @@ const categoryName = ref<string>("");
 const loading = ref<boolean>(false);
 const allLoaded = ref<boolean>(false);
 
+const { data: categories, error } = await useFetch(
+  `/api/categories/${route.params.category}`
+);
+
+if (categories.value.length > 0) {
+  categoryName.value = categories.value[0].name;
+  categoryIds.value = [
+    categories.value[0].id,
+    ...categories.value[0].category_children.map((child: any) => child.id),
+  ];
+}
+
 const fetchProducts = async () => {
   try {
     if (loading.value || allLoaded.value) return;
 
     loading.value = true;
-
-    if (categoryIds.value.length === 0) {
-      await fetchCategories();
-    }
 
     const result = await medusaClient.store.product.list({
       category_id: categoryIds.value,
@@ -73,27 +66,6 @@ const fetchProducts = async () => {
   }
 };
 
-// const setPage = (page: number) => {
-//   // if (page > 0 && page <= totalPages.value) {
-//   //   currentPage.value = page;
-//   //   queryOffset.value = (page - 1) * limit.value;
-//   //   fetchProducts();
-//   // }
-//   if (page > 0 && page <= totalPages.value) {
-//     router.push({ query: { ...route.query, strona: page } });
-//     currentPage.value = page;
-//     queryOffset.value = (page - 1) * limit.value;
-//     fetchProducts();
-//     window.scrollTo({
-//       top: 0,
-//       behavior: "smooth",
-//     });
-//   }
-// };
-
-// watch(loading, (newValue) => {
-// });
-
 const calculatePages = (count: number): number => {
   return Math.ceil(count / limit.value);
 };
@@ -108,32 +80,11 @@ const loadMoreProducts = async ({ done }) => {
   }
 };
 
-// onMounted(() => {
-//   // const pageFromQuery = parseInt(route.query.strona as string) || 1;
-//   // currentPage.value = pageFromQuery;
-//   // queryOffset.value = (pageFromQuery - 1) * limit.value;
-//   fetchProducts();
-//   // products.value.push(...(await fetchProducts()));
-//   // products.value = await fetchProducts();
-// });
-
-// watch(currentPage, (newPage) => {
-//   setPage(newPage);
-// });
-
-// const { products, count, limit, offset } =
-//   await medusaClient.store.product.list({
-//     category_id: [product_categories[0].id],
-//     fields: "*variants.calculated_price,+variants.inventory_quantity",
-//     limit: 20,
-//     offset: queryOffset.value,
-//     // offset: 20, // apply offset based on current page
-//     // include_category_children: true,
-//   });
-
 useSeoMeta({
-  title: "JBeauty - Kategoria",
-  ogTitle: "JBeauty - Kategoria",
+  title: `JBeauty - ${categoryName.value}`,
+  ogTitle: `JBeauty - ${categoryName.value}`,
+  description: `Przeglądaj produkty dostępne w Jbeauty sklep w kategorii: ${categoryName.value}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
+  ogDescription: `Przeglądaj produkty dostępne w Jbeauty sklep w kategorii: ${categoryName.value}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
 });
 </script>
 
