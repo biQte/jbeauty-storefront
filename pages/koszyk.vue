@@ -179,6 +179,7 @@ const applyDiscount = async () => {
   if (!discountInput.value) return;
 
   try {
+    await cartStore.updateCart(undefined, undefined, undefined, [], undefined);
     await cartStore.addPromotions([discountInput.value.toUpperCase()]);
   } catch (e) {
     console.log(e);

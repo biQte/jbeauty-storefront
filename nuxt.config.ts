@@ -17,7 +17,6 @@ media-src * data: blob: 'unsafe-inline';
 frame-src * data: blob: ; 
 style-src * data: blob: 'unsafe-inline';
 font-src * data: blob: 'unsafe-inline';
-frame-ancestors * data: blob:;
           `,
         },
       ],
@@ -138,33 +137,59 @@ frame-ancestors * data: blob:;
     id: "G-CV9TZ8BS61",
   },
 
-  // sitemap: {
-  //   siteUrl: process.env.NUXT_STORE_URL,
-  //   autoLastMode: true,
-  //   siteMaps: [
-  //     {
-  //       path: "sitemap.xml",
-  //       routes: async () => {
-  //         const categories = ""; // fetch categories
-  //         const products = ""; // fetch products
+  site: {
+    url: process.env.NUXT_STORE_URL,
+  },
 
-  //         return [
-  //           ...categories,
-  //           ...products,
-  //           "/",
-  //           "/kontakt",
-  //           "/konto",
-  //           "/kody-rabatowe",
-  //           "/login",
-  //           "/nie-pamietam-hasla",
-  //           "/nowosci",
-  //           "/polityka-prywatnosci",
-  //           "/regulamin",
-  //           "/rejestracja",
-  //           "szukaj",
-  //         ];
-  //       },
-  //     },
-  //   ],
-  // },
+  sitemap: {
+    // hostname: 'https://example.com', // Zmień na swoją domenę
+    urls: async () => {
+      // 1️⃣ Pobierz kategorie i produkty z Medusa, Strapi, itp.
+      const { product_categories } = await fetch(
+        `${process.env.NUXT_MEDUSA_URL}/store/product-categories`,
+        {
+          credentials: "include",
+          headers: {
+            "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
+          },
+        }
+      ).then((res: any) => res.json());
+      const { products } = await fetch(
+        `${process.env.NUXT_MEDUSA_URL}/store/products?fields=id,handle`,
+        {
+          credentials: "include",
+          headers: {
+            "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
+          },
+        }
+      ).then((res: any) => res.json());
+
+      // 2️⃣ Generowanie ścieżek URL dla każdej kategorii i produktu
+      const categoryUrls = product_categories.map((category: any) => ({
+        loc: `/kategoria/${category.handle}`,
+        changefreq: "weekly",
+        priority: 0.8,
+      }));
+
+      const productUrls = products.map((product: any) => ({
+        loc: `/produkt/${product.handle}`,
+        changefreq: "daily",
+        priority: 0.9,
+      }));
+
+      // 3️⃣ Zwrócenie pełnej listy linków do sitemapy
+      return [
+        { loc: "/", changefreq: "daily", priority: 1.0 },
+        { loc: "/kontakt", changefreq: "monthly", priority: 0.7 },
+        { loc: "/o-nas", changefreq: "monthly", priority: 0.7 },
+        { loc: "/konto", changefreq: "monthly", priority: 0.7 },
+        { loc: "/login", changefreq: "monthly", priority: 0.7 },
+        { loc: "/rejestracja", changefreq: "monthly", priority: 0.7 },
+        { loc: "/regulamin", changefreq: "monthly", priority: 0.7 },
+        { loc: "/polityka-prywatnosci", changefreq: "monthly", priority: 0.7 },
+        ...categoryUrls,
+        ...productUrls,
+      ];
+    },
+  },
 });

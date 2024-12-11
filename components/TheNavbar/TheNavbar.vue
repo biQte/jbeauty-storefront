@@ -22,10 +22,6 @@ const { data: pcats } = await useFetch(
 
 productCategories.value = pcats.value;
 
-console.log(productCategories.value);
-console.log("---------------------------------");
-console.log(pcats.value);
-
 const { data: bcats } = await useFetch(
   `/api/categories/${config.public.brandsCategoryID}`
 );

@@ -31,8 +31,6 @@ const { data: products, error } = await useFetch(
   `/api/products/${route.params.product}`
 );
 
-console.log(products.value);
-
 if (!products)
   snackbarStore.showSnackbar("Nie znaleziono produktu", "error", 5000);
 
@@ -110,6 +108,8 @@ useSeoMeta({
   description: products.value[0].description,
   ogDescription: products.value[0].description,
   ogImage: products.value[0].thumbnail,
+  ogImageUrl: products.value[0].thumbnail,
+  twitterImage: products.value[0].thumbnail,
 });
 </script>
 
