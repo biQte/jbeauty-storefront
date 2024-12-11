@@ -21,34 +21,39 @@ const medusaClient = nuxtApp.$medusaClient;
 
 const { width, height } = useWindowSize();
 
-onMounted(async () => {
-  loading.value = true;
-  bestsellingProducts.value = await loadBestsellingProducts();
-  recommendedProducts.value = await loadRecommendedProducts();
+// onMounted(async () => {
+//   loading.value = true;
+//   bestsellingProducts.value = await loadBestsellingProducts();
+//   recommendedProducts.value = await loadRecommendedProducts();
 
-  loading.value = false;
-});
+//   loading.value = false;
+// });
 
-const loadBestsellingProducts = async () => {
-  const { data: products, error } = await useFetch(`/api/products/new`, {
+// const loadBestsellingProducts = async () => {
+const { data: newProducts, error: newProductsError } = await useFetch(
+  `/api/products/new`,
+  {
+    server: true,
+    immediate: true,
+  }
+);
+
+bestsellingProducts.value = newProducts.value;
+
+// return products.value;
+// };
+
+// const loadRecommendedProducts = async () => {
+const { data: recommendedProductsQuery, error: recommendedProductsError } =
+  await useFetch(`/api/products/recommended`, {
     server: true,
     immediate: true,
   });
 
-  return products.value;
-};
+recommendedProducts.value = recommendedProductsQuery.value;
 
-const loadRecommendedProducts = async () => {
-  const { data: products, error } = await useFetch(
-    `/api/products/recommended`,
-    {
-      server: true,
-      immediate: true,
-    }
-  );
-
-  return products.value;
-};
+// return products.value;
+// };
 </script>
 
 <template>
@@ -56,18 +61,14 @@ const loadRecommendedProducts = async () => {
     <TheMainPageCarousel />
     <div class="bestsellers-wrapper">
       <h2>Nowości</h2>
-      <v-lazy>
-        <ProductCarousel :products="bestsellingProducts" :loading="loading" />
-      </v-lazy>
+      <ProductCarousel :products="bestsellingProducts" :loading="loading" />
     </div>
     <TheHomePageBanner />
     <TheHomePageLowerBanner />
     <br />
     <div class="recommended-products bestsellers-wrapper">
       <h2>Polecane</h2>
-      <v-lazy>
-        <ProductCarousel :products="recommendedProducts" :loading="loading" />
-      </v-lazy>
+      <ProductCarousel :products="recommendedProducts" :loading="loading" />
     </div>
   </div>
 </template>
