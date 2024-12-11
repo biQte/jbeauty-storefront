@@ -12,7 +12,7 @@ useSeoMeta({
 definePageMeta({
   isAccessibleAfterLogin: true,
 });
-const loading = ref<boolean>(true);
+const loading = ref<boolean>(false);
 
 const bestsellingProducts = ref();
 const recommendedProducts = ref();
@@ -61,7 +61,9 @@ recommendedProducts.value = recommendedProductsQuery.value;
     <TheMainPageCarousel />
     <div class="bestsellers-wrapper">
       <h2>Nowości</h2>
-      <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      <v-lazy>
+        <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      </v-lazy>
     </div>
     <TheHomePageBanner />
     <TheHomePageLowerBanner />
