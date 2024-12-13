@@ -56,46 +56,26 @@ const { data: initialProductsData, error: productsError } = await useFetch(
   }
 );
 
+await nextTick();
+
 // @ts-expect-error
 if (initialProductsData?.value?.products) {
   // @ts-expect-error
   products.value = initialProductsData.value.products;
   // @ts-expect-error
   totalProducts.value = initialProductsData.value.count;
-  queryOffset.value += limit.value; // Ustawiamy offset na liczbę załadowanych produktów
+  queryOffset.value += limit.value;
 
   if (products.value.length >= totalProducts.value) {
     allLoaded.value = true;
   }
 }
 
-// console.log(categories.value);
-// console.log(error);
-// console.log("------------------------------");
-
-// const fetchCategories = async () => {
-// const { product_categories } = await medusaClient.store.category.list({
-//   handle: route.params.category as string,
-//   // include_descendants_tree: true,
-// });
-// if (product_categories.length > 0) {
-//   categoryName.value = product_categories[0].name;
-//   categoryIds.value = [
-//     product_categories[0].id,
-//     ...product_categories[0].category_children.map((child) => child.id),
-//   ];
-// }
-// };
-
 const fetchProducts = async () => {
   try {
     if (loading.value || allLoaded.value) return;
 
     loading.value = true;
-
-    // if (categoryIds.value.length === 0) {
-    //   await fetchCategories();
-    // }
 
     const result = await medusaClient.store.product.list({
       category_id: categoryIds.value,
@@ -153,7 +133,7 @@ useSeoMeta({
         @load="loadMoreProducts"
         :disabled="allLoaded"
         mode="intersect"
-        :width="width"
+        :width="100 + '%'"
         empty-text=""
         side="end"
       >
@@ -229,7 +209,6 @@ useSeoMeta({
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  // height: 100%;
   width: 100%;
   .products-container {
     display: flex;
