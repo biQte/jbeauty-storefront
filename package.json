@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build && node ./scripts/generate-sitemap.js",
     "dev": "nuxi dev --inspect --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -24,6 +24,7 @@
     "nuxt": "^3.13.0",
     "nuxt-gtag": "^3.0.2",
     "nuxt-simple-sitemap": "^4.4.1",
+    "ohmyfetch": "^0.4.21",
     "pinia": "^2.2.4",
     "stripe": "^17.3.1",
     "vee-validate": "^4.13.2",

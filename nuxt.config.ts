@@ -181,7 +181,6 @@ font-src * data: blob: 'unsafe-inline';
       return [
         { loc: "/", changefreq: "daily", priority: 1.0 },
         { loc: "/kontakt", changefreq: "monthly", priority: 0.7 },
-        { loc: "/o-nas", changefreq: "monthly", priority: 0.7 },
         { loc: "/konto", changefreq: "monthly", priority: 0.7 },
         { loc: "/login", changefreq: "monthly", priority: 0.7 },
         { loc: "/rejestracja", changefreq: "monthly", priority: 0.7 },
