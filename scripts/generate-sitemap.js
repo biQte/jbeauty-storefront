@@ -2,28 +2,49 @@ import fs from "fs";
 import { $fetch } from "ohmyfetch";
 import dotenv from "dotenv/config";
 
+const fetchAllData = async (url, key) => {
+  let data = [];
+  let offset = 0;
+  let limit = 50;
+
+  try {
+    while (true) {
+      const response = await $fetch(
+        `${url}?limit=${limit}&offset=${offset}&fields=id,handle`,
+        {
+          credentials: "include",
+          headers: {
+            "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
+          },
+        }
+      );
+
+      if (response[key] && response[key].length > 0) {
+        data = data.concat(response[key]);
+        offset += limit;
+      } else {
+        break;
+      }
+    }
+
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
 const generateSitemap = async () => {
   console.log("⏳ Generowanie sitemapy...");
 
   try {
-    const { product_categories } = await $fetch(
-      `${process.env.NUXT_MEDUSA_URL}/store/product-categories?fields=id,handle`,
-      {
-        credentials: "include",
-        headers: {
-          "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
-        },
-      }
+    const product_categories = await fetchAllData(
+      `${process.env.NUXT_MEDUSA_URL}/store/product-categories`,
+      "product_categories"
     );
 
-    const { products } = await $fetch(
-      `${process.env.NUXT_MEDUSA_URL}/store/products?fields=id,handle`,
-      {
-        credentials: "include",
-        headers: {
-          "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY,
-        },
-      }
+    const products = await fetchAllData(
+      `${process.env.NUXT_MEDUSA_URL}/store/products`,
+      "products"
     );
 
     const urls = [
