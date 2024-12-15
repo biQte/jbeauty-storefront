@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build && node ./scripts/generate-sitemap.js",
+    "build": "nuxt build",
     "dev": "nuxi dev --inspect --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

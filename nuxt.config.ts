@@ -145,37 +145,81 @@ font-src * data: blob: 'unsafe-inline';
     // hostname: 'https://example.com', // Zmień na swoją domenę
     urls: async () => {
       // 1️⃣ Pobierz kategorie i produkty z Medusa, Strapi, itp.
-      const { product_categories } = await fetch(
-        `${process.env.NUXT_MEDUSA_URL}/store/product-categories`,
-        {
-          credentials: "include",
-          headers: {
-            "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
-          },
-        }
-      ).then((res: any) => res.json());
-      const { products } = await fetch(
-        `${process.env.NUXT_MEDUSA_URL}/store/products?fields=id,handle`,
-        {
-          credentials: "include",
-          headers: {
-            "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
-          },
-        }
-      ).then((res: any) => res.json());
 
-      // 2️⃣ Generowanie ścieżek URL dla każdej kategorii i produktu
-      const categoryUrls = product_categories.map((category: any) => ({
-        loc: `/kategoria/${category.handle}`,
-        changefreq: "weekly",
-        priority: 0.8,
-      }));
+      let categoryUrls: any[] = [];
+      let productUrls: any[] = [];
 
-      const productUrls = products.map((product: any) => ({
-        loc: `/produkt/${product.handle}`,
-        changefreq: "daily",
-        priority: 0.9,
-      }));
+      let hasMoreCategories = true;
+      let categoryOffset = 0;
+      const categoryLimit = 50;
+
+      while (hasMoreCategories) {
+        console.log(`📦 Pobieranie kategorii: offset = ${categoryOffset}`);
+
+        const response = await fetch(
+          `${process.env.NUXT_MEDUSA_URL}/store/product-categories?limit=${categoryLimit}&offset=${categoryOffset}`,
+          {
+            credentials: "include",
+            headers: {
+              "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
+            },
+          }
+        ).then((res) => res.json());
+
+        const categories = response.product_categories || [];
+        categoryUrls.push(
+          ...categories.map((category: any) => ({
+            loc: `/kategoria/${category.handle}`,
+            changefreq: "weekly",
+            priority: 0.8,
+          }))
+        );
+
+        // Jeśli zwrócono mniej rekordów niż `categoryLimit`, to znaczy, że to ostatnia strona
+        if (categories.length < categoryLimit) {
+          hasMoreCategories = false;
+        } else {
+          categoryOffset += categoryLimit;
+        }
+      }
+
+      let hasMoreProducts = true;
+      let productOffset = 0;
+      const productLimit = 50;
+
+      while (hasMoreProducts) {
+        console.log(`🛒 Pobieranie produktów: offset = ${productOffset}`);
+
+        const response = await fetch(
+          `${process.env.NUXT_MEDUSA_URL}/store/products?limit=${productLimit}&offset=${productOffset}&fields=id,handle`,
+          {
+            credentials: "include",
+            headers: {
+              "x-publishable-api-key": process.env.NUXT_MEDUSA_PUBLISHABLE_KEY!,
+            },
+          }
+        ).then((res) => res.json());
+
+        const products = response.products || [];
+        productUrls.push(
+          ...products.map((product: any) => ({
+            loc: `/produkt/${product.handle}`,
+            changefreq: "daily",
+            priority: 0.9,
+          }))
+        );
+
+        // Jeśli zwrócono mniej rekordów niż `productLimit`, to znaczy, że to ostatnia strona
+        if (products.length < productLimit) {
+          hasMoreProducts = false;
+        } else {
+          productOffset += productLimit;
+        }
+      }
+
+      console.log(
+        `✅ Załadowano ${categoryUrls.length} kategorii i ${productUrls.length} produktów!`
+      );
 
       // 3️⃣ Zwrócenie pełnej listy linków do sitemapy
       return [
