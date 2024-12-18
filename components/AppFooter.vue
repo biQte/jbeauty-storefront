@@ -43,6 +43,8 @@
       </div>
       <div class="contact">
         <h4>Kontakt</h4>
+        <p>Żegocina 102</p>
+        <p>32-731 Żegocina</p>
         <a href="mailto:info@jbeautysklep.pl"
           ><p>E-mail: info@jbeautysklep.pl</p></a
         >

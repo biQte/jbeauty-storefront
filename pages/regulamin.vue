@@ -249,6 +249,7 @@ nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {
           <li>InPost Paczkomaty 24/7,</li>
           <li>InPost Kurier,</li>
           <li>InPost Kurier - Pobranie</li>
+          <li>Odbiór osobosty (Przedpłata)</li>
         </ol>
       </li>
       <li>
@@ -260,7 +261,7 @@ nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {
       </li>
       <li>
         Szczegółowe informacje na temat metod dostawy oraz akceptowalnych metod
-        płatności znajdują się za stronach Sklepu.
+        płatności znajdują się na stronach Sklepu.
       </li>
     </ol>
     <h2>&#167; 9 Wykonanie umowy sprzedaży</h2>

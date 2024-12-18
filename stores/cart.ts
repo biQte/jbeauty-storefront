@@ -34,7 +34,7 @@ export const useCartStore = defineStore("cart", () => {
   const shippingOptions = ref<ShippingOptionDTO[] | null>([]);
   const availableShippingOptions = ref<ShippingOptionDTO[] | null>();
   const loading = ref<boolean>(false);
-  const freeShippingTreshold = ref<number>(250);
+  const freeShippingTreshold = ref<number>(200);
   const availablePaymentProviders = ref<StorePaymentProvider[] | null>();
 
   const createCart = async (items: Item[] | undefined) => {
@@ -331,6 +331,7 @@ export const useCartStore = defineStore("cart", () => {
         if (
           // @ts-expect-error
           option.amount === 0 ||
+          option.name.toLowerCase().includes("kurier") ||
           option.name.toLowerCase().includes("pobranie")
         ) {
           availableShippingOptions.value.push(option);
@@ -341,6 +342,8 @@ export const useCartStore = defineStore("cart", () => {
         if (
           // @ts-expect-error
           option.amount > 0 ||
+          option.name.toLowerCase().includes("kurier") ||
+          option.name.toLowerCase().includes("osobisty") ||
           option.name.toLowerCase().includes("pobranie")
         ) {
           availableShippingOptions.value.push(option);
