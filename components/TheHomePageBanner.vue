@@ -8,7 +8,7 @@
     </div>
     <div class="shipping segment">
       <v-icon icon="mdi-truck-check-outline" />
-      <p>Darmowa dostawa <b>od 250 zł</b></p>
+      <p>Darmowa dostawa paczkomatem <b>od 200 zł</b></p>
     </div>
     <div class="returns segment">
       <v-icon icon="mdi-calendar-check-outline" />
