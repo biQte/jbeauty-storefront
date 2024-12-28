@@ -118,7 +118,7 @@ export const useCartStore = defineStore("cart", () => {
       cartObject.value = cartResponse.cart as unknown as CartDTO;
 
       calculateQuantity();
-      getAvailableShippingOptions();
+      await getAvailableShippingOptions();
     } catch (e) {
       throw e;
     }
@@ -352,8 +352,8 @@ export const useCartStore = defineStore("cart", () => {
   const getAvailableShippingOptions = async () => {
     if (!cartObject.value) return;
 
-    if (!shippingOptions.value || shippingOptions.value.length < 1)
-      await getShippingOptions();
+    // if (!shippingOptions.value || shippingOptions.value.length < 1)
+    await getShippingOptions();
 
     availableShippingOptions.value = [];
 

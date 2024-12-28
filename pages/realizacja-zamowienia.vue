@@ -82,7 +82,14 @@ const locales = [
   { country: "Niemcy", value: "de" },
 ];
 
-const country = ref(locales.find((item) => item.value === "pl"));
+const country = ref(
+  cartStore.cartObject?.shipping_address
+    ? locales.find(
+        (item) =>
+          item.value === cartStore.cartObject?.shipping_address?.country_code
+      )
+    : locales.find((item) => item.value === "pl")
+);
 
 const orderDataSchema = yupObject({
   isAuthenticated: yupBoolean(),
@@ -546,7 +553,14 @@ onMounted(async () => {
 
   stripeLoadingSuccess.value = false;
 
-  await cartStore.updateCountry("pl");
+  if (!cartStore.cartObject?.shipping_address) {
+    await cartStore.updateCountry("pl");
+  } else {
+    country.value = locales.find(
+      (item) =>
+        item.value === cartStore.cartObject?.shipping_address?.country_code
+    );
+  }
 });
 
 watch(country, async (newValue, oldValue) => {
