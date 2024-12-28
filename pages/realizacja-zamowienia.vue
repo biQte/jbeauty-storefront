@@ -77,6 +77,13 @@ const setupStripe = async () => {
 
 const loadingStep = ref<boolean>(false);
 
+const locales = [
+  { country: "Polska", value: "pl" },
+  { country: "Niemcy", value: "de" },
+];
+
+const country = ref(locales.find((item) => item.value === "pl"));
+
 const orderDataSchema = yupObject({
   isAuthenticated: yupBoolean(),
   firstName: yupString()
@@ -105,7 +112,9 @@ const orderDataSchema = yupObject({
     ),
   postalCode: yupString()
     .required("Należy podać kod pocztowy")
-    .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
+    // .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
+    .min(5, "Kod pocztowy jest za krótki")
+    .max(6, "Kod pocztowy jest za długi")
     .trim(),
   city: yupString()
     .required("Należy podać nazwę miasta")
@@ -155,7 +164,9 @@ const orderDataSchema = yupObject({
       otherwise: (schema) => schema.notRequired(),
     }),
   companyPostalCode: yupString()
-    .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
+    // .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
+    .min(5, "Kod pocztowy jest za krótki")
+    .max(6, "Kod pocztowy jest za długi")
     .trim()
     .when(["wantsInvoice", "differentThanShipping"], {
       is: true,
@@ -245,6 +256,8 @@ const parcelLockerStreet = ref<string>("");
 const showParcelLockerDialog = ref<boolean>(false);
 
 function updatePostalCode(value: string) {
+  if (cartStore.cartObject?.shipping_address?.country_code !== "pl") return;
+
   const digitsOnly = value.replace(/\D/g, "");
 
   if (digitsOnly.length <= 5) {
@@ -532,6 +545,16 @@ onMounted(async () => {
   }
 
   stripeLoadingSuccess.value = false;
+
+  await cartStore.updateCountry("pl");
+});
+
+watch(country, async (newValue, oldValue) => {
+  if (oldValue === newValue) return;
+
+  await cartStore.updateCountry(newValue!.value);
+
+  await cartStore.getAvailableShippingOptions();
 });
 
 const prevStep = () => {
@@ -737,8 +760,17 @@ onMounted(() => {
     prev-text="Wróć"
   >
     <template v-slot:item.1>
-      <h3>Dostawa</h3>
+      <h3>Kraj i Dostawa</h3>
       <br />
+      <v-select
+        v-model="country"
+        label="Kraj"
+        :items="locales"
+        item-title="country"
+        item-value="value"
+        return-object
+        variant="solo"
+      ></v-select>
       <v-radio-group
         v-model="selectedShippingOption"
         label="Wybierz metodę dostawy"
@@ -767,6 +799,7 @@ onMounted(() => {
           <v-text-field
             density="compact"
             class="text-input"
+            autocomplete="given-name"
             v-model="firstName.value.value"
             :error-messages="firstName.errorMessage.value"
             label="Imię*"
@@ -774,6 +807,7 @@ onMounted(() => {
           <v-text-field
             density="compact"
             class="text-input"
+            autocomplete="family-name"
             v-model="lastName.value.value"
             :error-messages="lastName.errorMessage.value"
             label="Nazwisko*"
@@ -781,6 +815,7 @@ onMounted(() => {
           <v-text-field
             density="compact"
             class="text-input"
+            autocomplete="email"
             v-model="email.value.value"
             :error-messages="email.errorMessage.value"
             label="E-mail*"
@@ -791,17 +826,29 @@ onMounted(() => {
         <br />
         <div class="input-row">
           <v-text-field
+            v-if="cartStore.cartObject?.shipping_address?.country_code === 'pl'"
             density="compact"
             class="text-input"
+            autocomplete="postal-code"
             v-model="postalCode.value.value"
             :error-messages="postalCode.errorMessage.value"
             @input="updatePostalCode(postalCode.value.value)"
             label="Kod pocztowy*"
           ></v-text-field>
           <v-text-field
+            v-if="cartStore.cartObject?.shipping_address?.country_code !== 'pl'"
+            density="compact"
+            class="text-input"
+            autocomplete="postal-code"
+            v-model="postalCode.value.value"
+            :error-messages="postalCode.errorMessage.value"
+            label="Kod pocztowy*"
+          ></v-text-field>
+          <v-text-field
             density="compact"
             class="text-input"
             v-model="city.value.value"
+            autocomplete="address-level2"
             :error-messages="city.errorMessage.value"
             label="Miasto*"
           ></v-text-field>
@@ -811,6 +858,7 @@ onMounted(() => {
             density="compact"
             class="text-input"
             v-model="street.value.value"
+            autocomplete="street-address"
             :error-messages="street.errorMessage.value"
             label="Ulica*"
           ></v-text-field>
@@ -888,6 +936,7 @@ onMounted(() => {
             <v-text-field
               density="compact"
               class="text-input"
+              autocomplete="postal-code"
               v-model="companyPostalCode.value.value"
               :error-messages="companyPostalCode.errorMessage.value"
               @input="updateCompanyPostalCode(companyPostalCode.value.value)"
@@ -896,6 +945,7 @@ onMounted(() => {
             <v-text-field
               density="compact"
               class="text-input"
+              autocomplete="address-level2"
               v-model="companyCity.value.value"
               :error-messages="companyCity.errorMessage.value"
               label="Miasto*"
@@ -906,6 +956,7 @@ onMounted(() => {
               density="compact"
               class="text-input"
               v-model="companyStreet.value.value"
+              autocomplete="street-address"
               :error-messages="companyStreet.errorMessage.value"
               label="Ulica*"
             ></v-text-field>
@@ -929,6 +980,7 @@ onMounted(() => {
               density="compact"
               class="text-input"
               v-model="companyPhoneNumber.value.value"
+              autocomplete="tel-national"
               :error-messages="companyPhoneNumber.errorMessage.value"
               @input="updateCompanyPhoneNumber(companyPhoneNumber.value.value)"
               label="Numer telefonu*"

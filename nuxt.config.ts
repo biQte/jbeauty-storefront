@@ -134,7 +134,8 @@ font-src * data: blob: 'unsafe-inline';
     },
   },
   gtag: {
-    id: "G-CV9TZ8BS61",
+    id:
+      process.env.NUXT_NODE_ENV !== "development" ? "G-CV9TZ8BS61" : undefined,
   },
 
   site: {

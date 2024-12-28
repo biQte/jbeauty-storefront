@@ -93,6 +93,37 @@ export const useCartStore = defineStore("cart", () => {
     }
   };
 
+  const updateCountry = async (countryCode: string) => {
+    try {
+      if (!cartObject.value) {
+        return;
+      }
+
+      console.log("called");
+
+      const cartResponse = await medusaClient.store.cart.update(
+        cartObject.value.id,
+        {
+          shipping_address: {
+            country_code: countryCode,
+          },
+          billing_address: {
+            country_code: countryCode,
+          },
+        }
+      );
+
+      console.log("done");
+
+      cartObject.value = cartResponse.cart as unknown as CartDTO;
+
+      calculateQuantity();
+      getAvailableShippingOptions();
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const addLineItem = async (variant_id: string, quantity: number) => {
     try {
       if (!cartObject.value) {
@@ -466,6 +497,7 @@ export const useCartStore = defineStore("cart", () => {
     loading,
     createCart,
     updateCart,
+    updateCountry,
     addLineItem,
     updateLineItem,
     deleteLineItem,
