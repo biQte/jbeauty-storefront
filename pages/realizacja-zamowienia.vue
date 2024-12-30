@@ -1085,7 +1085,7 @@ onMounted(() => {
                 language="pl"
                 style="width: 100%; height: 500px; overflow: hidden"
                 onpoint="onpointselect"
-                config="parcellocker247"
+                config="parcelcollect247"
               ></inpost-geowidget>
 
               <!-- </div> -->
