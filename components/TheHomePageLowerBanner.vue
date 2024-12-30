@@ -73,6 +73,8 @@ const config = useRuntimeConfig();
 
   .left {
     background-image: url("/public/product_gallery_3f99f2894a.jpg");
+    // background-image: url("/public/VV_PinkProsecco_1200x1200_PLE-dystry.jpg");
+    // background-image: url("/public/VYNN_VV_BRILLANT_1200_PLE.jpg");
     background-size: cover;
   }
   .right {
