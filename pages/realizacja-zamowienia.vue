@@ -221,7 +221,7 @@ const orderDataSchema = yupObject({
     .trim(),
 });
 
-const step = ref<number>(2);
+const step = ref<number>(1);
 const stepperItems = ref(["Dostawa", "Dane", "Podsumowanie"]);
 const selectedShippingOption = ref<string>();
 const selectedPaymentMethod = ref<string>();
