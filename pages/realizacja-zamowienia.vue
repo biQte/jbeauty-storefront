@@ -271,6 +271,7 @@ const parcelLockerBuildingNumber = ref<string>("");
 const parcelLockerProvince = ref<string>("");
 const parcelLockerStreet = ref<string>("");
 const showParcelLockerDialog = ref<boolean>(false);
+const showParcelLockerDialogModel = ref<boolean>(true);
 
 function updatePostalCode(value: string) {
   if (cartStore.cartObject?.shipping_address?.country_code !== "pl") return;
@@ -1069,7 +1070,11 @@ onMounted(() => {
             >Wybierz paczkomat</v-btn
           >
 
-          <v-dialog max-width="800" v-model="showParcelLockerDialog">
+          <v-dialog
+            max-width="800"
+            v-model="showParcelLockerDialogModel"
+            v-show="showParcelLockerDialog"
+          >
             <v-card title="Wybierz paczkomat" min-height="500">
               <InpostGeoWidget
                 :config="'parcelcollect247'"
