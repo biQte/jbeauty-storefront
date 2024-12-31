@@ -1073,7 +1073,7 @@ onMounted(() => {
           <v-dialog
             max-width="800"
             v-model="showParcelLockerDialogModel"
-            v-show="showParcelLockerDialog"
+            v-if="showParcelLockerDialog"
             persistent
           >
             <v-card title="Wybierz paczkomat" min-height="500">
