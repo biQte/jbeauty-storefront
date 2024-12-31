@@ -50,9 +50,10 @@ let stripeLoadingSuccess = ref<boolean>(true);
 const stripePromise = loadStripe(String(config.public.stripePublicKey));
 
 const setupStripe = async () => {
+  stripe = await stripePromise;
+
   if (!stripe) {
-    // snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
-    stripe = await stripePromise;
+    snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
 
     return;
   }
