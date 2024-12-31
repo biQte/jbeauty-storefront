@@ -9,7 +9,8 @@ const config = useRuntimeConfig();
     <!-- <NuxtLink class="left banner" :to="`/kategoria/swiateczne-perelki`"> -->
     <NuxtLink class="left banner" :to="`/kategoria/victoria-vynn-brillant-gel`">
       <div class="overlay">
-        <p>Świąteczne perełki</p>
+        <!-- <p>Świąteczne perełki</p> -->
+        <p>Brilliant Gel</p>
         <v-btn :elevation="24" size="x-large" color="transparent"
           >Zobacz więcej</v-btn
         >
