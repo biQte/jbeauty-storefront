@@ -15,8 +15,8 @@ import {
 import type { HttpTypes, CartDTO } from "@medusajs/types";
 import { ROUTES } from "../constants/routes";
 import { FetchError } from "@medusajs/js-sdk";
-import { Stripe } from "stripe";
-import { loadStripe } from "@stripe/stripe-js";
+// import { Stripe } from "stripe";
+// import { loadStripe } from "@stripe/stripe-js";
 import { useWindowSize } from "@vueuse/core";
 import InpostGeoWidget from "~/components/InpostGeoWidget.vue";
 
@@ -39,18 +39,19 @@ const sessionStore = useSessionStore();
 const router = useRouter();
 const route = useRoute();
 const snackbarStore = useSnackbarStore();
-// const nuxtApp = useNuxtApp();
+const nuxtApp = useNuxtApp();
 // const stripe = nuxtApp.$stripe;
 const { width, height } = useWindowSize();
-let stripe: any = null;
+// let stripe: any = null;
+const stripe = nuxtApp.$stripe;
 let elements: any = null;
 
 let stripeLoadingSuccess = ref<boolean>(true);
 
-const stripePromise = loadStripe(String(config.public.stripePublicKey));
+// const stripePromise = loadStripe(String(config.public.stripePublicKey));
 
 const setupStripe = async () => {
-  stripe = await stripePromise;
+  // stripe = await stripePromise;
 
   if (!stripe) {
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
@@ -669,7 +670,7 @@ watch(form, (newForm) => {
   form?.value.addEventListener("submit", async (event: any) => {
     event.preventDefault();
 
-    const result = await stripe.confirmPayment({
+    const result = await stripe!.confirmPayment({
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
@@ -678,7 +679,7 @@ watch(form, (newForm) => {
     });
 
     if (result.error) {
-      snackbarStore.showSnackbar(result.error, "error", 5000);
+      snackbarStore.showSnackbar(result.error.toString(), "error", 5000);
     } else {
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
