@@ -6,7 +6,8 @@ const config = useRuntimeConfig();
   <div class="lower-banner-wrapper">
     <!-- <v-img src="@/assets/img/fotos-352.jpg" /> -->
     <!-- <v-img src="@/assets/img/fotos-363.jpg" /> -->
-    <NuxtLink class="left banner" :to="`/kategoria/swiateczne-perelki`">
+    <!-- <NuxtLink class="left banner" :to="`/kategoria/swiateczne-perelki`"> -->
+    <NuxtLink class="left banner" :to="`/kategoria/victoria-vynn-brillant-gel`">
       <div class="overlay">
         <p>Świąteczne perełki</p>
         <v-btn :elevation="24" size="x-large" color="transparent"
@@ -72,9 +73,9 @@ const config = useRuntimeConfig();
   }
 
   .left {
-    background-image: url("/public/product_gallery_3f99f2894a.jpg");
+    // background-image: url("/public/product_gallery_3f99f2894a.jpg");
     // background-image: url("/public/VV_PinkProsecco_1200x1200_PLE-dystry.jpg");
-    // background-image: url("/public/VYNN_VV_BRILLANT_1200_PLE.jpg");
+    background-image: url("/public/VYNN_VV_BRILLANT_1200_PLE.jpg");
     background-size: cover;
   }
   .right {
