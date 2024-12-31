@@ -73,15 +73,13 @@ const setupStripe = async () => {
     //   : "card",
   };
 
-  if (!elements) {
-    elements = stripe.elements({
-      // @ts-expect-error
-      clientSecret: cartStore.cartObject?.payment_collection
-        ?.payment_sessions?.[0].data.client_secret as string,
-      appearance,
-      locale: "pl",
-    });
-  }
+  elements = stripe.elements({
+    // @ts-expect-error
+    clientSecret: cartStore.cartObject?.payment_collection
+      ?.payment_sessions?.[0].data.client_secret as string,
+    appearance,
+    locale: "pl",
+  });
 
   const paymentElement = elements.create("payment", options);
 
