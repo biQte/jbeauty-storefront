@@ -50,10 +50,9 @@ let stripeLoadingSuccess = ref<boolean>(true);
 const stripePromise = loadStripe(String(config.public.stripePublicKey));
 
 const setupStripe = async () => {
-  stripe = await stripePromise;
-
   if (!stripe) {
-    snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
+    // snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
+    stripe = await stripePromise;
 
     return;
   }
@@ -73,13 +72,16 @@ const setupStripe = async () => {
     //   : "card",
   };
 
-  elements = stripe.elements({
-    // @ts-expect-error
-    clientSecret: cartStore.cartObject?.payment_collection
-      ?.payment_sessions?.[0].data.client_secret as string,
-    appearance,
-    locale: "pl",
-  });
+  if (!elements) {
+    elements = stripe.elements({
+      // @ts-expect-error
+      clientSecret: cartStore.cartObject?.payment_collection
+        ?.payment_sessions?.[0].data.client_secret as string,
+      appearance,
+      locale: "pl",
+    });
+  }
+
   const paymentElement = elements.create("payment", options);
 
   paymentElement.mount("#payment-element");
