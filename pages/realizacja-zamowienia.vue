@@ -1070,8 +1070,12 @@ onMounted(() => {
             >Wybierz paczkomat</v-btn
           >
 
-          <div class="overlay" v-show="showParcelLockerDialog">
-            <v-card class="dialog-card">
+          <div
+            class="overlay"
+            v-show="showParcelLockerDialog"
+            @click="showParcelLockerDialog = false"
+          >
+            <v-card class="dialog-card" @click.stop>
               <v-card-title>Wybierz paczkomat</v-card-title>
               <v-card-text>
                 <InpostGeoWidget
@@ -1493,6 +1497,6 @@ h4 {
 .dialog-card {
   width: 800px;
   max-width: 90%;
-  height: 500px;
+  height: 600px;
 }
 </style>
