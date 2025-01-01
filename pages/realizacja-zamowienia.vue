@@ -639,12 +639,28 @@ const nextStep = async () => {
           ? "pp_stripe_stripe"
           : "pp_system_default"
       );
-      if (
+      // if (
+      //   // @ts-expect-error
+      //   cartStore.cartObject.payment_collection?.payment_sessions?.[0].provider_id.includes(
+      //     "stripe"
+      //   )
+      // ) {
+      //   await setupStripe();
+      // }
+      const activePaymentSession =
         // @ts-expect-error
-        cartStore.cartObject.payment_collection?.payment_sessions?.[0].provider_id.includes(
-          "stripe"
-        )
-      ) {
+        cartStore.cartObject.payment_collection?.payment_sessions?.[0];
+
+      if (!activePaymentSession) {
+        snackbarStore.showSnackbar(
+          "Brak aktywnej sesji płatności",
+          "error",
+          5000
+        );
+        return;
+      }
+
+      if (activePaymentSession.provider_id.startsWith("pp_stripe")) {
         await setupStripe();
       }
     }

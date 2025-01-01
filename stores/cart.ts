@@ -437,11 +437,26 @@ export const useCartStore = defineStore("cart", () => {
         paymentCollectionId = payment_collection.id;
       }
 
-      await medusaClient.store.payment.initiatePaymentSession(
-        // @ts-expect-error
-        cartObject.value,
+      // await medusaClient.store.payment.initiatePaymentSession(
+      //   // @ts-expect-error
+      //   cartObject.value,
+      //   {
+      //     provider_id: selectedPaymentProviderId,
+      //   }
+      // );
+
+      await $fetch(
+        `${config.public.medusaUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions`,
         {
-          provider_id: selectedPaymentProviderId,
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-publishable-api-key": config.public.medusaPublishableKey,
+          },
+          body: JSON.stringify({
+            provider_id: selectedPaymentProviderId,
+          }),
         }
       );
 
