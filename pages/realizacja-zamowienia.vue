@@ -65,6 +65,17 @@ const setupStripe = async () => {
   //   return;
   // }
 
+  await cartStore.fetchCart();
+
+  if (!cartStore.cartObject) {
+    snackbarStore.showSnackbar(
+      "Nie udało się załadować koszyka",
+      "error",
+      5000
+    );
+    return;
+  }
+
   const appearance = {};
   const options = {
     // paymentMethodType: selectedPaymentMethod.value?.includes("blik")
@@ -75,7 +86,6 @@ const setupStripe = async () => {
   };
 
   elements = stripe.elements({
-    // @ts-expect-error
     clientSecret: cartStore.cartObject?.payment_collection
       ?.payment_sessions?.[0].data.client_secret as string,
     appearance,
@@ -648,7 +658,6 @@ const nextStep = async () => {
       //   await setupStripe();
       // }
       const activePaymentSession =
-        // @ts-expect-error
         cartStore.cartObject.payment_collection?.payment_sessions?.[0];
 
       if (!activePaymentSession) {
@@ -1383,7 +1392,6 @@ onMounted(() => {
             v-if="
               step < 3 ||
               (step === 3 &&
-                // @ts-expect-error
                 !cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
                   'stripe'
                 ))
@@ -1399,7 +1407,6 @@ onMounted(() => {
         id="payment-element"
         v-show="
           step === 3 &&
-          // @ts-expect-error
           cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
             'stripe'
           )
@@ -1412,7 +1419,6 @@ onMounted(() => {
         :size="width < 720 ? 'small' : 'large'"
         v-show="
           step === 3 &&
-          // @ts-expect-error
           cartStore.cartObject?.payment_collection?.payment_sessions?.[0].provider_id.includes(
             'stripe'
           )

@@ -27,7 +27,7 @@ export interface DiscountInner {
 export const useCartStore = defineStore("cart", () => {
   const nuxtApp = useNuxtApp();
   const medusaClient = nuxtApp.$medusaClient;
-  const cartObject = ref<undefined | CartDTO>(undefined);
+  const cartObject = ref<undefined | StoreCart>(undefined);
   const triedToFetchCart = ref<boolean>(false);
   const quantity = ref<number>(0);
   const config = useRuntimeConfig();
@@ -47,7 +47,7 @@ export const useCartStore = defineStore("cart", () => {
         sales_channel_id: String(config.public.salesChannelID),
       });
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       localStorage.setItem("cart_id", cartObject.value.id);
 
@@ -84,7 +84,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -115,7 +115,7 @@ export const useCartStore = defineStore("cart", () => {
 
       console.log("done");
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       calculateQuantity();
       await getAvailableShippingOptions();
@@ -138,7 +138,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -159,7 +159,7 @@ export const useCartStore = defineStore("cart", () => {
         { quantity }
       );
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -179,7 +179,7 @@ export const useCartStore = defineStore("cart", () => {
         lineItemId
       );
 
-      cartObject.value = cartResponse.parent as unknown as CartDTO;
+      cartObject.value = cartResponse.parent as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -208,7 +208,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cart as unknown as CartDTO;
+      cartObject.value = cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -244,7 +244,7 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      cartObject.value = cart as unknown as CartDTO;
+      cartObject.value = cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -262,7 +262,7 @@ export const useCartStore = defineStore("cart", () => {
         { option_id }
       );
 
-      cartObject.value = cart as unknown as CartDTO;
+      cartObject.value = cart as unknown as StoreCart;
 
       calculateQuantity();
     } catch (e) {
@@ -299,7 +299,7 @@ export const useCartStore = defineStore("cart", () => {
       //   }
       // );
 
-      cartObject.value = cartResponse.cart as unknown as CartDTO;
+      cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -412,7 +412,6 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      // @ts-expect-error
       let paymentCollectionId = cartObject.value.payment_collection?.id;
 
       if (!paymentCollectionId) {
@@ -444,6 +443,8 @@ export const useCartStore = defineStore("cart", () => {
       //     provider_id: selectedPaymentProviderId,
       //   }
       // );
+
+      await fetchCart();
 
       await $fetch(
         `${config.public.medusaUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions`,
