@@ -158,7 +158,7 @@ useSeoMeta({
                     :class="{
                       strike:
                         product.variants?.[0].calculated_price?.calculated_price
-                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0,
+                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount,
                     }"
                   >
                     {{
@@ -173,7 +173,7 @@ useSeoMeta({
                   <span
                     v-if="
                       product.variants?.[0].calculated_price?.calculated_price
-                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0
+                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount
                     "
                     class="sale-price"
                   >
