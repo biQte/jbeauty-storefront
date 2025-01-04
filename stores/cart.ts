@@ -14,6 +14,7 @@ import type {
   PaymentProviderDTO,
   StorePaymentProvider,
 } from "@medusajs/types";
+import { FetchError } from "@medusajs/js-sdk";
 
 export interface Item {
   variant_id: string;
@@ -36,6 +37,7 @@ export const useCartStore = defineStore("cart", () => {
   const loading = ref<boolean>(false);
   const freeShippingTreshold = ref<number>(200);
   const availablePaymentProviders = ref<StorePaymentProvider[] | null>();
+  const snackbarStore = useSnackbarStore();
 
   const createCart = async (items: Item[] | undefined) => {
     try {
@@ -164,7 +166,43 @@ export const useCartStore = defineStore("cart", () => {
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e) {
-      throw e;
+      if (e instanceof FetchError) {
+        if (e.message === "Some variant does not have the required inventory") {
+          try {
+            const cartProduct = cartObject.value?.items?.find(
+              (product: any) => product.id === lineItemId
+            );
+
+            // @ts-expect-error
+            const { products } = await $fetch(
+              `${config.public.medusaUrl}/store/products?id=${cartProduct?.product_id}&fields=+variants.inventory_quantity`,
+              {
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-publishable-api-key": config.public.medusaPublishableKey,
+                },
+              }
+            );
+
+            if (products[0].inventory_quantity === 0) {
+              await deleteLineItem(lineItemId);
+            } else {
+              await deleteLineItem(lineItemId);
+              await addLineItem(
+                products[0].variants[0].id,
+                products[0].variants[0].inventory_quantity
+              );
+            }
+          } catch (e) {
+            throw e;
+          }
+        } else {
+          throw e;
+        }
+      } else {
+        throw e;
+      }
     }
   };
 
@@ -283,10 +321,86 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const cartResponse = await medusaClient.store.cart.retrieve(cartId, {
+      let cartResponse = await medusaClient.store.cart.retrieve(cartId, {
         // fields: "*items.variant,+items.product.variants.inventory_quantity",
         fields: "+billing_address.metadata,+shipping_address.metadata",
       });
+
+      if (
+        // @ts-expect-error
+        cartResponse.cart.completed_at !== null
+      ) {
+        loading.value = false;
+        cartObject.value = undefined;
+        localStorage.removeItem("cart_id");
+        return;
+      }
+
+      const productIds = [];
+
+      if (cartResponse.cart.items) {
+        let removedOrModifiedProducts = false;
+
+        for (let i = 0; i < cartResponse.cart.items?.length; i++) {
+          productIds.push(cartResponse.cart.items[i].product_id);
+        }
+
+        console.log(productIds);
+
+        // @ts-expect-error
+        const { products } = await $fetch(
+          `${config.public.medusaUrl}/store/products?id=${
+            productIds.length === 1 ? productIds[0] : productIds
+          }&fields=+variants.inventory_quantity`,
+          {
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "x-publishable-api-key": config.public.medusaPublishableKey,
+            },
+          }
+        );
+
+        for (let i = 0; i < cartResponse.cart.items.length; i++) {
+          const cartProduct = cartResponse.cart.items[i];
+
+          const product = products.find(
+            (product: any) => product.id === cartProduct.product_id
+          );
+
+          if (product.variants[0].inventory_quantity < cartProduct.quantity) {
+            removedOrModifiedProducts = true;
+
+            if (product.variants[0].inventory_quantity === 0) {
+              await deleteLineItem(cartProduct.id);
+            } else {
+              await deleteLineItem(cartProduct.id);
+              await addLineItem(
+                product.variants[0].id,
+                product.variants[0].inventory_quantity
+              );
+              // await updateLineItem(
+              //   cartProduct.id,
+              //   // product.variants[0].inventory_quantity
+              //   2
+              // );
+            }
+          }
+        }
+
+        if (removedOrModifiedProducts) {
+          snackbarStore.showSnackbar(
+            "Usuneliśmy niektóre produkty z twojego koszyka z powodu braku dostępności",
+            "info",
+            5000
+          );
+
+          cartResponse = await medusaClient.store.cart.retrieve(cartId, {
+            // fields: "*items.variant,+items.product.variants.inventory_quantity",
+            fields: "+billing_address.metadata,+shipping_address.metadata",
+          });
+        }
+      }
 
       // const cartResponse = await $fetch(
       //   `${config.public.medusaUrl}/store/carts/${cartId}?fields=+items.variant.inventory_quantity`,
@@ -487,11 +601,11 @@ export const useCartStore = defineStore("cart", () => {
         }
       );
 
-      localStorage.removeItem("cart_id");
-      cartObject.value = undefined;
-      calculateQuantity();
+      // localStorage.removeItem("cart_id");
+      // cartObject.value = undefined;
+      // calculateQuantity();
 
-      await fetchCart();
+      // await fetchCart();
 
       return {
         type,
