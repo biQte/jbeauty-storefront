@@ -336,22 +336,24 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const productIds = [];
+      const productIds: string[] = [];
 
       if (cartResponse.cart.items) {
         let removedOrModifiedProducts = false;
 
         for (let i = 0; i < cartResponse.cart.items?.length; i++) {
-          productIds.push(cartResponse.cart.items[i].product_id);
+          productIds.push(cartResponse.cart.items[i].product_id!);
         }
+
+        const queryParams = productIds
+          .map((id) => `id=${encodeURIComponent(id)}`)
+          .join("&");
 
         console.log(productIds);
 
         // @ts-expect-error
         const { products } = await $fetch(
-          `${config.public.medusaUrl}/store/products?id=${
-            productIds.length === 1 ? productIds[0] : productIds
-          }&fields=+variants.inventory_quantity`,
+          `${config.public.medusaUrl}/store/products?${queryParams}&fields=+variants.inventory_quantity`,
           {
             credentials: "include",
             headers: {
