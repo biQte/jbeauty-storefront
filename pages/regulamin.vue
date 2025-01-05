@@ -249,7 +249,6 @@ nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {
           <li>InPost Paczkomaty 24/7,</li>
           <li>InPost Kurier,</li>
           <li>InPost Kurier - Pobranie</li>
-          <li>Odbiór osobosty (Przedpłata)</li>
         </ol>
       </li>
       <li>
