@@ -77,8 +77,6 @@ const { width, height } = useWindowSize();
         </div>
       </div>
       <div class="map-wrapper">
-        <h3>Chcesz odebrać produkty osobiście?</h3>
-        <h4>Znajdziesz nas tutaj</h4>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2775.9539572249855!2d20.406310712300453!3d49.808667571357795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47161917b01ff59d%3A0xe0204291449b2d1!2s%C5%BBegocina%20102%2C%2032-731%20%C5%BBegocina!5e1!3m2!1sen!2spl!4v1734556258937!5m2!1sen!2spl"
           width="600"
