@@ -476,7 +476,7 @@ const submitForm = handleSubmit(async (values) => {
     const shippingAddress: HttpTypes.StoreAddAddress = {
       first_name: firstName.value.value,
       last_name: lastName.value.value,
-      // country_code: "pl",
+      country_code: "pl",
       postal_code: postalCode.value.value,
       phone: phoneNumber.value.value,
       city: city.value.value,
@@ -509,7 +509,7 @@ const submitForm = handleSubmit(async (values) => {
         ? {
             first_name: firstName.value.value,
             last_name: lastName.value.value,
-            // country_code: "pl",
+            country_code: "pl",
             postal_code: companyPostalCode.value.value,
             phone: companyPhoneNumber.value.value,
             city: companyCity.value.value,

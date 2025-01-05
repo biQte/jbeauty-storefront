@@ -326,6 +326,8 @@ export const useCartStore = defineStore("cart", () => {
         fields: "+billing_address.metadata,+shipping_address.metadata",
       });
 
+      console.log("cart when started fetching", cartResponse.cart);
+
       if (
         // @ts-expect-error
         cartResponse.cart.completed_at !== null
@@ -404,6 +406,10 @@ export const useCartStore = defineStore("cart", () => {
         }
       }
 
+      if (!cartResponse.cart.shipping_address?.country_code) {
+        await updateCountry("pl");
+      }
+
       // const cartResponse = await $fetch(
       //   `${config.public.medusaUrl}/store/carts/${cartId}?fields=+items.variant.inventory_quantity`,
       //   {
@@ -417,8 +423,10 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = cartResponse.cart as unknown as StoreCart;
 
+      console.log("cart when finished fetching: ", cartResponse.cart);
+
       calculateQuantity();
-      getAvailableShippingOptions();
+      await getAvailableShippingOptions();
     } catch (e) {
       loading.value = false;
       return;
