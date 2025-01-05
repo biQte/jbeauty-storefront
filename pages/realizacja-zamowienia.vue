@@ -99,19 +99,19 @@ const setupStripe = async () => {
 
 const loadingStep = ref<boolean>(false);
 
-const locales = [
-  { country: "Polska", value: "pl" },
-  { country: "Niemcy", value: "de" },
-];
+// const locales = [
+//   { country: "Polska", value: "pl" },
+//   { country: "Niemcy", value: "de" },
+// ];
 
-const country = ref(
-  cartStore.cartObject?.shipping_address
-    ? locales.find(
-        (item) =>
-          item.value === cartStore.cartObject?.shipping_address?.country_code
-      )
-    : locales.find((item) => item.value === "pl")
-);
+// const country = ref(
+//   cartStore.cartObject?.shipping_address
+//     ? locales.find(
+//         (item) =>
+//           item.value === cartStore.cartObject?.shipping_address?.country_code
+//       )
+//     : locales.find((item) => item.value === "pl")
+// );
 
 const orderDataSchema = yupObject({
   isAuthenticated: yupBoolean(),
@@ -286,7 +286,7 @@ const showParcelLockerDialog = ref<boolean>(false);
 const showParcelLockerDialogModel = ref<boolean>(true);
 
 function updatePostalCode(value: string) {
-  if (cartStore.cartObject?.shipping_address?.country_code !== "pl") return;
+  // if (cartStore.cartObject?.shipping_address?.country_code !== "pl") return;
 
   const digitsOnly = value.replace(/\D/g, "");
 
@@ -476,7 +476,7 @@ const submitForm = handleSubmit(async (values) => {
     const shippingAddress: HttpTypes.StoreAddAddress = {
       first_name: firstName.value.value,
       last_name: lastName.value.value,
-      country_code: "pl",
+      // country_code: "pl",
       postal_code: postalCode.value.value,
       phone: phoneNumber.value.value,
       city: city.value.value,
@@ -509,7 +509,7 @@ const submitForm = handleSubmit(async (values) => {
         ? {
             first_name: firstName.value.value,
             last_name: lastName.value.value,
-            country_code: "pl",
+            // country_code: "pl",
             postal_code: companyPostalCode.value.value,
             phone: companyPhoneNumber.value.value,
             city: companyCity.value.value,
@@ -576,23 +576,23 @@ onMounted(async () => {
 
   stripeLoadingSuccess.value = false;
 
-  if (!cartStore.cartObject?.shipping_address) {
-    await cartStore.updateCountry("pl");
-  } else {
-    country.value = locales.find(
-      (item) =>
-        item.value === cartStore.cartObject?.shipping_address?.country_code
-    );
-  }
+  // if (!cartStore.cartObject?.shipping_address) {
+  //   await cartStore.updateCountry("pl");
+  // } else {
+  //   country.value = locales.find(
+  //     (item) =>
+  //       item.value === cartStore.cartObject?.shipping_address?.country_code
+  //   );
+  // }
 });
 
-watch(country, async (newValue, oldValue) => {
-  if (oldValue === newValue) return;
+// watch(country, async (newValue, oldValue) => {
+//   if (oldValue === newValue) return;
 
-  await cartStore.updateCountry(newValue!.value);
+//   await cartStore.updateCountry(newValue!.value);
 
-  await cartStore.getAvailableShippingOptions();
-});
+//   await cartStore.getAvailableShippingOptions();
+// });
 
 const prevStep = () => {
   step.value--;
@@ -820,9 +820,9 @@ onMounted(() => {
     prev-text="Wróć"
   >
     <template v-slot:item.1>
-      <h3>Kraj i Dostawa</h3>
+      <h3>Dostawa</h3>
       <br />
-      <v-select
+      <!-- <v-select
         v-model="country"
         label="Kraj"
         :items="locales"
@@ -830,7 +830,7 @@ onMounted(() => {
         item-value="value"
         return-object
         variant="solo"
-      ></v-select>
+      ></v-select> -->
       <v-radio-group
         v-model="selectedShippingOption"
         label="Wybierz metodę dostawy"
@@ -886,22 +886,12 @@ onMounted(() => {
         <br />
         <div class="input-row">
           <v-text-field
-            v-if="cartStore.cartObject?.shipping_address?.country_code === 'pl'"
             density="compact"
             class="text-input"
             autocomplete="postal-code"
             v-model="postalCode.value.value"
             :error-messages="postalCode.errorMessage.value"
             @input="updatePostalCode(postalCode.value.value)"
-            label="Kod pocztowy*"
-          ></v-text-field>
-          <v-text-field
-            v-if="cartStore.cartObject?.shipping_address?.country_code !== 'pl'"
-            density="compact"
-            class="text-input"
-            autocomplete="postal-code"
-            v-model="postalCode.value.value"
-            :error-messages="postalCode.errorMessage.value"
             label="Kod pocztowy*"
           ></v-text-field>
           <v-text-field
