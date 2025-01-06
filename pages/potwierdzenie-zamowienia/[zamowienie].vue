@@ -281,7 +281,7 @@ onMounted(async () => {
       <v-list-item
         ><b>Płatność</b>:
         {{
-          order?.payment_status === "authorized" ? "Opłacone" : "Nieopłacone"
+          order?.payment_status === "captured" ? "Opłacone" : "Nieopłacone"
         }}</v-list-item
       >
       <v-list-item>
