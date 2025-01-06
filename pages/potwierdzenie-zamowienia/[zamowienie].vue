@@ -17,8 +17,22 @@ const orderId = ref<string>(route.params.zamowienie as string);
 const { width, height } = useWindowSize();
 const order = ref<StoreOrder>();
 onMounted(async () => {
-  const orderReponse = await medusaClient.store.order.retrieve(orderId.value);
-  order.value = orderReponse.order as unknown as StoreOrder;
+  const orderResponse = await medusaClient.store.order.retrieve(orderId.value);
+  // const queryParams = encodeURIComponent("+fulfillments.labels");
+
+  // const orderResponse = await $fetch(
+  //   `${config.public.medusaUrl}/store/orders/${orderId.value}?fields=${queryParams}`,
+  //   {
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "x-publishable-api-key": config.public.medusaPublishableKey,
+  //     },
+  //   }
+  // );
+
+  order.value = orderResponse.order as StoreOrder;
+  console.log(order.value);
 });
 </script>
 
@@ -262,6 +276,33 @@ onMounted(async () => {
         </v-list-item>
       </v-list>
     </div>
+    <h2>Status</h2>
+    <v-list>
+      <v-list-item
+        ><b>Płatność</b>:
+        {{
+          order?.payment_status === "authorized" ? "Opłacone" : "Nieopłacone"
+        }}</v-list-item
+      >
+      <v-list-item>
+        <b>Dostawa</b>:
+        {{
+          order?.fulfillment_status === "fulfilled"
+            ? "Zamówienie spakowane, czeka na odbiór kuriera"
+            : order?.fulfillment_status === "shipped"
+            ? "Zamówienie wysłane"
+            : order?.fulfillment_status === "delivered"
+            ? "Zamówienie doręczone"
+            : "Zamówienie przyjęte do realizacji"
+        }}
+      </v-list-item>
+      <!-- <v-list-row v-if="order?.fulfillment_status === 'shipped'"
+        >Link do śledzenia przesyłki:
+        <a
+          :href="`https://inpost.pl/sledzenie-przesylek?number=${order?.fulfillments?.[0].labels[0].}`"
+        ></a
+      ></v-list-row> -->
+    </v-list>
     <!-- <h2>Płatność</h2>
     <div class="v-list-row">
       <v-list>

@@ -551,6 +551,8 @@ const completeCart = async () => {
 
     if (order!.type === "cart") throw order?.error;
 
+    await cartStore.fetchCart();
+
     router.push(`${ROUTES.ORDER_CONFIRMATION_PAGE}/${order!.order.id}`);
   } catch (e) {
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);

@@ -335,6 +335,7 @@ export const useCartStore = defineStore("cart", () => {
         loading.value = false;
         cartObject.value = undefined;
         localStorage.removeItem("cart_id");
+        calculateQuantity();
         return;
       }
 
