@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
         offset,
         limit,
         fields: "*variants.calculated_price,+variants.inventory_quantity",
+        // order: '-'
       },
     });
 

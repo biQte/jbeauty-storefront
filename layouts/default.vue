@@ -1,23 +1,26 @@
 <script setup lang="ts">
 const showCookiesBanner = ref<boolean>(false);
 
-const getCookiesAcceptationFromStorage = () => {
-  const cookies = localStorage.getItem("cookiesAccepted");
-
-  if (!cookies || cookies !== "true") {
-    showCookiesBanner.value = true;
-  } else {
-    showCookiesBanner.value = false;
-  }
-};
-
-const checkForCookiesAcceptation = () => {
-  getCookiesAcceptationFromStorage();
-};
-
-onMounted(() => {
-  getCookiesAcceptationFromStorage();
+// Używamy useCookie do zarządzania ciasteczkiem 'cookiesAccepted
+const cookiesAccepted = useCookie("cookiesAccepted", {
+  default: () => false,
 });
+
+// Funkcja sprawdzająca akceptację ciasteczek
+const checkForCookiesAcceptation = () => {
+  showCookiesBanner.value = cookiesAccepted.value !== true;
+
+  console.log(showCookiesBanner.value);
+  console.log(cookiesAccepted.value);
+};
+
+const acceptCookies = () => {
+  cookiesAccepted.value = true;
+  checkForCookiesAcceptation();
+};
+
+// Inicjalne sprawdzenie akceptacji ciasteczek
+checkForCookiesAcceptation();
 </script>
 
 <template>
@@ -27,9 +30,6 @@ onMounted(() => {
       <slot />
     </main>
     <AppFooter />
-    <CookiesBanner
-      v-if="showCookiesBanner"
-      @accepted-cookies="checkForCookiesAcceptation"
-    />
+    <CookiesBanner v-if="showCookiesBanner" @accepted-cookies="acceptCookies" />
   </div>
 </template>

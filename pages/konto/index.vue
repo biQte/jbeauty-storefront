@@ -25,6 +25,10 @@ const lastName = ref<string>(sessionStore.session?.last_name!);
 
 const config = useRuntimeConfig();
 
+if (route.query.showOrders) {
+  showOrders.value = true;
+}
+
 watch(showOrders, async (newValue) => {
   if (newValue && !ordersList.value) {
     loading.value = true;
@@ -87,11 +91,11 @@ const logout = async () => {
   }
 };
 
-onMounted(() => {
-  if (route.query.showOrders) {
-    showOrders.value = true;
-  }
-});
+// onMounted(() => {
+//   if (route.query.showOrders) {
+//     showOrders.value = true;
+//   }
+// });
 
 useSeoMeta({
   title: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,

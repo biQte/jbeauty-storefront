@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const emit = defineEmits(["acceptedCookies"]);
 
+// Tworzymy ciasteczko `cookiesAccepted`
+// const cookiesAccepted = useCookie("cookiesAccepted", {
+//   default: () => false,
+// });
+
+// Funkcja akceptująca ciasteczka
 const acceptCookies = () => {
-  localStorage.setItem("cookiesAccepted", "true");
-  emit("acceptedCookies");
+  // cookiesAccepted.value = true; // Ustawiamy wartość ciasteczka
+  emit("acceptedCookies"); // Emitujemy zdarzenie do rodzica
 };
 </script>
 

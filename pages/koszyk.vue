@@ -27,6 +27,22 @@ const selectedShippingOption = ref<string>();
 const router = useRouter();
 const orderMessage = ref<string>("");
 
+await cartStore.fetchCart();
+
+if (cartStore.cartObject?.metadata?.orderMessage) {
+  orderMessage.value = cartStore.cartObject?.metadata?.orderMessage as string;
+}
+
+if (sessionStore.isAuthenticated && !cartStore.cartObject?.customer_id) {
+  await cartStore.updateCart(
+    sessionStore.session?.email,
+    undefined,
+    undefined,
+    undefined,
+    undefined
+  );
+}
+
 const getTotalAmount = computed(() => {
   if (!cartStore.cartObject) return 0;
 
@@ -270,23 +286,23 @@ const proceedToCheckout = async () => {
   // } catch (e) {}
 };
 
-onMounted(async () => {
-  await cartStore.fetchCart();
+// onMounted(async () => {
+//   await cartStore.fetchCart();
 
-  if (cartStore.cartObject?.metadata?.orderMessage) {
-    orderMessage.value = cartStore.cartObject?.metadata?.orderMessage as string;
-  }
+//   if (cartStore.cartObject?.metadata?.orderMessage) {
+//     orderMessage.value = cartStore.cartObject?.metadata?.orderMessage as string;
+//   }
 
-  if (sessionStore.isAuthenticated && !cartStore.cartObject?.customer_id) {
-    await cartStore.updateCart(
-      sessionStore.session?.email,
-      undefined,
-      undefined,
-      undefined,
-      undefined
-    );
-  }
-});
+//   if (sessionStore.isAuthenticated && !cartStore.cartObject?.customer_id) {
+//     await cartStore.updateCart(
+//       sessionStore.session?.email,
+//       undefined,
+//       undefined,
+//       undefined,
+//       undefined
+//     );
+//   }
+// });
 </script>
 
 <template>

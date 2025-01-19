@@ -13,12 +13,14 @@ const props = defineProps<{
     <v-carousel-item v-for="product in products" :key="product.id">
       <NuxtLink :to="`/produkt/${product.handle}`">
         <v-card width="340px">
-          <v-img
+          <nuxt-img
             :src="product.thumbnail!"
             width="340"
             height="340"
-            cover
-          ></v-img>
+            fit="cover"
+            loading="lazy"
+            format="webp"
+          />
           <v-card-item>
             <v-card-title>{{ product.title }}</v-card-title>
             <v-card-subtitle>{{

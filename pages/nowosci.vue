@@ -10,38 +10,20 @@ useSeoMeta({
 
 import { type StoreProduct } from "@medusajs/types";
 
-const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const { width, height } = useWindowSize();
-const config = useRuntimeConfig();
-const snackbarStore = useSnackbarStore();
 
 const products = ref<StoreProduct[]>([]);
 const loading = ref<boolean>(false);
 
-const loadNewProducts = async () => {
-  try {
-    loading.value = true;
-    products.value = (
-      await medusaClient.store.product.list({
-        fields: "*variants.calculated_price,+variants.inventory_quantity",
-        order: "-created_at",
-        limit: 40,
-      })
-    ).products;
-    loading.value = false;
-  } catch (e) {
-    snackbarStore.showSnackbar(
-      "Wystąpił błąd podczas ładowania nowości",
-      "error"
-    );
-    loading.value = false;
+const { data: newProducts, error } = await useFetch(
+  `/api/products/new?limit=40`,
+  {
+    server: true,
+    immediate: true,
   }
-};
+);
 
-onMounted(() => {
-  loadNewProducts();
-});
+products.value = newProducts.value;
 </script>
 
 <template>

@@ -15,6 +15,7 @@
     "@medusajs/client-types": "^0.2.12",
     "@medusajs/js-sdk": "^2.0.1",
     "@medusajs/types": "^2.0.1",
+    "@nuxt/image": "^1.9.0",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/sitemap": "^7.0.0",
     "@pinia/nuxt": "^0.5.5",

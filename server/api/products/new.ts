@@ -1,6 +1,11 @@
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
+  const query = getQuery(event);
+
+  // @ts-expect-error
+  const limit = query.limit ? parseInt(query.limit, 10) : 12;
+
   try {
     // @ts-expect-error
     const { products } = await $fetch(
@@ -12,7 +17,7 @@ export default defineEventHandler(async (event) => {
         },
         query: {
           fields: "*variants.calculated_price,+variants.inventory_quantity",
-          limit: 12,
+          limit: limit,
           order: "-created_at",
         },
       }

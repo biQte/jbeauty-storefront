@@ -61,16 +61,16 @@ recommendedProducts.value = recommendedProductsQuery.value;
     <TheMainPageCarousel />
     <div class="bestsellers-wrapper">
       <h2>Nowości</h2>
-      <v-lazy>
-        <ProductCarousel :products="bestsellingProducts" :loading="loading" />
-      </v-lazy>
+      <!--<v-lazy>-->
+      <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      <!--</v-lazy>-->
     </div>
     <TheHomePageBanner />
-    <TheHomePageLowerBanner />
+    <LazyTheHomePageLowerBanner />
     <br />
     <div class="recommended-products bestsellers-wrapper">
       <h2>Polecane</h2>
-      <ProductCarousel :products="recommendedProducts" :loading="loading" />
+      <LazyProductCarousel :products="recommendedProducts" :loading="loading" />
     </div>
   </div>
 </template>

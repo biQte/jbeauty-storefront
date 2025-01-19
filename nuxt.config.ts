@@ -78,7 +78,8 @@ font-src * data: blob: 'unsafe-inline';
     minify: true,
   },
   compatibilityDate: "2024-07-09",
-  debug: false,
+  debug: true,
+  components: true,
   imports: {
     dirs: ["stores"],
   },
@@ -93,6 +94,7 @@ font-src * data: blob: 'unsafe-inline';
         config.plugins.push(vuetify({ autoImport: true }));
       });
     },
+    "@nuxt/image",
     "@pinia/nuxt",
     "@vueuse/nuxt",
     "nuxt-delay-hydration",
@@ -101,7 +103,7 @@ font-src * data: blob: 'unsafe-inline';
     "@nuxtjs/sitemap",
   ],
   delayHydration: {
-    debug: true,
+    debug: false,
     mode: "init",
   },
   plugins: [
@@ -116,6 +118,18 @@ font-src * data: blob: 'unsafe-inline';
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  image: {
+    // quality: 80,
+    provider: "ipx",
+    quality: 80,
+    format: ["webp"],
+    domains: [
+      "www.jbeautysklep.pl",
+      "jbeautysklep.pl",
+      "api.jbeautysklep.pl",
+      "localhost",
+    ],
   },
   vite: {
     css: {
