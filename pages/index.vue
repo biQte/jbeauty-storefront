@@ -34,7 +34,6 @@ const { data: newProducts, error: newProductsError } = await useFetch(
   `/api/products/new`,
   {
     server: true,
-    immediate: true,
   }
 );
 
@@ -47,7 +46,6 @@ bestsellingProducts.value = newProducts.value;
 const { data: recommendedProductsQuery, error: recommendedProductsError } =
   await useFetch(`/api/products/recommended`, {
     server: true,
-    immediate: true,
   });
 
 recommendedProducts.value = recommendedProductsQuery.value;

@@ -28,7 +28,10 @@ const showOverlay = () => {
 };
 
 const { data: products, error } = await useFetch(
-  `/api/products/${route.params.product}`
+  `/api/products/${route.params.product}`,
+  {
+    server: true,
+  }
 );
 
 if (!products)

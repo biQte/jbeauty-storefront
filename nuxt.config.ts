@@ -78,8 +78,8 @@ font-src * data: blob: 'unsafe-inline';
     minify: true,
   },
   compatibilityDate: "2024-07-09",
-  debug: true,
-  components: true,
+  // debug: true,
+  // components: true,
   imports: {
     dirs: ["stores"],
   },
@@ -119,18 +119,18 @@ font-src * data: blob: 'unsafe-inline';
       autoprefixer: {},
     },
   },
-  image: {
-    // quality: 80,
-    provider: "ipx",
-    quality: 80,
-    format: ["webp"],
-    domains: [
-      "www.jbeautysklep.pl",
-      "jbeautysklep.pl",
-      "api.jbeautysklep.pl",
-      "localhost",
-    ],
-  },
+  // image: {
+  //   // quality: 80,
+  //   provider: "ipx",
+  //   quality: 80,
+  //   format: ["webp"],
+  //   domains: [
+  //     "www.jbeautysklep.pl",
+  //     "jbeautysklep.pl",
+  //     "api.jbeautysklep.pl",
+  //     "localhost",
+  //   ],
+  // },
   vite: {
     css: {
       preprocessorOptions: {
