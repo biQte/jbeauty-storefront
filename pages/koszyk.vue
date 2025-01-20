@@ -2,6 +2,12 @@
 import { ROUTES } from "~/constants/routes";
 import { useWindowSize } from "@vueuse/core";
 import { type StoreProduct } from "@medusajs/types";
+import { FetchError } from "@medusajs/js-sdk";
+
+type ProductAndQuantity = {
+  productId: string;
+  quantity: number;
+};
 
 useSeoMeta({
   title: "JBeauty - Koszyk",
@@ -286,6 +292,59 @@ const proceedToCheckout = async () => {
   // } catch (e) {}
 };
 
+const refreshCart = async () => {
+  let productIdsAndQuantities: ProductAndQuantity[] = [];
+
+  if (
+    !cartStore.cartObject ||
+    !cartStore.cartObject.items ||
+    cartStore.cartObject.items.length < 1
+  ) {
+    return;
+  }
+
+  for (let i = 0; i < cartStore.cartObject.items.length; i++) {
+    const productAndQuantity: ProductAndQuantity = {
+      productId: cartStore.cartObject.items[i].variant_id as string,
+      quantity: cartStore.cartObject.items[i].quantity,
+    };
+    productIdsAndQuantities.push(productAndQuantity);
+  }
+
+  localStorage.removeItem("cart_id");
+
+  await cartStore.createCart(undefined);
+
+  for (let i = 0; i < productIdsAndQuantities.length; i++) {
+    try {
+      await cartStore.addLineItem(
+        productIdsAndQuantities[i].productId,
+        productIdsAndQuantities[i].quantity
+      );
+    } catch (e) {
+      if (e instanceof FetchError) {
+        if (e.message.includes("does not have the required inventory")) {
+          snackbarStore.showSnackbar(
+            "Niektóre produkty nie są dostępne w podanej ilości i zostały usunięte z koszyka",
+            "error",
+            5000
+          );
+        }
+      }
+    }
+  }
+
+  if (sessionStore.isAuthenticated) {
+    await cartStore.updateCart(
+      sessionStore.session?.email,
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    );
+  }
+};
+
 // onMounted(async () => {
 //   await cartStore.fetchCart();
 
@@ -510,6 +569,12 @@ const proceedToCheckout = async () => {
               :width="200"
             ></v-text-field>
             <v-btn @click="applyDiscount" color="primary">Zapisz</v-btn>
+          </div>
+          <br />
+          <div @click="refreshCart" class="reset-cart">
+            <p>W przypadku problemów z podawaniem kodu</p>
+            <br />
+            <v-btn color="info">Odśwież koszyk</v-btn>
           </div>
           <!-- <br />
           <div class="order-message-wrapper">

@@ -22,6 +22,13 @@ export default defineNuxtPlugin((nuxtApp) => {
           "Jeden z wybranych produktów jest już niedostępny",
           "error"
         );
+      } else if (
+        error.message.includes("does not have the required inventory")
+      ) {
+        snackbarStore.showSnackbar(
+          "Niektóre produkty nie są dostępne w podanej ilości",
+          "error"
+        );
       } else {
         snackbarStore.showSnackbar(error.message, "error", 5000);
       }
@@ -44,6 +51,13 @@ export default defineNuxtPlugin((nuxtApp) => {
           "Jeden z wybranych produktów jest już niedostępny",
           "error"
         );
+      } else if (
+        event.reason.message.includes("does not have the required inventory")
+      ) {
+        snackbarStore.showSnackbar(
+          "Niektóre produkty nie są dostępne w podanej ilości",
+          "error"
+        );
       } else {
         snackbarStore.showSnackbar(event.reason.message, "error", 5000);
       }
@@ -62,6 +76,13 @@ export default defineNuxtPlugin((nuxtApp) => {
       } else if (event.message.includes("ProductVariant id not found")) {
         snackbarStore.showSnackbar(
           "Jeden z wybranych produktów jest już niedostępny",
+          "error"
+        );
+      } else if (
+        event.message.includes("does not have the required inventory")
+      ) {
+        snackbarStore.showSnackbar(
+          "Niektóre produkty nie są dostępne w podanej ilości",
           "error"
         );
       } else {
