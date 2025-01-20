@@ -25,34 +25,22 @@ const { width, height } = useWindowSize();
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink> -->
     <NuxtLink :to="`/kategoria/victoria-vynn-just-base`">
-      <v-carousel-item>
-        <nuxt-img
-          src="/VYNN_JustBase_DYSTR-KV_WWW_2000x600.jpg"
-          fit="contain"
-          format="webp"
-          :width="width"
-        />
-      </v-carousel-item>
+      <v-carousel-item
+        src="/public/VYNN_JustBase_DYSTR-KV_WWW_2000x600.webp"
+        contain
+      ></v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-easy-fiber-gel`">
       <v-carousel-item
-        ><nuxt-img
-          src="/VYNN_VV_EasyFiberGel_banery_www_-2000x600.jpg"
-          fit="contain"
-          format="webp"
-          :width="width"
-        />
-      </v-carousel-item>
+        src="/public/VYNN_VV_EasyFiberGel_banery_www_-2000x600.webp"
+        contain
+      ></v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-mega-base-shimmer`">
       <v-carousel-item
-        ><nuxt-img
-          src="/VYNN_VV_MegaBaseX3_banery_www_2000x600.jpg"
-          fit="contain"
-          format="webp"
-          :width="width"
-        />
-      </v-carousel-item>
+        src="/public/VYNN_VV_MegaBaseX3_banery_www_2000x600.webp"
+        contain
+      ></v-carousel-item>
     </NuxtLink>
   </v-carousel>
 </template>
