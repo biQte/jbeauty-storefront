@@ -410,7 +410,15 @@ const refreshCart = async () => {
                   cover
                   :src="item.thumbnail!"
                 ></v-img>
-                {{ item.product_title }}
+                <div>
+                  {{ item.product_title }}
+                  <p
+                    style="color: red"
+                    v-if="item.product_collection === 'POMODORO'"
+                  >
+                    Na ten produkt nie obowiązuje kod rabatowy
+                  </p>
+                </div>
               </NuxtLink>
               <!-- </div> -->
             </th>
@@ -477,7 +485,7 @@ const refreshCart = async () => {
           </tr>
         </tbody>
       </v-table>
-      <v-table v-else>
+      <v-table :width="width" v-else>
         <thead>
           <tr>
             <td>Protukt</td>
@@ -491,6 +499,12 @@ const refreshCart = async () => {
               <NuxtLink :to="`/produkt/${item.product_handle}`">
                 <v-img :src="item.thumbnail!" width="80" cover></v-img>
                 <p style="width: 100px">{{ item.product_title }}</p>
+                <p
+                  style="color: red; max-width: 110px"
+                  v-if="item.product_collection === 'POMODORO'"
+                >
+                  Na ten produkt nie obowiązuje kod rabatowy
+                </p>
               </NuxtLink>
               <p>
                 Cena:
@@ -699,6 +713,11 @@ const refreshCart = async () => {
     justify-content: center;
     gap: 5rem;
     height: 100%;
+
+    @media only screen and (max-width: 720px) {
+      width: 100%;
+      align-items: normal;
+    }
 
     .cart-info {
       display: flex;
