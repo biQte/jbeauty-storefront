@@ -20,11 +20,11 @@ const config = useRuntimeConfig();
       </div>
     </NuxtLink>
     <NuxtLink
-      :to="`/produkt/pb-nails-top-do-zeli-i-hybryd-the-best-top-coat-8ml`"
+      :to="`/produkt/victoria-vynn-quick-trick-nail-forms-100-szt`"
       class="right banner"
     >
       <div class="overlay">
-        <p>The best coat</p>
+        <p>Quick Trick Nail Forms</p>
         <v-btn :elevation="24" size="x-large" color="transparent"
           >Zobacz więcej</v-btn
         >
@@ -84,7 +84,8 @@ const config = useRuntimeConfig();
     background-size: cover;
   }
   .right {
-    background-image: url("/public/fotos-363.webp");
+    // background-image: url("/public/fotos-363.webp");
+    background-image: url("/public/VYNN_VV_Formy_POST_PLE.webp");
   }
 }
 </style>

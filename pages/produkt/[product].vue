@@ -97,6 +97,8 @@ const increaseQuantity = () => {
   }
 };
 
+const tab = ref();
+
 const toggleDescription = () => {
   showDescription.value = !showDescription.value;
 };
@@ -106,19 +108,30 @@ const toggleDetails = () => {
 };
 
 useSeoMeta({
-  title: `JBeauty - ${products.value[0].title}`,
-  ogTitle: `JBeauty - ${products.value[0].title}`,
-  description: products.value[0].description,
-  ogDescription: products.value[0].description,
+  title: products.value[0].metadata?.seoTitle
+    ? products.value[0].metadata.seoTitle
+    : `JBeauty - ${products.value[0].title}`,
+  ogTitle: products.value[0].metadata?.seoTitle
+    ? products.value[0].metadata.seoTitle
+    : `JBeauty - ${products.value[0].title}`,
+  description: products.value[0].metadata?.seoDescription
+    ? products.value[0].metadata.seoDescription
+    : products.value[0].description,
+  ogDescription: products.value[0].metadata?.seoDescription
+    ? products.value[0].metadata.seoDescription
+    : products.value[0].description,
   ogImage: products.value[0].thumbnail,
   ogImageUrl: products.value[0].thumbnail,
   twitterImage: products.value[0].thumbnail,
+  keywords: products.value[0].metadata?.seoTags
+    ? products.value[0].metadata.seoTags
+    : "",
 });
 </script>
 
 <template>
   <div class="product-page-wrapper">
-    <div class="container mx-auto p-8">
+    <div class="container mx-auto p-4">
       <div class="flex flex-col lg:flex-row">
         <div class="lg:w-3/5 lg:pr-14">
           <div class="flex">
@@ -203,6 +216,7 @@ useSeoMeta({
           <p v-show="!loading && product?.variants" class="text-lg mt-2 mb-4">
             <!-- @vue-expect-error -->
             <span
+              class="text-3xl"
               :class="{strike: product?.variants?.[0].calculated_price?.calculated_price
                           ?.price_list_type === 'sale' && product?.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount}"
               >{{
@@ -237,6 +251,10 @@ useSeoMeta({
             </span>
           </p>
 
+          <p v-if="product?.variants?.[0]?.ean">
+            EAN(GTIN): {{ product?.variants?.[0]?.ean }}
+          </p>
+
           <div class="product-actions" v-show="!loading">
             <v-btn
               color="primary"
@@ -269,7 +287,30 @@ useSeoMeta({
         </div>
       </div>
 
-      <div class="mt-12">
+      <br />
+
+      <v-card variant="flat">
+        <v-tabs v-model="tab">
+          <v-tab :value="1">Opis</v-tab>
+          <v-tab :value="2" v-if="product?.metadata?.gpsr"
+            >Informacje dot. bezpieczeństwa</v-tab
+          >
+        </v-tabs>
+
+        <hr />
+        <br />
+
+        <v-tabs-window v-model="tab">
+          <v-tabs-window-item :value="1">
+            <div v-html="product?.description" style="padding: 8px"></div>
+          </v-tabs-window-item>
+          <v-tabs-window-item :value="2">
+            <div v-html="product?.metadata?.gpsr" style="padding: 8px"></div>
+          </v-tabs-window-item>
+        </v-tabs-window>
+      </v-card>
+
+      <!--<div class="mt-12">
         <div
           class="border-t last:border-b border-ui-medium py-6"
           v-show="!loading"
@@ -333,9 +374,9 @@ useSeoMeta({
                 {{ product?.length ? `${product.length} cm` : "" }}
               </li>
             </ul>
-          </div>
+          </div> 
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div v-show="loading" class="loading">Ładuje...</div>

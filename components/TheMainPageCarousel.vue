@@ -24,27 +24,24 @@ const { width, height } = useWindowSize();
     <!-- <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink> -->
+    <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
+      <v-carousel-item src="/public/web.webp" contain></v-carousel-item>
+    </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-pomodoro`">
       <v-carousel-item
         src="/public/VYNN_VV_POMODORO_banery_www_-2000x600.webp"
         contain
       ></v-carousel-item>
     </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-just-base`">
+    <NuxtLink :to="`/kategoria/victoria-vynn-mousse`">
       <v-carousel-item
-        src="/public/VYNN_JustBase_DYSTR-KV_WWW_2000x600.webp"
+        src="/public/vynn_vv_MOUSSE_HDT_FREE_banery_dystr_www_2000x600.webp"
         contain
       ></v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-easy-fiber-gel`">
       <v-carousel-item
-        src="/public/VYNN_VV_EasyFiberGel_banery_www_-2000x600.webp"
-        contain
-      ></v-carousel-item>
-    </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-mega-base-shimmer`">
-      <v-carousel-item
-        src="/public/VYNN_VV_MegaBaseX3_banery_www_2000x600.webp"
+        src="/public/vynn_vv_EASY_fiber_HDT_FREE_banery_dystr_www_2000x600.webp"
         contain
       ></v-carousel-item>
     </NuxtLink>
