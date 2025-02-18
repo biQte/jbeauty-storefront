@@ -13,7 +13,8 @@ export default defineEventHandler(async (event) => {
         },
         query: {
           handle,
-          fields: "*variants.calculated_price,+variants.inventory_quantity",
+          fields:
+            "+metadata,*variants.calculated_price,+variants.inventory_quantity",
         },
       }
     );
