@@ -23,7 +23,8 @@ const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
 
-const showOverlay = () => {
+const showOverlay = (index: number) => {
+  currentIndex.value = index;
   activeOverlay.value = true;
 };
 
@@ -175,17 +176,14 @@ useSeoMeta({
                       contain
                       class="w-full"
                       :src="image.url"
-                      @click="showOverlay"
+                      @click="showOverlay(index)"
                     >
                       <v-overlay
                         v-model="activeOverlay"
                         absolute
-                        location-strategy="static"
-                        target="[0,0]"
                         scroll-strategy="block"
                         close-on-content-click
-                        :width="width"
-                        :height="height"
+                        class="d-flex align-center justify-center"
                       >
                         <v-img
                           contain
@@ -254,6 +252,7 @@ useSeoMeta({
           <p v-if="product?.variants?.[0]?.ean">
             EAN(GTIN): {{ product?.variants?.[0]?.ean }}
           </p>
+          <br />
 
           <div class="product-actions" v-show="!loading">
             <v-btn
@@ -302,7 +301,11 @@ useSeoMeta({
 
         <v-tabs-window v-model="tab">
           <v-tabs-window-item :value="1">
-            <div v-html="product?.description" style="padding: 8px"></div>
+            <!-- <div v-html="product?.description" style="padding: 8px"></div> -->
+            <product-description
+              :description="product?.description!"
+              style="padding: 8px"
+            />
           </v-tabs-window-item>
           <v-tabs-window-item :value="2">
             <div v-html="product?.metadata?.gpsr" style="padding: 8px"></div>
