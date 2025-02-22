@@ -68,6 +68,7 @@ font-src * data: blob: 'unsafe-inline';
       brandsCategoryID: process.env.NUXT_BRANDS_CATEGORY_ID,
       salesChannelID: process.env.NUXT_SALES_CHANNEL_ID,
       regionID: process.env.NUXT_REGION_ID,
+      recommendedByCategoryID: process.env.NUXT_RECOMMENDED_BY_CATEGORY_ID,
     },
     nitro: {
       envExpansion: true,
@@ -94,13 +95,14 @@ font-src * data: blob: 'unsafe-inline';
         config.plugins.push(vuetify({ autoImport: true }));
       });
     },
+    "@nuxtjs/sitemap",
+    "@nuxt/content",
     "@nuxt/image",
     "@pinia/nuxt",
     "@vueuse/nuxt",
     "nuxt-delay-hydration",
     "nuxt-anchorscroll",
     "nuxt-gtag",
-    "@nuxtjs/sitemap",
   ],
   delayHydration: {
     debug: false,
@@ -250,5 +252,6 @@ font-src * data: blob: 'unsafe-inline';
         ...productUrls,
       ];
     },
+    exclude: ["/content/*"],
   },
 });
