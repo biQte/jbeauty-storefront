@@ -9,6 +9,7 @@ const cartStore = useCartStore();
 
 const productCategories = ref();
 const brands = ref();
+const recommendedBy = ref();
 const { width, height } = useWindowSize();
 const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
@@ -28,23 +29,32 @@ const { data: bcats } = await useFetch(
 
 brands.value = bcats.value;
 
-const productCategoryMenuOpen = ref<boolean>(false);
-const brandCategoryMenuOpen = ref<boolean>(false);
-const toggleProductCategoryMenu = () => {
-  productCategoryMenuOpen.value = !productCategoryMenuOpen.value;
-};
-const toggleBrandCategoryMenu = () => {
-  brandCategoryMenuOpen.value = !brandCategoryMenuOpen.value;
-};
+const { data: recommendedByCategories } = await useFetch(
+  `/api/categories/${config.public.recommendedByCategoryID}`
+);
 
-watch(mobileMenu, (newValue) => {
-  if (newValue === false) {
-    productCategoryMenuOpen.value = false;
-    brandCategoryMenuOpen.value = false;
-  }
-});
+recommendedBy.value = recommendedByCategories.value;
+
+console.log(JSON.stringify(recommendedBy.value));
+
+// const productCategoryMenuOpen = ref<boolean>(false);
+// const brandCategoryMenuOpen = ref<boolean>(false);
+// const toggleProductCategoryMenu = () => {
+//   productCategoryMenuOpen.value = !productCategoryMenuOpen.value;
+// };
+// const toggleBrandCategoryMenu = () => {
+//   brandCategoryMenuOpen.value = !brandCategoryMenuOpen.value;
+// };
+
+// watch(mobileMenu, (newValue) => {
+//   if (newValue === false) {
+//     productCategoryMenuOpen.value = false;
+//     brandCategoryMenuOpen.value = false;
+//   }
+// });
 
 const closeMenu = () => {
+  console.log("should close");
   mobileMenu.value = false;
 };
 
@@ -120,6 +130,19 @@ onMounted(async () => {
                 variant="text"
                 >Nowości</v-btn
               >
+              <!-- <ul class="product-categories">
+                <TheNavbarMobileCategoryItemWithPhoto
+                  :category="recommendedBy[0]"
+                  @close-menu="closeMenu"
+                />
+              </ul> -->
+              <v-btn
+                to="/blog"
+                @click="closeMenu"
+                class="mobile-menu-item"
+                variant="text"
+                >Blog</v-btn
+              >
               <v-btn
                 to="/kontakt"
                 @click="closeMenu"
@@ -190,6 +213,20 @@ onMounted(async () => {
             size="small"
             >Nowości</v-btn
           >
+          <!--<v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="menu-link"
+                variant="text"
+                v-bind="props"
+                size="small"
+                >Polecane przez</v-btn
+              >
+            </template>
+            <ProductCategoryMenuWithIcons
+              :categories="recommendedBy as unknown as ProductCategory[]"
+            />
+          </v-menu>-->
           <!--<v-btn
             class="menu-link"
             variant="text"
@@ -198,6 +235,14 @@ onMounted(async () => {
             size="small"
             >Kody rabatowe</v-btn
           >-->
+          <v-btn
+            class="menu-link"
+            variant="text"
+            to="/blog"
+            :active="false"
+            size="small"
+            >Blog</v-btn
+          >
           <v-btn
             class="menu-link"
             variant="text"
