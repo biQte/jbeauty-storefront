@@ -47,4 +47,34 @@ useSeoMeta({
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.terms-of-contest {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+
+    h1{
+        font-size: 2.5rem;
+        font-weight: 400;
+    }
+
+    h2 {
+    font-size: 2rem;
+    font-weight: 400;
+  }
+
+  ol {
+    max-width: 1200px;
+    padding: 0 5rem;
+    list-style-type: decimal;
+  }
+
+  .alphanumeric-list {
+    list-style-type: lower-latin;
+  }
+}
+</style>
