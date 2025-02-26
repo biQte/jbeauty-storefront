@@ -67,6 +67,11 @@ useSeoMeta({
     font-weight: 400;
   }
 
+  p {
+    max-width: 1200px;
+    padding: 0 5rem;
+  }
+
   ol {
     max-width: 1200px;
     padding: 0 5rem;
