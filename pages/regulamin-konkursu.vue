@@ -131,5 +131,9 @@ useSeoMeta({
   .alphanumeric-list {
     list-style-type: lower-latin;
   }
+
+  ul {
+    list-style-type: disc;
+  }
 }
 </style>
