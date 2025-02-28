@@ -346,7 +346,11 @@ useSeoMeta({
       <br />
 
       <v-card variant="flat">
-        <v-tabs v-model="tab" direction="vertical" color="primary">
+        <v-tabs
+          v-model="tab"
+          :direction="width < 720 ? 'vertical' : 'horizontal'"
+          color="primary"
+        >
           <v-tab :value="1">Opis</v-tab>
           <v-tab :value="2" v-if="product?.metadata?.gpsr"
             >Informacje dot. bezpieczeństwa</v-tab
@@ -484,6 +488,7 @@ useSeoMeta({
   @media only screen and (max-width: 720px) {
     // flex-direction: column;
     gap: 0.5rem;
+    transform: translateX(-10px);
   }
 }
 
@@ -530,8 +535,8 @@ ul {
 
   h2 {
     margin-left: 10%;
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 1.4rem;
+    font-weight: 600;
   }
 }
 </style>
