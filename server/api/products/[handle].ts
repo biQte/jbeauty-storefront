@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         query: {
           handle,
           fields:
-            "+metadata,*variants.calculated_price,+variants.inventory_quantity",
+            "+metadata,*categories,*variants.calculated_price,+variants.inventory_quantity",
         },
       }
     );

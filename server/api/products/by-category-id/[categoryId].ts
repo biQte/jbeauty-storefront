@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
           "x-publishable-api-key": config.public.medusaPublishableKey,
         },
         query: {
-          category_id: categoryIds,
+          category_id: categoryId,
           offset,
           limit,
           fields: "*variants.calculated_price,+variants.inventory_quantity",
