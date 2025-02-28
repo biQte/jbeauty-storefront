@@ -22,10 +22,32 @@ const showDescription = ref<boolean>(true);
 const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
+// const customText = ref("");
+// const customTextError = ref(false);
 
 const showOverlay = (index: number) => {
   currentIndex.value = index;
   activeOverlay.value = true;
+};
+
+const findDeepestProductCategory = () => {
+  const productsCategoryID = config.public.productsCategoryID;
+
+  if (!product.value?.categories) return null;
+
+  const productTreeCategory = product.value?.categories.filter((category) =>
+    category.mpath?.startsWith(productsCategoryID)
+  );
+
+  // @ts-expect-error
+  const deepestCategory = productTreeCategory.reduce((deepest, category) => {
+    // @ts-expect-error
+    return category.mpath!.length > (deepest?.mpath.length || 0)
+      ? category
+      : deepest;
+  }, null);
+
+  return deepestCategory;
 };
 
 const { data: products, error } = await useFetch(
@@ -43,6 +65,28 @@ product.value = productsObject.value as unknown as Product;
 
 imageToShow.value = product.value.images?.[0]?.id ?? null;
 options.value = product.value.options ?? null;
+
+const deepestCategory = findDeepestProductCategory();
+
+const { data: productsInTheSameCategory, error: categoryError } =
+  await useFetch(`/api/products/by-category-id/${deepestCategory?.id}`, {
+    server: true,
+    query: {
+      offset: 0,
+      limit: 13,
+    },
+  });
+
+productsInTheSameCategory.value = productsInTheSameCategory.value.filter(
+  (p: any) => p.id !== product.value?.id
+);
+
+if (productsInTheSameCategory.value.length > 12) {
+  productsInTheSameCategory.value = productsInTheSameCategory.value.slice(
+    0,
+    12
+  );
+}
 
 const addToCart = async () => {
   try {
@@ -254,6 +298,19 @@ useSeoMeta({
           </p>
           <br />
 
+          <!-- <div>
+            <v-textarea
+              v-model="customText"
+              label="Należy podać nazwę/y kont na instagramie do których mają odnosić tagi"
+              outlined
+              required
+              class="mt-4"
+            />
+            <p v-if="customTextError" class="text-red-500 text-sm">
+              Pole nie może być puste!
+            </p>
+          </div> -->
+
           <div class="product-actions" v-show="!loading">
             <v-btn
               color="primary"
@@ -289,7 +346,7 @@ useSeoMeta({
       <br />
 
       <v-card variant="flat">
-        <v-tabs v-model="tab">
+        <v-tabs v-model="tab" direction="vertical" color="primary">
           <v-tab :value="1">Opis</v-tab>
           <v-tab :value="2" v-if="product?.metadata?.gpsr"
             >Informacje dot. bezpieczeństwa</v-tab
@@ -408,6 +465,14 @@ useSeoMeta({
         </template>
       </v-card>
     </v-dialog>
+
+    <div class="related-products-wrapper">
+      <h2>W kategorii: {{ deepestCategory?.name }}</h2>
+      <LazyProductCarousel
+        :products="productsInTheSameCategory"
+        :loading="false"
+      />
+    </div>
   </div>
 </template>
 
@@ -455,5 +520,18 @@ ul {
 .sale-price {
   font-size: 1.2rem;
   color: $primary-color;
+}
+
+.related-products-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  h2 {
+    margin-left: 10%;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
 }
 </style>
