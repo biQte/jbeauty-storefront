@@ -25,7 +25,17 @@ const { width, height } = useWindowSize();
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink> -->
     <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
-      <v-carousel-item src="/public/web.webp" contain></v-carousel-item>
+      <!-- src="/public/web.webp" contain -->
+      <v-carousel-item>
+        <NuxtImg
+          src="/web.webp"
+          loading="eager"
+          importance="high"
+          width="2000"
+          height="600"
+          fit="contain"
+        />
+      </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-pomodoro`">
       <v-carousel-item

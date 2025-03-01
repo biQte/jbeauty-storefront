@@ -66,7 +66,7 @@ function chunkArray(arr: any[], size: number) {
       >
         <div class="product-chunk">
           <v-card
-            v-for="product in productChunk"
+            v-for="(product, productIndex) in productChunk"
             :key="product.id"
             class="product-card"
             width="340px"
@@ -76,7 +76,10 @@ function chunkArray(arr: any[], size: number) {
                 :src="
                   product.thumbnail!
                 "
-                loading="lazy"
+                :loading="index === 0 && productIndex === 0 ? 'eager' : 'lazy'"
+                :importance="
+                  index === 0 && productIndex === 0 ? 'high' : 'auto'
+                "
                 cover
                 width="340"
                 height="340"

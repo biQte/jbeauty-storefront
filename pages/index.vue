@@ -12,9 +12,10 @@ useSeoMeta({
 useHead({
   link: [
     {
-      as: "image",
       rel: "preload",
       href: "/_nuxt/public/web.webp",
+      as: "image",
+      fetchpriority: "high",
     },
   ],
 });
@@ -101,7 +102,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
     <TheHomePageBanner />
     <Suspense>
       <template #default>
-        <LazyTheHomePageLowerBanner />
+        <TheHomePageLowerBanner />
       </template>
       <template #fallback> Ładowanie... </template>
     </Suspense>
