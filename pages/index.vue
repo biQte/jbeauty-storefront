@@ -9,17 +9,6 @@ useSeoMeta({
   // ogImage: ""
 });
 
-useHead({
-  link: [
-    {
-      rel: "preload",
-      href: "/_nuxt/public/web.webp",
-      as: "image",
-      fetchpriority: "high",
-    },
-  ],
-});
-
 definePageMeta({
   isAccessibleAfterLogin: true,
 });
