@@ -39,7 +39,11 @@ export const useCartStore = defineStore("cart", () => {
   const availablePaymentProviders = ref<StorePaymentProvider[] | null>();
   const snackbarStore = useSnackbarStore();
 
+  const cartIdCookie = useCookie("cart_id", { sameSite: "strict" });
+
   const createCart = async (items: Item[] | undefined) => {
+    if (import.meta.server) return;
+
     try {
       const cartResponse = await medusaClient.store.cart.create({
         items,
@@ -51,7 +55,7 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = cartResponse.cart as unknown as StoreCart;
 
-      localStorage.setItem("cart_id", cartObject.value.id);
+      cartIdCookie.value = cartObject.value.id;
 
       fetchCart();
       calculateQuantity();
@@ -68,6 +72,8 @@ export const useCartStore = defineStore("cart", () => {
     promo_codes: string[] | undefined,
     orderMessage: string | undefined
   ) => {
+    if (import.meta.server) return;
+
     try {
       if (!cartObject.value) {
         return;
@@ -309,12 +315,14 @@ export const useCartStore = defineStore("cart", () => {
   };
 
   const fetchCart = async () => {
+    if (import.meta.server) return;
+
     try {
       triedToFetchCart.value = true;
 
       loading.value = true;
 
-      const cartId = localStorage.getItem("cart_id");
+      const cartId = cartIdCookie.value;
 
       if (!cartId) {
         loading.value = false;
@@ -334,7 +342,7 @@ export const useCartStore = defineStore("cart", () => {
       ) {
         loading.value = false;
         cartObject.value = undefined;
-        localStorage.removeItem("cart_id");
+        cartIdCookie.value = null;
         calculateQuantity();
         return;
       }
@@ -611,8 +619,6 @@ export const useCartStore = defineStore("cart", () => {
           method: "POST",
         }
       );
-
-      // localStorage.removeItem("cart_id");
       // cartObject.value = undefined;
       // calculateQuantity();
 
