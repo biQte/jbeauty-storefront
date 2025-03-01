@@ -9,33 +9,41 @@ const cartStore = useCartStore();
 
 const productCategories = ref();
 const brands = ref();
-const recommendedBy = ref();
-const { width, height } = useWindowSize();
+// const recommendedBy = ref();
+
 const nuxtApp = useNuxtApp();
 const medusaClient = nuxtApp.$medusaClient;
 const mobileMenu = ref<boolean>(false);
+const isClient = ref(false);
 
+const isMobile = useMediaQuery("(max-width: 1400px)");
+const isMobileComputed = computed(() => (isClient ? isMobile.value : false));
 const config = useRuntimeConfig();
 
 const { data: pcats } = await useFetch(
-  `/api/categories/${config.public.productsCategoryID}`
+  `/api/categories/${config.public.productsCategoryID}`,
+  { server: true }
 );
-
-productCategories.value = pcats.value;
 
 const { data: bcats } = await useFetch(
-  `/api/categories/${config.public.brandsCategoryID}`
+  `/api/categories/${config.public.brandsCategoryID}`,
+  {
+    server: true,
+  }
 );
 
-brands.value = bcats.value;
+// const { data: recommendedByCategories } = await useFetch(
+//   `/api/categories/${config.public.recommendedByCategoryID}`,
+//   {
+//     server: true,
+//   }
+// );
 
-const { data: recommendedByCategories } = await useFetch(
-  `/api/categories/${config.public.recommendedByCategoryID}`
-);
-
-recommendedBy.value = recommendedByCategories.value;
-
-console.log(JSON.stringify(recommendedBy.value));
+watchEffect(() => {
+  if (pcats.value) productCategories.value = pcats.value;
+  if (bcats.value) brands.value = bcats.value;
+  // if (recommendedByCategories.value) recommendedBy.value = recommendedByCategories.value;
+});
 
 // const productCategoryMenuOpen = ref<boolean>(false);
 // const brandCategoryMenuOpen = ref<boolean>(false);
@@ -54,12 +62,13 @@ console.log(JSON.stringify(recommendedBy.value));
 // });
 
 const closeMenu = () => {
-  console.log("should close");
   mobileMenu.value = false;
 };
 
+const cartId = useCookie("cart_id");
+
 onMounted(async () => {
-  const cartId = localStorage.getItem("cart_id");
+  isClient.value = true;
   // const { product_categories } = await $fetch(
   //   `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.productsCategoryID}&fields=*category_children`,
   //   {
@@ -86,11 +95,13 @@ onMounted(async () => {
     cartStore.fetchCart();
   }
 });
+
+const { width, height } = useWindowSize();
 </script>
 
 <template>
   <div class="navbar-wrapper">
-    <div class="mobile-wrapper" v-if="width <= 1400">
+    <div class="mobile-wrapper" v-show="isMobileComputed">
       <div class="hamburger-and-logo-wrapper">
         <v-menu
           v-model="mobileMenu"
@@ -159,7 +170,7 @@ onMounted(async () => {
         <TheNavbarTheMobileNavbarActionList />
       </div>
     </div>
-    <div class="desktop-wrapper" v-if="width > 1400">
+    <div class="desktop-wrapper" v-show="!isMobileComputed">
       <div class="navbar-wrapper-top">
         <NuxtLink to="/"><div class="logo">JBeauty</div></NuxtLink>
         <div class="search-bar">
@@ -284,6 +295,7 @@ onMounted(async () => {
       display: flex;
       align-items: center;
       padding: 1rem 2rem;
+      min-height: 80px;
     }
 
     .logo {
@@ -330,6 +342,7 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     justify-content: space-between;
+    min-height: 80px;
     .hamburger-and-logo-wrapper {
       display: flex;
       flex-direction: row;
