@@ -30,6 +30,17 @@ function chunkArray(arr: any[], size: number) {
       )
     : [];
 }
+
+useHead({
+  link: [
+    {
+      rel: "preload",
+      href: props.products![0].thumbnail,
+      as: "image",
+      fetchpriority: "high",
+    },
+  ],
+});
 </script>
 
 <template>
