@@ -55,7 +55,7 @@ useSeoMeta({
 
 <template>
   <v-container class="blog-post-wrapper">
-    <v-card v-if="post" class="blog-post-card">
+    <v-card v-if="post" class="blog-post-card" :border="false" :elevation="0">
       <v-img :src="post.thumbnail" contain class="blog-post-image" />
       <!-- lazy-src="/placeholder.jpg" -->
       <v-card-title class="blog-post-title"
@@ -103,7 +103,7 @@ useSeoMeta({
 .blog-post-title {
   font-size: 2rem;
   font-weight: 700;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 
   ::v-deep(h1) {
     all: revert;
