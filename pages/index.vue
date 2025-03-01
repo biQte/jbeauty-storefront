@@ -9,6 +9,16 @@ useSeoMeta({
   // ogImage: ""
 });
 
+useHead({
+  link: [
+    {
+      as: "image",
+      rel: "preload",
+      href: "/_nuxt/public/web.webp",
+    },
+  ],
+});
+
 definePageMeta({
   isAccessibleAfterLogin: true,
 });
@@ -50,36 +60,110 @@ const { data: recommendedProductsQuery, error: recommendedProductsError } =
 
 recommendedProducts.value = recommendedProductsQuery.value;
 
+const { recentlyViewed } = useRecentlyViewed();
+
+const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
+
+const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
+  await useFetch(`/api/products/by-ids`, {
+    server: true,
+    query: {
+      productIds: recentlyViewedFiltered,
+    },
+  });
+
 // return products.value;
 // };
+const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 </script>
 
 <template>
   <div class="index-wrapper">
-    <TheMainPageCarousel />
+    <div
+      class="carousel-placeholder"
+      :style="{ minHeight: carouselHeight + 'px' }"
+    >
+      <TheMainPageCarousel />
+    </div>
     <div class="bestsellers-wrapper">
       <h2>Nowości</h2>
       <!--<v-lazy>-->
-      <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+      <Suspense>
+        <template #default>
+          <ProductCarousel :products="bestsellingProducts" :loading="loading" />
+        </template>
+        <template #fallback>
+          <ProductCarouselSkeletonLoader />
+        </template>
+      </Suspense>
       <!--</v-lazy>-->
     </div>
     <TheHomePageBanner />
-    <LazyTheHomePageLowerBanner />
+    <Suspense>
+      <template #default>
+        <LazyTheHomePageLowerBanner />
+      </template>
+      <template #fallback> Ładowanie... </template>
+    </Suspense>
     <br />
     <div class="recommended-products bestsellers-wrapper">
       <h2>Polecane</h2>
-      <LazyProductCarousel :products="recommendedProducts" :loading="loading" />
+      <Suspense>
+        <template #default>
+          <LazyProductCarousel
+            :products="recommendedProducts"
+            :loading="loading"
+          />
+        </template>
+        <template #fallback> <ProductCarouselSkeletonLoader /> </template>
+      </Suspense>
+    </div>
+    <br />
+    <div class="recently-viewed-wrapper">
+      <h2>Ostatnio przeglądane:</h2>
+      <Suspense>
+        <template #default>
+          <!-- @vue-expect-error -->
+          <LazyProductCarousel
+            :products="recentlyViewedProducts.products"
+            :loading="false"
+            v-if="recentlyViewedProducts"
+          />
+          <p v-else>
+            Zacznij przeglądać produkty aby zaczęły się tutaj pojawiać
+          </p>
+        </template>
+        <template #fallback>
+          <ProductCarouselSkeletonLoader />
+        </template>
+      </Suspense>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .index-wrapper {
-  .bestsellers-wrapper {
+  .carousel-placeholder {
+    width: 100%;
+    min-height: 400px;
+
+    @media only screen and (max-width: 720px) {
+      min-height: 100px;
+    }
+  }
+  .bestsellers-wrapper,
+  .recently-viewed-wrapper {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin-top: 2rem;
+    min-height: 500px;
+
+    p {
+      margin-left: 15%;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
 
     .products-wrapper {
       display: flex;
