@@ -68,21 +68,26 @@ function chunkArray(arr: any[], size: number) {
           <v-card
             v-for="product in productChunk"
             :key="product.id"
+            class="product-card"
             width="340px"
           >
             <NuxtLink :to="`/produkt/${product.handle}`">
-              <v-img
+              <NuxtImg
                 :src="
                   product.thumbnail!
                 "
+                loading="lazy"
                 cover
                 width="340"
                 height="340"
               />
               <v-card-item>
-                <v-card-title>{{ product.title }}</v-card-title>
+                <v-card-title
+                  ><h2>{{ product.title }}</h2></v-card-title
+                >
                 <v-card-subtitle
                   ><span
+                    class="product-price"
                     :class="{strike: product.variants?.[0].calculated_price?.calculated_price
                           ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount}"
                     >{{
@@ -142,13 +147,23 @@ function chunkArray(arr: any[], size: number) {
   font-size: 1.2rem;
   color: $primary-color;
 }
-</style>
 
-<script lang="ts">
-// function formatPrice(product: StoreProduct) {
-//   return new Intl.NumberFormat("pl-PL", {
-//     style: "currency",
-//     currency: "PLN",
-//   }).format(product.variants?.[0].calculated_price?.original_amount!);
-// }
-</script>
+h1 {
+  font-size: 2rem;
+  padding: 0 2rem;
+  width: 100%;
+  text-align: start;
+
+  @media only screen and (max-width: 720px) {
+    padding: 0;
+  }
+}
+
+h2 {
+  font-size: 1rem !important;
+}
+
+.product-price {
+  font-size: 1rem !important;
+}
+</style>
