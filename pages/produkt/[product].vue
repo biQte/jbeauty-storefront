@@ -88,6 +88,20 @@ if (productsInTheSameCategory.value.length > 12) {
   );
 }
 
+const { recentlyViewed } = useRecentlyViewed();
+
+const recentlyViewedFiltered = recentlyViewed.value.filter(
+  (p: string) => p !== product.value!.id
+);
+
+const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
+  await useFetch(`/api/products/by-ids`, {
+    server: true,
+    query: {
+      productIds: recentlyViewedFiltered,
+    },
+  });
+
 const addToCart = async () => {
   try {
     const variantId = product.value!.variants![0].id;
@@ -151,6 +165,10 @@ const toggleDescription = () => {
 const toggleDetails = () => {
   showDetails.value = !showDetails.value;
 };
+
+const { addProduct } = useRecentlyViewed();
+
+addProduct(product.value.id);
 
 useSeoMeta({
   title: products.value[0].metadata?.seoTitle
@@ -477,6 +495,19 @@ useSeoMeta({
         :loading="false"
       />
     </div>
+
+    <br />
+
+    <div class="recently-viewed-products-wrapper">
+      <h2>Ostatnio przeglądane:</h2>
+      <!-- @vue-expect-error -->
+      <LazyProductCarousel
+        :products="recentlyViewedProducts.products"
+        :loading="false"
+        v-if="recentlyViewedProducts"
+      />
+      <p v-else>Zacznij przeglądać produkty aby zaczęły się tutaj pojawiać</p>
+    </div>
   </div>
 </template>
 
@@ -527,7 +558,8 @@ ul {
   color: $primary-color;
 }
 
-.related-products-wrapper {
+.related-products-wrapper,
+.recently-viewed-products-wrapper {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -537,6 +569,12 @@ ul {
     margin-left: 10%;
     font-size: 1.4rem;
     font-weight: 600;
+  }
+
+  p {
+    margin-left: 15%;
+    font-size: 1.2rem;
+    font-weight: 400;
   }
 }
 </style>
