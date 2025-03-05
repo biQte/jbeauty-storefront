@@ -22,7 +22,7 @@ thumbnail: "/produkty-na-start.webp"
 
 Stylizacja paznokci to świetna pasja, którą można zamienić w dochodowy zawód. Jeśli marzysz o tym, by profesjonalnie zajmować się manicure, potrzebujesz odpowiednich narzędzi, produktów i wiedzy. W tym artykule dowiesz się, co jest absolutnie niezbędne dla początkującej stylistki paznokci, a także jakie szkolenia warto rozważyć, jeśli chcesz zacząć pracować z klientkami.
 
-Jeśli szukasz porad na temat samego wykonania manicure hybrydowego, zajrzyj do naszego wpisu: [Manicure hybrydowy krok po kroku](/blog/Manicure%20hybrydowy%20krok%20po%20kroku)
+Jeśli szukasz porad na temat samego wykonania manicure hybrydowego, zajrzyj do naszego wpisu: [Manicure hybrydowy krok po kroku](/blog/manicure-hybrydowy-krok-po-kroku)
 
 ---
 
