@@ -19,7 +19,7 @@ useSeoMeta({
     <h1 class="blog-title">Blog</h1>
     <v-row justify="center">
       <v-col v-for="post in posts" :key="post.id" cols="12">
-        <v-card class="blog-card" :to="`/blog/${post.title}`">
+        <v-card class="blog-card" :to="`/blog/${post.handle}`">
           <v-img
             :src="post.thumbnail"
             cover

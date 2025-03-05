@@ -41,7 +41,7 @@ const route = useRoute();
 const { data: post } = await useAsyncData("post", () =>
   queryCollection("blog")
     .where("draft", "<>", false)
-    .where("title", "=", `${route.params.post}`)
+    .where("handle", "=", `${route.params.post}`)
     .first()
 );
 
@@ -97,6 +97,7 @@ useSeoMeta({
 .blog-post-image {
   height: auto;
   // max-height: 350px;
+  max-height: 500px;
   border-radius: 8px;
 }
 
@@ -139,6 +140,12 @@ useSeoMeta({
         color: black;
         text-decoration: none;
       }
+    }
+
+    ::v-deep(ul),
+    ::v-deep(ol),
+    ::v-deep(li) {
+      all: revert;
     }
 
     ::v-deep(a) {
