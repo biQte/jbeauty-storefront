@@ -1,5 +1,6 @@
 ---
 title: "Manicure hybrydowy krok po kroku"
+handle: "manicure-hybrydowy-krok-po-kroku"
 date: 2025-02-22
 draft: false
 tags:
