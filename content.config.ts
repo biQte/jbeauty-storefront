@@ -11,6 +11,7 @@ export default defineContentConfig({
         date: z.date(),
         thumbnail: z.string(),
         draft: z.boolean(),
+        handle: z.string(),
       }),
     }),
   },
