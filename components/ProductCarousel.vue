@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import { type StoreProduct } from "@medusajs/types";
+import { ROUTES } from "../constants/routes";
 
 const props = defineProps<{
   products: StoreProduct[] | null;
   loading: boolean;
 }>();
-const { width } = useWindowSize();
 
-const config = useRuntimeConfig();
+const cartStore = useCartStore();
+const snackbarStore = useSnackbarStore();
+const sessionStore = useSessionStore();
+const router = useRouter();
+const { width } = useWindowSize();
+const isPaused = ref(false); // Flaga do kontrolowania pauzy karuzeli
+const showDialog = ref<boolean>(false);
 
 const chunkedProducts = computed(() => {
   const chunkSize =
@@ -31,25 +37,51 @@ function chunkArray(arr: any[], size: number) {
     : [];
 }
 
-useHead({
-  link: [
-    {
-      rel: "preload",
-      href: props.products![0].thumbnail,
-      as: "image",
-      fetchpriority: "high",
-    },
-  ],
-});
+const addToCart = async (product: StoreProduct) => {
+  try {
+    const variantId = product!.variants![0].id;
+
+    if (cartStore.cartObject === null || cartStore.cartObject === undefined) {
+      await cartStore.createCart(undefined);
+    }
+
+    if (
+      cartStore.cartObject?.items?.find((item) => item.variant_id === variantId)
+    ) {
+      const item = cartStore.cartObject?.items?.find(
+        (item) => item.variant_id === variantId
+      );
+
+      await cartStore.updateLineItem(item!.id, item!.quantity++);
+    } else {
+      await cartStore.addLineItem(variantId, 1);
+      if (sessionStore.session && !cartStore.cartObject?.email) {
+        await cartStore.updateCart(
+          sessionStore.session.email,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        );
+      }
+    }
+
+    showDialog.value = true;
+  } catch (e) {
+    const { message, color, timeout } = handleFetchError(e);
+    if (message !== "") snackbarStore.showSnackbar(message, color, timeout);
+  }
+};
 </script>
 
 <template>
   <v-carousel
     v-if="loading || chunkedProducts.length"
     hide-delimiter-background
-    cycle
+    hide-delimiters
     show-arrows
     interval="5000"
+    :cycle="!isPaused"
   >
     <template v-if="loading">
       <v-carousel-item
@@ -81,12 +113,12 @@ useHead({
             :key="product.id"
             class="product-card"
             width="340px"
+            @mouseenter="isPaused = true"
+            @mouseleave="isPaused = false"
           >
             <NuxtLink :to="`/produkt/${product.handle}`">
               <NuxtImg
-                :src="
-                  product.thumbnail!
-                "
+                :src="product.thumbnail!"
                 :loading="index === 0 && productIndex === 0 ? 'eager' : 'lazy'"
                 :importance="
                   index === 0 && productIndex === 0 ? 'high' : 'auto'
@@ -99,24 +131,32 @@ useHead({
                 <v-card-title
                   ><h2>{{ product.title }}</h2></v-card-title
                 >
-                <v-card-subtitle
-                  ><span
+                <v-card-subtitle>
+                  <span
                     class="product-price"
-                    :class="{strike: product.variants?.[0].calculated_price?.calculated_price
-                          ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount}"
-                    >{{
+                    :class="{
+                      strike:
+                        product.variants?.[0].calculated_price?.calculated_price?.price_list_type === 'sale' &&
+                        product.variants?.[0].inventory_quantity! > 0 &&
+                        product.variants?.[0].calculated_price?.original_amount !==
+                          product.variants?.[0].calculated_price.calculated_amount,
+                    }"
+                  >
+                    {{
                       new Intl.NumberFormat("pl-PL", {
                         style: "currency",
                         currency: "PLN",
                       }).format(
                         product.variants?.[0].calculated_price?.original_amount!
                       )
-                    }}</span
-                  >
+                    }}
+                  </span>
                   <span
                     v-if="
-                      product.variants?.[0].calculated_price?.calculated_price
-                        ?.price_list_type === 'sale' && product.variants?.[0].inventory_quantity! > 0 && product.variants?.[0].calculated_price?.original_amount !== product.variants?.[0].calculated_price.calculated_amount
+                      product.variants?.[0].calculated_price?.calculated_price?.price_list_type === 'sale' &&
+                      product.variants?.[0].inventory_quantity! > 0 &&
+                      product.variants?.[0].calculated_price?.original_amount !==
+                        product.variants?.[0].calculated_price.calculated_amount
                     "
                     class="sale-price"
                   >
@@ -134,10 +174,47 @@ useHead({
                   </span>
                   <b v-if="product.variants?.[0].inventory_quantity! < 1">
                     - Chwilowo niedostępny</b
-                  ></v-card-subtitle
-                >
+                  >
+                </v-card-subtitle>
               </v-card-item>
             </NuxtLink>
+
+            <!-- PRZYCISK SZYBKIEGO DODAWANIA DO KOSZYKA (ZAWSZE WIDOCZNY) -->
+            <v-btn
+              class="quick-add-btn"
+              icon
+              size="small"
+              type="text"
+              v-if="product.variants?.[0].inventory_quantity! >= 1"
+              @click.stop="addToCart(product)"
+            >
+              <v-icon color="primary">mdi-cart</v-icon>
+            </v-btn>
+
+            <v-dialog
+              v-model="showDialog"
+              width="auto"
+              persistent
+              transition="dialog-top-transition"
+            >
+              <v-card
+                max-width="500"
+                prepend-icon="mdi-cart-outline"
+                :text="product?.title"
+                title="Dodano do koszyka"
+              >
+                <template v-slot:actions>
+                  <div class="added-to-cart-modal-actions">
+                    <v-btn @click="showDialog = false" color="success"
+                      >Kontynuuj zakupy</v-btn
+                    >
+                    <v-btn @click="router.push(ROUTES.CART_PAGE)"
+                      >Przejdź do koszyka</v-btn
+                    >
+                  </div>
+                </template>
+              </v-card>
+            </v-dialog>
           </v-card>
         </div>
       </v-carousel-item>
@@ -153,6 +230,26 @@ useHead({
   gap: 2rem;
 }
 
+.product-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Przycisk dodawania do koszyka zawsze widoczny */
+.quick-add-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  // background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  z-index: 1000;
+}
+
+/* Gwarancja widoczności */
+.product-card:hover .quick-add-btn {
+  opacity: 1;
+}
+
 .strike {
   text-decoration: line-through;
 }
@@ -160,17 +257,6 @@ useHead({
 .sale-price {
   font-size: 1.2rem;
   color: $primary-color;
-}
-
-h1 {
-  font-size: 2rem;
-  padding: 0 2rem;
-  width: 100%;
-  text-align: start;
-
-  @media only screen and (max-width: 720px) {
-    padding: 0;
-  }
 }
 
 h2 {
