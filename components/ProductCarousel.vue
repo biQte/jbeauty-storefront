@@ -16,6 +16,7 @@ const router = useRouter();
 const { width } = useWindowSize();
 const isPaused = ref(false); // Flaga do kontrolowania pauzy karuzeli
 const showDialog = ref<boolean>(false);
+const currentlyAddedProductTitle = ref<string>();
 
 const chunkedProducts = computed(() => {
   const chunkSize =
@@ -38,6 +39,7 @@ function chunkArray(arr: any[], size: number) {
 }
 
 const addToCart = async (product: StoreProduct) => {
+  currentlyAddedProductTitle.value = product.title;
   try {
     const variantId = product!.variants![0].id;
 
@@ -200,7 +202,7 @@ const addToCart = async (product: StoreProduct) => {
               <v-card
                 max-width="500"
                 prepend-icon="mdi-cart-outline"
-                :text="product?.title"
+                :text="currentlyAddedProductTitle"
                 title="Dodano do koszyka"
               >
                 <template v-slot:actions>
