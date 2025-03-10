@@ -11,8 +11,6 @@ const sessionStore = useSessionStore();
 
 const snackbarStore = useSnackbarStore();
 
-const medusaClient = nuxtApp.$medusaClient;
-
 const router = useRouter();
 
 const { width, height } = useWindowSize();
@@ -41,7 +39,9 @@ const ordersList = ref<any[]>();
 
 const loadOrders = async () => {
   try {
-    const { orders } = await medusaClient.store.order.list();
+    const orders = await $fetch(`/api/order`, {
+      credentials: "include",
+    });
 
     ordersList.value = orders;
   } catch (e) {
@@ -63,9 +63,13 @@ const saveAccountData = async () => {
       return;
     }
 
-    await medusaClient.store.customer.update({
-      first_name: firstName.value,
-      last_name: lastName.value,
+    await $fetch(`/api/customers/me`, {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        first_name: firstName.value,
+        last_name: lastName.value,
+      }),
     });
 
     snackbarStore.showSnackbar("Zmieniono dane konta", "success", 3000);
@@ -83,7 +87,11 @@ loadOrders();
 
 const logout = async () => {
   try {
-    await medusaClient.auth.logout();
+    await $fetch(`/api/auth/session`, {
+      credentials: "include",
+      method: "DELETE",
+    });
+
     sessionStore.deleteSession();
     router.push(ROUTES.ROOT_PAGE);
   } catch (e) {

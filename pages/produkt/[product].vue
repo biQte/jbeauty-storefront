@@ -5,7 +5,6 @@ import { ROUTES } from "../../constants/routes";
 const loading = ref<boolean>(false);
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const router = useRouter();

@@ -12,7 +12,6 @@ import {
 import { handleFetchError } from "~/utils/handleFetchError";
 import { useWindowSize } from "@vueuse/core";
 
-const { $medusaClient } = useNuxtApp();
 const config = useRuntimeConfig();
 
 const router = useRouter();
@@ -29,8 +28,6 @@ const getIsEmailValidAndAvailable = async (
 ): Promise<boolean | null> => {
   try {
     // TODO: validate and check availability
-    // const available = await medusaClient.auth.exists(email);
-    // await medusaClient.auth.
 
     // if (available.exists) {
     //   return false;
@@ -126,23 +123,23 @@ const loading = ref<boolean>(false);
 const signup = async (accountData: InferType<typeof accountSchema>) => {
   loading.value = true;
   try {
-    const token = await $medusaClient.auth.register("customer", "emailpass", {
-      email: accountData.email,
-      password: accountData.password,
-    });
-
-    await fetch(`${config.public.medusaUrl}/store/customers`, {
+    const token = await $fetch(`/api/auth/customer/register`, {
       credentials: "include",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        "x-publishable-api-key": String(config.public.medusaPublishableKey),
-      },
       body: JSON.stringify({
-        first_name: accountData.firstName,
-        last_name: accountData.lastName,
         email: accountData.email,
+        password: accountData.password,
+      }),
+    });
+
+    await $fetch(`/api/customers/create`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        token,
+        email: accountData.email,
+        firstName: accountData.firstName,
+        lastName: accountData.lastName,
       }),
     });
 
@@ -151,8 +148,13 @@ const signup = async (accountData: InferType<typeof accountSchema>) => {
     snackbarColor.value = "success";
     snackbarVisible.value = true;
     router.push(ROUTES.LOGIN_PAGE);
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
+    if (e.response._data.message === "Identity with email already exists") {
+      snackarStore.showSnackbar("Wybrany adres email jest już zajęty", "error");
+      loading.value = false;
+      return;
+    }
     const { message, color, timeout } = handleFetchError(e);
     if (message !== "") {
       snackarStore.showSnackbar(message, color, timeout);

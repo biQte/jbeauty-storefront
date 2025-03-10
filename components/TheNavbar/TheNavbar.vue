@@ -12,7 +12,6 @@ const brands = ref();
 // const recommendedBy = ref();
 
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const mobileMenu = ref<boolean>(false);
 const isClient = ref(false);
 
@@ -69,28 +68,6 @@ const cartId = useCookie("cart_id");
 
 onMounted(async () => {
   isClient.value = true;
-  // const { product_categories } = await $fetch(
-  //   `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.productsCategoryID}&fields=*category_children`,
-  //   {
-  //     credentials: "include",
-  //     headers: {
-  //       "x-publishable-api-key": String(config.public.medusaPublishableKey),
-  //     },
-  //   }
-  // );
-
-  // productCategories.value = product_categories;
-
-  // brands.value = await $fetch(
-  //   `${config.public.medusaUrl}/store/product-categories?include_descendants_tree=true&id=${config.public.brandsCategoryID}&fields=*category_children`,
-  //   {
-  //     credentials: "include",
-  //     headers: {
-  //       "x-publishable-api-key": String(config.public.medusaPublishableKey),
-  //     },
-  //   }
-  // );
-
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
   }

@@ -23,7 +23,6 @@ const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const products = ref<StoreProduct[]>([]);
 
 const { width, height } = useWindowSize();
@@ -90,15 +89,13 @@ watch(
         (item) => item.product_id
       );
 
-      medusaClient.store.product
-        .list({
-          fields: "+variants.inventory_quantity",
-          // @ts-expect-error
-          id: productIds,
-        })
-        .then((response) => {
-          products.value = response.products;
-        });
+      $fetch(`/api/products/by-ids`, {
+        credentials: "include",
+        query: {
+          productIds,
+        },
+        // @ts-expect-error
+      }).then((response) => (products.value = response.products));
     }
   },
   { immediate: true }
@@ -138,13 +135,15 @@ const increaseQuantity = async (itemId: string) => {
       (item) => item.product_id
     );
 
-    products.value = (
-      await medusaClient.store.product.list({
-        fields: "+variants.inventory_quantity",
-        // @ts-expect-error
-        id: productIds,
-      })
-    ).products;
+    const response = await $fetch(`/api/products/by-ids`, {
+      credentials: "include",
+      query: {
+        productIds,
+      },
+    });
+
+    // @ts-expect-error
+    products.value = response.products;
   }
 
   if (!currentItem) return;
@@ -201,7 +200,7 @@ const applyDiscount = async () => {
   if (!discountInput.value) return;
 
   try {
-    await cartStore.updateCart(undefined, undefined, undefined, [], undefined);
+    // await cartStore.updateCart(undefined, undefined, undefined, [], undefined);
     await cartStore.addPromotions([discountInput.value.toUpperCase()]);
   } catch (e) {
     console.log(e);

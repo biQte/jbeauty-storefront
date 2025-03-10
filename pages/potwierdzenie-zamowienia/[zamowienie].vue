@@ -10,27 +10,17 @@ useSeoMeta({
 const route = useRoute();
 
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const config = useRuntimeConfig();
 
 const orderId = ref<string>(route.params.zamowienie as string);
 const { width, height } = useWindowSize();
 const order = ref<StoreOrder>();
 onMounted(async () => {
-  const orderResponse = await medusaClient.store.order.retrieve(orderId.value);
-  // const queryParams = encodeURIComponent("+fulfillments.labels");
+  const orderResponse = await $fetch(`/api/order/${orderId.value}`, {
+    credentials: "include",
+  });
 
-  // const orderResponse = await $fetch(
-  //   `${config.public.medusaUrl}/store/orders/${orderId.value}?fields=${queryParams}`,
-  //   {
-  //     credentials: "include",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "x-publishable-api-key": config.public.medusaPublishableKey,
-  //     },
-  //   }
-  // );
-
+  // @ts-expect-error
   order.value = orderResponse.order as StoreOrder;
   console.log(order.value);
 });

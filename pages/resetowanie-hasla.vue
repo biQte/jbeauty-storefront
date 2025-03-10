@@ -55,22 +55,18 @@ const resetPassword = async (
   resetPasswordData: InferType<typeof resetPasswordSchema>
 ) => {
   try {
-    const response = await $fetch(
-      `${config.public.medusaUrl}/auth/customer/emailpass/update?token=${
-        route.query.token as string
-      }`,
-      {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: resetPasswordData.email,
-          password: resetPasswordData.password,
-        }),
-      }
-    );
+    const response = await $fetch(`/api/auth/customer/emailpass/update`, {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${route.query.token}`,
+      },
+      body: JSON.stringify({
+        email: resetPasswordData.email,
+        password: resetPasswordData.password,
+      }),
+    });
 
     snackarStore.showSnackbar("Zresetowano hasło", "success", 5000);
     router.push(ROUTES.LOGIN_PAGE);

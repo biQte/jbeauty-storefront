@@ -18,19 +18,13 @@ const sendResetPasswordToken = async () => {
       return;
     }
 
-    $fetch(
-      `${config.public.medusaUrl}/auth/customer/emailpass/reset-password`,
-      {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier: email.value,
-        }),
-      }
-    )
+    $fetch(`/api/auth/customer/emailpass/reset-password`, {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        identifier: email.value,
+      }),
+    })
       .then(() => {
         email.value = null;
         snackarStore.showSnackbar(

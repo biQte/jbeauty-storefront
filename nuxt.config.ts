@@ -109,7 +109,6 @@ font-src * data: blob: 'unsafe-inline';
     mode: "init",
   },
   plugins: [
-    "~/plugins/medusa.ts",
     "~/plugins/stripe.client.ts",
     // "~/plugins/inpostGeowidget.ts",
     // "~/plugins/stripe.ts"

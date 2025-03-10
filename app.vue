@@ -1,7 +1,5 @@
 <script setup lang="ts">
 // import type { Customer } from "@medusajs/client-types";
-
-// const client = useMedusaClient();
 // const sessionStore = useSessionStore();
 
 // await callOnce(async () => {

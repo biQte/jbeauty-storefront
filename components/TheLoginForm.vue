@@ -7,8 +7,6 @@ import { handleFetchError } from "~/utils/handleFetchError";
 import type { CustomerDTO } from "@medusajs/types";
 import { useWindowSize } from "@vueuse/core";
 
-const { $medusaClient } = useNuxtApp();
-
 const config = useRuntimeConfig();
 
 const router = useRouter();
@@ -47,31 +45,27 @@ const password = useField<string>("password");
 const login = async (loginData: InferType<typeof loginSchema>) => {
   loading.value = true;
   try {
-    const token = await $medusaClient.auth.login("customer", "emailpass", {
-      email: loginData.email,
-      password: loginData.password,
-    });
-
-    await $fetch(`${config.public.medusaUrl}/auth/session`, {
+    const { token } = await $fetch(`/api/auth/customer/emailpass`, {
       credentials: "include",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      body: JSON.stringify({
+        email: loginData.email,
+        password: loginData.password,
+      }),
     });
 
-    // @ts-expect-error
-    const { customer } = await $fetch(
-      `${config.public.medusaUrl}/store/customers/me`,
-      {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "x-publishable-api-key": String(config.public.medusaPublishableKey),
-        },
-      }
-    );
+    await $fetch(`/api/auth/session`, {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        token,
+      }),
+    });
+
+    const customer = await $fetch(`/api/customers/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     loading.value = false;
 
@@ -83,6 +77,7 @@ const login = async (loginData: InferType<typeof loginSchema>) => {
 
     router.push(ROUTES.AFTER_LOGIN_HOMEPAGE);
   } catch (e) {
+    console.log(e);
     const { message, color, timeout } = handleFetchError(e);
     if (message !== "") {
       snackbarStore.showSnackbar(message, color, timeout);

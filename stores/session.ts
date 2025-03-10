@@ -12,41 +12,10 @@ export const useSessionStore = defineStore("session", () => {
 
   const fetchSession = async () => {
     try {
-      const medusaClient = nuxtApp.$medusaClient;
-
-      // const token = await medusaClient.auth.refresh();
-
-      // await $fetch(`${config.public.medusaUrl}/auth/session`, {
-      //   credentials: "include",
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-
-      // const customer = await $fetch(
-      //   `${config.public.medusaUrl}/store/customers/me`,
-      //   {
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "x-publishable-api-key": config.public.medusaPublishableKey,
-      //     },
-      //   }
-      // );
-
-      // @ts-expect-error
-      const { customer } = await $fetch(
-        `${config.public.medusaUrl}/store/customers/me`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": String(config.public.medusaPublishableKey),
-          },
-        }
-      );
+      const { customer } = await $fetch(`/api/customers/me`, {
+        credentials: "include",
+        method: "GET",
+      });
 
       session.value = customer as unknown as CustomerDTO;
 

@@ -4,7 +4,6 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const config = useRuntimeConfig();
 
 const { width, height } = useWindowSize();
@@ -27,15 +26,19 @@ const limit = ref<number>(20);
 
 const fetchProducts = async () => {
   try {
-    const result = await medusaClient.store.product.list({
-      q: query.value, // Filtrowanie produktów po tytule (search term)
-      limit: limit.value,
-      offset: queryOffset.value,
-      fields: "*variants.calculated_price,+variants.inventory_quantity",
+    const result = await $fetch(`/api/products`, {
+      credentials: "include",
+      query: {
+        q: query.value,
+        limit: limit.value,
+        offset: queryOffset.value,
+      },
     });
 
     if (result) {
+      // @ts-expect-error
       products.value = result.products;
+      // @ts-expect-error
       totalProducts.value = result.count;
       totalPages.value = calculatePages(totalProducts.value);
     }

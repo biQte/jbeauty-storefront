@@ -7,8 +7,6 @@ const router = useRouter();
 
 const nuxtApp = useNuxtApp();
 
-const medusaClient = nuxtApp.$medusaClient;
-
 const config = useRuntimeConfig();
 
 const { width, height } = useWindowSize();
@@ -77,18 +75,23 @@ const fetchProducts = async () => {
 
     loading.value = true;
 
-    const result = await medusaClient.store.product.list({
-      category_id: categoryIds.value,
-      fields: "*variants.calculated_price,+variants.inventory_quantity",
-      limit: limit.value,
-      offset: queryOffset.value,
+    const result = await $fetch(`/api/products/by-category-ids/`, {
+      credentials: "include",
+      query: {
+        limit: limit.value,
+        offset: queryOffset.value,
+        categoryIds: categoryIds.value,
+      },
     });
 
+    // @ts-expect-error
     if (result.products.length < limit.value) {
       allLoaded.value = true;
     }
 
+    // @ts-expect-error
     products.value.push(...result.products);
+    // @ts-expect-error
     totalProducts.value = result.count;
 
     queryOffset.value += limit.value;

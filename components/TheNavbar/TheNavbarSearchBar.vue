@@ -2,7 +2,6 @@
 import type { StoreProduct } from "@medusajs/types";
 
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 const router = useRouter();
 
 const config = useRuntimeConfig();
@@ -24,11 +23,16 @@ watch(search, async (newSearch) => {
 
   try {
     loading.value = true;
-    const { products } = await medusaClient.store.product.list({
-      fields: "*variants.calculated_price,+variants.inventory_quantity",
-      q: newSearch,
-      limit: 5,
+
+    // @ts-expect-error
+    const { products } = await $fetch("/api/products", {
+      credentials: "include",
+      query: {
+        limit: 5,
+        q: newSearch,
+      },
     });
+
     results.value = products;
     showMenu.value = true;
   } catch (e) {

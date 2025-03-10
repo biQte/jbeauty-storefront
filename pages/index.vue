@@ -17,7 +17,6 @@ const loading = ref<boolean>(false);
 const bestsellingProducts = ref();
 const recommendedProducts = ref();
 const nuxtApp = useNuxtApp();
-const medusaClient = nuxtApp.$medusaClient;
 
 const { width, height } = useWindowSize();
 

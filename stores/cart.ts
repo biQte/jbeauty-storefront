@@ -27,7 +27,6 @@ export interface DiscountInner {
 
 export const useCartStore = defineStore("cart", () => {
   const nuxtApp = useNuxtApp();
-  const medusaClient = nuxtApp.$medusaClient;
   const cartObject = ref<undefined | StoreCart>(undefined);
   const triedToFetchCart = ref<boolean>(false);
   const quantity = ref<number>(0);
@@ -45,14 +44,15 @@ export const useCartStore = defineStore("cart", () => {
     if (import.meta.server) return;
 
     try {
-      const cartResponse = await medusaClient.store.cart.create({
-        items,
-        // region_id: "reg_01JB4P2DW6KD26916HWVTQH288",
-        // sales_channel_id: "sc_01JB4NT3TED1JT059QYMRFA4ND",
-        region_id: String(config.public.regionID),
-        sales_channel_id: String(config.public.salesChannelID),
+      const cartResponse = await $fetch(`/api/cart`, {
+        method: "POST",
+        credentials: "include",
+        body: {
+          items,
+        },
       });
 
+      // @ts-expect-error
       cartObject.value = cartResponse.cart as unknown as StoreCart;
 
       cartIdCookie.value = cartObject.value.id;
@@ -78,10 +78,10 @@ export const useCartStore = defineStore("cart", () => {
       if (!cartObject.value) {
         return;
       }
-
-      const cartResponse = await medusaClient.store.cart.update(
-        cartObject.value.id,
-        {
+      const cartResponse = await $fetch(`/api/cart/${cartObject.value.id}`, {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({
           email,
           billing_address,
           shipping_address,
@@ -89,10 +89,10 @@ export const useCartStore = defineStore("cart", () => {
           metadata: {
             orderMessage,
           },
-        }
-      );
+        }),
+      });
 
-      cartObject.value = cartResponse.cart as unknown as StoreCart;
+      cartObject.value = cartResponse as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -106,24 +106,20 @@ export const useCartStore = defineStore("cart", () => {
       if (!cartObject.value) {
         return;
       }
-
-      console.log("called");
-
-      const cartResponse = await medusaClient.store.cart.update(
-        cartObject.value.id,
-        {
+      const cartResponse = await $fetch(`/api/cart/${cartObject.value.id}`, {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({
           shipping_address: {
             country_code: countryCode,
           },
           billing_address: {
             country_code: countryCode,
           },
-        }
-      );
+        }),
+      });
 
-      console.log("done");
-
-      cartObject.value = cartResponse.cart as unknown as StoreCart;
+      cartObject.value = cartResponse as unknown as StoreCart;
 
       calculateQuantity();
       await getAvailableShippingOptions();
@@ -138,19 +134,24 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const cartResponse = await medusaClient.store.cart.createLineItem(
-        cartObject.value.id,
+      const cartResponse = await $fetch(
+        `api/cart/${cartObject.value.id}/line-items`,
         {
-          variant_id,
-          quantity,
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            variant_id,
+            quantity,
+          }),
         }
       );
 
-      cartObject.value = cartResponse.cart as unknown as StoreCart;
+      cartObject.value = cartResponse as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e: any) {
+      console.log(e);
       throw e;
     }
   };
@@ -161,49 +162,48 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const cartResponse = await medusaClient.store.cart.updateLineItem(
-        cartObject.value.id,
-        lineItemId,
-        { quantity }
+      const cartResponse = await $fetch(
+        `/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            quantity,
+          }),
+        }
       );
 
-      cartObject.value = cartResponse.cart as unknown as StoreCart;
+      cartObject.value = cartResponse as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
-    } catch (e) {
-      if (e instanceof FetchError) {
-        if (e.message === "Some variant does not have the required inventory") {
-          try {
-            const cartProduct = cartObject.value?.items?.find(
-              (product: any) => product.id === lineItemId
-            );
+    } catch (e: any) {
+      if (
+        e.statusText === "Some variant does not have the required inventory"
+      ) {
+        try {
+          const cartProduct = cartObject.value?.items?.find(
+            (product: any) => product.id === lineItemId
+          );
 
-            // @ts-expect-error
-            const { products } = await $fetch(
-              `${config.public.medusaUrl}/store/products?id=${cartProduct?.product_id}&fields=+variants.inventory_quantity`,
-              {
-                credentials: "include",
-                headers: {
-                  "Content-Type": "application/json",
-                  "x-publishable-api-key": config.public.medusaPublishableKey,
-                },
-              }
-            );
+          // @ts-expect-error
+          const { products } = await $fetch(`/api/products/by-ids`, {
+            credentials: "include",
+            query: {
+              productIds: cartProduct?.product_id,
+            },
+          });
 
-            if (products[0].inventory_quantity === 0) {
-              await deleteLineItem(lineItemId);
-            } else {
-              await deleteLineItem(lineItemId);
-              await addLineItem(
-                products[0].variants[0].id,
-                products[0].variants[0].inventory_quantity
-              );
-            }
-          } catch (e) {
-            throw e;
+          if (products[0].inventory_quantity === 0) {
+            await deleteLineItem(lineItemId);
+          } else {
+            await deleteLineItem(lineItemId);
+            await addLineItem(
+              products[0].variants[0].id,
+              products[0].variants[0].inventory_quantity
+            );
           }
-        } else {
+        } catch (e) {
           throw e;
         }
       } else {
@@ -218,12 +218,15 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const cartResponse = await medusaClient.store.cart.deleteLineItem(
-        cartObject.value.id,
-        lineItemId
+      const response = await $fetch(
+        `/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
+        {
+          credentials: "include",
+          method: "DELETE",
+        }
       );
 
-      cartObject.value = cartResponse.parent as unknown as StoreCart;
+      cartObject.value = response;
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -236,27 +239,20 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      // @ts-expect-error
-      const { cart } = await $fetch(
-        `${config.public.medusaUrl}/store/carts/${cartObject.value.id}/promotions`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": String(config.public.medusaPublishableKey),
-          },
-          method: "POST",
-          body: {
-            promo_codes: promoCodes,
-          },
-        }
-      );
+      const cart = await $fetch(`/api/cart/${cartObject.value.id}/promotions`, {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({
+          promo_codes: promoCodes,
+        }),
+      });
 
       cartObject.value = cart as unknown as StoreCart;
 
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e) {
+      console.log(e);
       throw e;
     }
   };
@@ -267,26 +263,13 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      // const cartResponse = await medusaClient.store.cart(
-      //   cartObject.value.id,
-      //   discountCode
-      // );
-
-      // @ts-expect-error
-      const { cart } = await $fetch(
-        `${config.public.medusaUrl}/store/carts/${cartObject.value.id}/promotions`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": String(config.public.medusaPublishableKey),
-          },
-          method: "DELETE",
-          body: {
-            promo_codes: promoCodes,
-          },
-        }
-      );
+      const cart = await $fetch(`/api/cart/${cartObject.value.id}/promotions`, {
+        credentials: "include",
+        method: "DELETE",
+        body: JSON.stringify({
+          promo_codes: promoCodes,
+        }),
+      });
 
       cartObject.value = cart as unknown as StoreCart;
 
@@ -301,9 +284,15 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      const { cart } = await medusaClient.store.cart.addShippingMethod(
-        cartObject.value.id,
-        { option_id }
+      const cart = await $fetch(
+        `/api/cart/${cartObject.value.id}/shipping-methods`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            option_id,
+          }),
+        }
       );
 
       cartObject.value = cart as unknown as StoreCart;
@@ -329,17 +318,11 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      let cartResponse = await medusaClient.store.cart.retrieve(cartId, {
-        // fields: "*items.variant,+items.product.variants.inventory_quantity",
-        fields: "+billing_address.metadata,+shipping_address.metadata",
+      let cartResponse = await $fetch(`/api/cart/${cartId}`, {
+        credentials: "include",
       });
 
-      console.log("cart when started fetching", cartResponse.cart);
-
-      if (
-        // @ts-expect-error
-        cartResponse.cart.completed_at !== null
-      ) {
+      if (cartResponse.completed_at !== null) {
         loading.value = false;
         cartObject.value = undefined;
         cartIdCookie.value = null;
@@ -349,33 +332,23 @@ export const useCartStore = defineStore("cart", () => {
 
       const productIds: string[] = [];
 
-      if (cartResponse.cart.items) {
+      if (cartResponse.items) {
         let removedOrModifiedProducts = false;
 
-        for (let i = 0; i < cartResponse.cart.items?.length; i++) {
-          productIds.push(cartResponse.cart.items[i].product_id!);
+        for (let i = 0; i < cartResponse.items?.length; i++) {
+          productIds.push(cartResponse.items[i].product_id!);
         }
 
-        const queryParams = productIds
-          .map((id) => `id=${encodeURIComponent(id)}`)
-          .join("&");
-
-        console.log(productIds);
-
         // @ts-expect-error
-        const { products } = await $fetch(
-          `${config.public.medusaUrl}/store/products?${queryParams}&fields=+variants.inventory_quantity`,
-          {
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "x-publishable-api-key": config.public.medusaPublishableKey,
-            },
-          }
-        );
+        const { products } = await $fetch(`/api/products/by-ids`, {
+          credentials: "include",
+          query: {
+            productIds,
+          },
+        });
 
-        for (let i = 0; i < cartResponse.cart.items.length; i++) {
-          const cartProduct = cartResponse.cart.items[i];
+        for (let i = 0; i < cartResponse.items.length; i++) {
+          const cartProduct = cartResponse.items[i];
 
           const product = products.find(
             (product: any) => product.id === cartProduct.product_id
@@ -392,11 +365,6 @@ export const useCartStore = defineStore("cart", () => {
                 product.variants[0].id,
                 product.variants[0].inventory_quantity
               );
-              // await updateLineItem(
-              //   cartProduct.id,
-              //   // product.variants[0].inventory_quantity
-              //   2
-              // );
             }
           }
         }
@@ -408,31 +376,17 @@ export const useCartStore = defineStore("cart", () => {
             5000
           );
 
-          cartResponse = await medusaClient.store.cart.retrieve(cartId, {
-            // fields: "*items.variant,+items.product.variants.inventory_quantity",
-            fields: "+billing_address.metadata,+shipping_address.metadata",
+          cartResponse = await $fetch(`/api/cart/${cartId}`, {
+            credentials: "include",
           });
         }
       }
 
-      if (!cartResponse.cart.shipping_address?.country_code) {
+      if (!cartResponse.shipping_address?.country_code) {
         await updateCountry("pl");
       }
 
-      // const cartResponse = await $fetch(
-      //   `${config.public.medusaUrl}/store/carts/${cartId}?fields=+items.variant.inventory_quantity`,
-      //   {
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "x-publishable-api-key": config.public.medusaPublishableKey,
-      //     },
-      //   }
-      // );
-
-      cartObject.value = cartResponse.cart as unknown as StoreCart;
-
-      console.log("cart when finished fetching: ", cartResponse.cart);
+      cartObject.value = cartResponse as unknown as StoreCart;
 
       calculateQuantity();
       await getAvailableShippingOptions();
@@ -459,21 +413,18 @@ export const useCartStore = defineStore("cart", () => {
   };
 
   const getShippingOptions = async () => {
+    if (!cartObject.value?.id) return;
+
     try {
-      // @ts-expect-error
-      const { shipping_options } = await $fetch(
-        `${config.public.medusaUrl}/store/shipping-options`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": String(config.public.medusaPublishableKey),
-          },
-          query: {
-            cart_id: cartObject.value?.id,
-          },
-        }
-      );
+      const shipping_options = await $fetch(`/api/shipping-options/`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        query: {
+          cart_id: cartObject.value?.id,
+        },
+      });
 
       shippingOptions.value =
         shipping_options as unknown as ShippingOptionDTO[];
@@ -528,10 +479,12 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      const { payment_providers } =
-        await medusaClient.store.payment.listPaymentProviders({
-          region_id: cartObject.value.region_id!,
-        });
+      const payment_providers = await $fetch(`/api/payment-providers`, {
+        credentials: "include",
+        query: {
+          region_id: cartObject.value.region_id,
+        },
+      });
 
       availablePaymentProviders.value = payment_providers;
     } catch (e) {
@@ -548,46 +501,24 @@ export const useCartStore = defineStore("cart", () => {
       let paymentCollectionId = cartObject.value.payment_collection?.id;
 
       if (!paymentCollectionId) {
-        // @ts-expect-error
-        const { payment_collection } = await $fetch(
-          `${config.public.medusaUrl}/store/payment-collections`,
-          {
-            credentials: "include",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-publishable-api-key": String(
-                config.public.medusaPublishableKey
-              ),
-            },
-            body: JSON.stringify({
-              cart_id: cartObject.value.id,
-            }),
-          }
-        );
+        const payment_collection = await $fetch(`/api/payment-collections`, {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            cart_id: cartObject.value.id,
+          }),
+        });
 
         paymentCollectionId = payment_collection.id;
       }
 
-      // await medusaClient.store.payment.initiatePaymentSession(
-      //   // @ts-expect-error
-      //   cartObject.value,
-      //   {
-      //     provider_id: selectedPaymentProviderId,
-      //   }
-      // );
-
       await fetchCart();
 
       await $fetch(
-        `${config.public.medusaUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions`,
+        `/api/payment-collections/${paymentCollectionId}/payment-sessions`,
         {
           credentials: "include",
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": config.public.medusaPublishableKey,
-          },
           body: JSON.stringify({
             provider_id: selectedPaymentProviderId,
           }),
@@ -604,25 +535,14 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      // const { type } = await medusaClient.store.cart.complete(
-      //   cartObject.value.id
-      // );
-
       //@ts-expect-error
       const { type, cart, order, error } = await $fetch(
-        `${config.public.medusaUrl}/store/carts/${cartObject.value.id}/complete`,
+        `/api/cart/${cartObject.value.id}/complete`,
         {
           credentials: "include",
-          headers: {
-            "x-publishable-api-key": String(config.public.medusaPublishableKey),
-          },
           method: "POST",
         }
       );
-      // cartObject.value = undefined;
-      // calculateQuantity();
-
-      // await fetchCart();
 
       return {
         type,
