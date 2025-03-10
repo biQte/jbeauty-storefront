@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
           credentials: "include",
           headers: {
             "x-publishable-api-key": config.public.medusaPublishableKey,
-            // Cookie: getHeader(event, "cookie") || "",
+            Cookie: getHeader(event, "cookie") || "",
           },
         }
       );
