@@ -9,26 +9,27 @@ export default defineEventHandler(async (event) => {
           credentials: "include",
           headers: {
             "x-publishable-api-key": config.public.medusaPublishableKey,
-            Cookie: getHeader(event, "cookie") || "",
+            // Cookie: getHeader(event, "cookie") || "",
           },
         }
       );
 
-      const responseData = response._data;
+      // const responseData = response._data;
+
+      // // @ts-expect-error
+      // const customer = responseData.customer;
+
+      // const setCookieHeaders =
+      //   response.headers.getSetCookie?.() || response.headers.get("set-cookie");
+
+      // if (setCookieHeaders) {
+      //   setCookieHeaders.forEach((cookie) => {
+      //     appendHeader(event, "set-cookie", cookie);
+      //   });
+      // }
 
       // @ts-expect-error
-      const customer = responseData.customer;
-
-      const setCookieHeaders =
-        response.headers.getSetCookie?.() || response.headers.get("set-cookie");
-
-      if (setCookieHeaders) {
-        setCookieHeaders.forEach((cookie) => {
-          appendHeader(event, "set-cookie", cookie);
-        });
-      }
-
-      return customer;
+      return response._data.customer;
     }
 
     if (event.method === "POST") {
