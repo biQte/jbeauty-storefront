@@ -14,22 +14,21 @@ export default defineEventHandler(async (event) => {
         }
       );
 
-      // const responseData = response._data;
-
-      // // @ts-expect-error
-      // const customer = responseData.customer;
-
-      // const setCookieHeaders =
-      //   response.headers.getSetCookie?.() || response.headers.get("set-cookie");
-
-      // if (setCookieHeaders) {
-      //   setCookieHeaders.forEach((cookie) => {
-      //     appendHeader(event, "set-cookie", cookie);
-      //   });
-      // }
+      const responseData = response._data;
 
       // @ts-expect-error
-      return response._data.customer;
+      const customer = responseData.customer;
+
+      const setCookieHeaders =
+        response.headers.getSetCookie?.() || response.headers.get("set-cookie");
+
+      if (setCookieHeaders) {
+        setCookieHeaders.forEach((cookie) => {
+          appendHeader(event, "set-cookie", cookie);
+        });
+      }
+
+      return customer;
     }
 
     if (event.method === "POST") {

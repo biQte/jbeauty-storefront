@@ -24,19 +24,19 @@ export default defineEventHandler(async (event) => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            // Cookie: getHeader(event, "cookie") || "",
+            Cookie: getHeader(event, "cookie") || "",
           },
         }
       );
 
-      // const setCookieHeaders =
-      //   response.headers.getSetCookie?.() || response.headers.get("set-cookie");
+      const setCookieHeaders =
+        response.headers.getSetCookie?.() || response.headers.get("set-cookie");
 
-      // if (setCookieHeaders) {
-      //   setCookieHeaders.forEach((cookie) => {
-      //     appendHeader(event, "set-cookie", cookie);
-      //   });
-      // }
+      if (setCookieHeaders) {
+        setCookieHeaders.forEach((cookie) => {
+          appendHeader(event, "set-cookie", cookie);
+        });
+      }
 
       // Medusa nie zwraca ciała odpowiedzi w tym endpoincie, zwróć domyślną wartość
       return { success: true };
