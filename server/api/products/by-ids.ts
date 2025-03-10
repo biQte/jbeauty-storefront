@@ -10,18 +10,33 @@ export default defineEventHandler(async (event) => {
   if (!productIds || productIds.length === 0) return;
 
   try {
-    const result = await $fetch(`${config.public.medusaUrl}/store/products`, {
-      credentials: "include",
-      headers: {
-        "x-publishable-api-key": config.public.medusaPublishableKey,
-      },
-      query: {
-        id: productIds,
-        fields: "*variants.calculated_price,+variants.inventory_quantity",
-      },
-    });
+    const response = await $fetch.raw(
+      `${config.public.medusaUrl}/store/products`,
+      {
+        credentials: "include",
+        headers: {
+          "x-publishable-api-key": config.public.medusaPublishableKey,
+          Cookie: getHeader(event, "cookie") || "",
+        },
+        query: {
+          id: productIds,
+          fields: "*variants.calculated_price,+variants.inventory_quantity",
+        },
+      }
+    );
 
-    return result;
+    const responseData = response._data;
+
+    const setCookieHeaders =
+      response.headers.getSetCookie?.() || response.headers.get("set-cookie");
+
+    if (setCookieHeaders) {
+      setCookieHeaders.forEach((cookie) => {
+        appendHeader(event, "set-cookie", cookie);
+      });
+    }
+
+    return responseData;
   } catch (e) {
     throw e;
   }

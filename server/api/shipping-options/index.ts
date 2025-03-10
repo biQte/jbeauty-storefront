@@ -2,33 +2,21 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   try {
-    // @ts-expect-error
-    const { product_categories } = await $fetch(
-      `${config.public.medusaUrl}/store/product-categories`,
-      {
-        credentials: "include",
-        headers: {
-          "x-publishable-api-key": config.public.medusaPublishableKey,
-          Cookie: getHeader(event, "cookie") || "",
-        },
-        query: {
-          handle: "polecane",
-        },
-      }
-    );
+    const query = getQuery(event);
+
+    console.log(query);
 
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/products`,
+      `${config.public.medusaUrl}/store/shipping-options`,
       {
         credentials: "include",
         headers: {
+          "Content-Type": "application/json",
           "x-publishable-api-key": config.public.medusaPublishableKey,
           Cookie: getHeader(event, "cookie") || "",
         },
         query: {
-          fields: "*variants.calculated_price,+variants.inventory_quantity",
-          limit: 12,
-          category_id: product_categories[0].id,
+          cart_id: query.cart_id,
         },
       }
     );
@@ -36,7 +24,7 @@ export default defineEventHandler(async (event) => {
     const responseData = response._data;
 
     // @ts-expect-error
-    const products = responseData.products;
+    const shipping_options = responseData.shipping_options;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -47,8 +35,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return products;
+    return shipping_options;
   } catch (e) {
-    throw e;
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error getting shipping methods",
+      data: e,
+    });
   }
 });

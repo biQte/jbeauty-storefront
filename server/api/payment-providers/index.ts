@@ -1,24 +1,11 @@
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
+  const id = getRouterParam(event, "id");
+  const query = getQuery(event);
 
   try {
-    // @ts-expect-error
-    const { product_categories } = await $fetch(
-      `${config.public.medusaUrl}/store/product-categories`,
-      {
-        credentials: "include",
-        headers: {
-          "x-publishable-api-key": config.public.medusaPublishableKey,
-          Cookie: getHeader(event, "cookie") || "",
-        },
-        query: {
-          handle: "polecane",
-        },
-      }
-    );
-
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/products`,
+      `${config.public.medusaUrl}/store/payment-providers`,
       {
         credentials: "include",
         headers: {
@@ -26,9 +13,7 @@ export default defineEventHandler(async (event) => {
           Cookie: getHeader(event, "cookie") || "",
         },
         query: {
-          fields: "*variants.calculated_price,+variants.inventory_quantity",
-          limit: 12,
-          category_id: product_categories[0].id,
+          region_id: query.region_id,
         },
       }
     );
@@ -36,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const responseData = response._data;
 
     // @ts-expect-error
-    const products = responseData.products;
+    const payment_providers = responseData.payment_providers;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -47,8 +32,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return products;
+    return payment_providers;
   } catch (e) {
-    throw e;
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error retrieving payment providers",
+      data: e,
+    });
   }
 });

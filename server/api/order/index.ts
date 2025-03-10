@@ -1,18 +1,14 @@
 export default defineEventHandler(async (event) => {
-  const handle = getRouterParam(event, "handle");
   const config = useRuntimeConfig();
 
   try {
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/product-categories`,
+      `${config.public.medusaUrl}/store/orders`,
       {
         credentials: "include",
         headers: {
           "x-publishable-api-key": config.public.medusaPublishableKey,
           Cookie: getHeader(event, "cookie") || "",
-        },
-        query: {
-          handle,
         },
       }
     );
@@ -20,7 +16,7 @@ export default defineEventHandler(async (event) => {
     const responseData = response._data;
 
     // @ts-expect-error
-    const product_categories = responseData.product_categories;
+    const orders = responseData.orders;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -31,8 +27,13 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return product_categories;
+    return orders;
   } catch (e) {
-    throw e;
+    console.log("tego no", e);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error fetching orders",
+      data: e,
+    });
   }
 });

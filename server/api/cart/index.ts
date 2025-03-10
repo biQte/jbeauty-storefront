@@ -1,26 +1,33 @@
 export default defineEventHandler(async (event) => {
-  const handle = getRouterParam(event, "handle");
+  if (event.method !== "POST") {
+    throw createError({ statusCode: 405, statusMessage: "Method Not Allowed" });
+  }
+
   const config = useRuntimeConfig();
+  const body = await readBody(event);
 
   try {
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/product-categories`,
+      `${config.public.medusaUrl}/store/carts/`,
       {
+        method: "POST",
         credentials: "include",
         headers: {
+          "Content-Type": "application/json",
           "x-publishable-api-key": config.public.medusaPublishableKey,
           Cookie: getHeader(event, "cookie") || "",
         },
-        query: {
-          handle,
-        },
+        body: JSON.stringify({
+          items: body.items,
+          region_id: config.public.regionID,
+          sales_channel_id: config.public.sales_channel_id,
+        }),
       }
     );
 
     const responseData = response._data;
 
-    // @ts-expect-error
-    const product_categories = responseData.product_categories;
+    const cart = responseData;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -31,8 +38,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return product_categories;
+    return cart;
   } catch (e) {
-    throw e;
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error while creating cart",
+      data: e,
+    });
   }
 });

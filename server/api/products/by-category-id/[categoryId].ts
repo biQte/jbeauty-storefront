@@ -15,13 +15,13 @@ export default defineEventHandler(async (event) => {
   const limit = query.limit ? parseInt(query.limit, 10) : 20;
 
   try {
-    // @ts-expect-error
-    const { products } = await $fetch(
+    const response = await $fetch.raw(
       `${config.public.medusaUrl}/store/products`,
       {
         credentials: "include",
         headers: {
           "x-publishable-api-key": config.public.medusaPublishableKey,
+          Cookie: getHeader(event, "cookie") || "",
         },
         query: {
           category_id: categoryId,
@@ -31,6 +31,20 @@ export default defineEventHandler(async (event) => {
         },
       }
     );
+
+    const responseData = response._data;
+
+    // @ts-expect-error
+    const products = responseData.products;
+
+    const setCookieHeaders =
+      response.headers.getSetCookie?.() || response.headers.get("set-cookie");
+
+    if (setCookieHeaders) {
+      setCookieHeaders.forEach((cookie) => {
+        appendHeader(event, "set-cookie", cookie);
+      });
+    }
 
     return products;
   } catch (e) {

@@ -1,26 +1,28 @@
 export default defineEventHandler(async (event) => {
-  const handle = getRouterParam(event, "handle");
   const config = useRuntimeConfig();
 
   try {
+    const body = await readBody(event);
+
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/product-categories`,
+      `${config.public.medusaUrl}/store/payment-collections`,
       {
         credentials: "include",
+        method: "POST",
         headers: {
           "x-publishable-api-key": config.public.medusaPublishableKey,
           Cookie: getHeader(event, "cookie") || "",
         },
-        query: {
-          handle,
-        },
+        body: JSON.stringify({
+          cart_id: body.cart_id,
+        }),
       }
     );
 
     const responseData = response._data;
 
     // @ts-expect-error
-    const product_categories = responseData.product_categories;
+    const payment_collection = responseData.payment_collection;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -31,8 +33,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return product_categories;
+    return payment_collection;
   } catch (e) {
-    throw e;
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error creating payment session",
+      data: e,
+    });
   }
 });

@@ -1,26 +1,30 @@
 export default defineEventHandler(async (event) => {
-  const handle = getRouterParam(event, "handle");
   const config = useRuntimeConfig();
+  const id = getRouterParam(event, "id");
 
   try {
+    const body = await readBody(event);
+
     const response = await $fetch.raw(
-      `${config.public.medusaUrl}/store/product-categories`,
+      `${config.public.medusaUrl}/store/carts/${id}/line-items`,
       {
         credentials: "include",
+        method: "POST",
         headers: {
           "x-publishable-api-key": config.public.medusaPublishableKey,
           Cookie: getHeader(event, "cookie") || "",
         },
-        query: {
-          handle,
-        },
+        body: JSON.stringify({
+          variant_id: body.variant_id,
+          quantity: body.quantity,
+        }),
       }
     );
 
     const responseData = response._data;
 
     // @ts-expect-error
-    const product_categories = responseData.product_categories;
+    const cart = responseData.cart;
 
     const setCookieHeaders =
       response.headers.getSetCookie?.() || response.headers.get("set-cookie");
@@ -31,8 +35,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return product_categories;
+    return cart;
   } catch (e) {
-    throw e;
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error updating line items",
+      data: e,
+    });
   }
 });
