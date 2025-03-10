@@ -77,6 +77,9 @@ font-src * data: blob: 'unsafe-inline';
   nitro: {
     compressPublicAssets: true,
     minify: true,
+    routeRules: {
+      "/api/**": { cors: true },
+    },
   },
   compatibilityDate: "2024-07-09",
   // debug: true,
