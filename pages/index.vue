@@ -6,7 +6,6 @@ useSeoMeta({
     "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
   ogDescription:
     "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
-  // ogImage: ""
 });
 
 definePageMeta({
@@ -16,53 +15,41 @@ const loading = ref<boolean>(false);
 
 const bestsellingProducts = ref();
 const recommendedProducts = ref();
+const recentlyViewedProducts = ref();
 const nuxtApp = useNuxtApp();
-
-const { width, height } = useWindowSize();
-
-// onMounted(async () => {
-//   loading.value = true;
-//   bestsellingProducts.value = await loadBestsellingProducts();
-//   recommendedProducts.value = await loadRecommendedProducts();
-
-//   loading.value = false;
-// });
-
-// const loadBestsellingProducts = async () => {
-const { data: newProducts, error: newProductsError } = await useFetch(
-  `/api/products/new`,
-  {
-    server: true,
-  }
-);
-
-bestsellingProducts.value = newProducts.value;
-
-// return products.value;
-// };
-
-// const loadRecommendedProducts = async () => {
-const { data: recommendedProductsQuery, error: recommendedProductsError } =
-  await useFetch(`/api/products/recommended`, {
-    server: true,
-  });
-
-recommendedProducts.value = recommendedProductsQuery.value;
+const width = ref();
 
 const { recentlyViewed } = useRecentlyViewed();
 
 const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
 
-const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
-  await useFetch(`/api/products/by-ids`, {
+const results = await Promise.allSettled([
+  useFetch(`/api/products/new`, { server: true, credentials: "include" }),
+  useFetch(`/api/products/recommended`, {
     server: true,
-    query: {
-      productIds: recentlyViewedFiltered,
-    },
-  });
+    credentials: "include",
+  }),
+  useFetch(`/api/products/by-ids`, {
+    server: true,
+    credentials: "include",
+    query: { productIds: recentlyViewedFiltered },
+  }),
+]);
 
-// return products.value;
-// };
+if (results[0].status === "fulfilled") {
+  bestsellingProducts.value = results[0].value.data.value;
+}
+if (results[1].status === "fulfilled") {
+  recommendedProducts.value = results[1].value.data.value;
+}
+if (results[2].status === "fulfilled") {
+  recentlyViewedProducts.value = results[2].value.data.value;
+}
+
+onMounted(() => {
+  width.value = useWindowSize().width;
+});
+
 const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 </script>
 
