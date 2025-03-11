@@ -18,18 +18,39 @@ const isClient = ref(false);
 const isMobile = useMediaQuery("(max-width: 1400px)");
 const isMobileComputed = computed(() => (isClient ? isMobile.value : false));
 const config = useRuntimeConfig();
+const width = ref();
+const height = ref();
 
-const { data: pcats } = await useFetch(
-  `/api/categories/${config.public.productsCategoryID}`,
-  { server: true }
-);
-
-const { data: bcats } = await useFetch(
-  `/api/categories/${config.public.brandsCategoryID}`,
-  {
+const results = await Promise.allSettled([
+  useFetch(`/api/categories/${config.public.productsCategoryID}`, {
     server: true,
-  }
-);
+    credentials: "include",
+  }),
+  useFetch(`/api/categories/${config.public.brandsCategoryID}`, {
+    server: true,
+    credentials: "include",
+  }),
+]);
+
+// const { data: pcats } = await useFetch(
+//   `/api/categories/${config.public.productsCategoryID}`,
+//   { server: true }
+// );
+
+// const { data: bcats } = await useFetch(
+//   `/api/categories/${config.public.brandsCategoryID}`,
+//   {
+//     server: true,
+//   }
+// );
+
+if (results[0].status === "fulfilled") {
+  productCategories.value = results[0].value.data.value;
+}
+
+if (results[1].status === "fulfilled") {
+  brands.value = results[1].value.data.value;
+}
 
 // const { data: recommendedByCategories } = await useFetch(
 //   `/api/categories/${config.public.recommendedByCategoryID}`,
@@ -38,11 +59,11 @@ const { data: bcats } = await useFetch(
 //   }
 // );
 
-watchEffect(() => {
-  if (pcats.value) productCategories.value = pcats.value;
-  if (bcats.value) brands.value = bcats.value;
-  // if (recommendedByCategories.value) recommendedBy.value = recommendedByCategories.value;
-});
+// watchEffect(() => {
+//   if (pcats.value) productCategories.value = pcats.value;
+//   if (bcats.value) brands.value = bcats.value;
+//   // if (recommendedByCategories.value) recommendedBy.value = recommendedByCategories.value;
+// });
 
 // const productCategoryMenuOpen = ref<boolean>(false);
 // const brandCategoryMenuOpen = ref<boolean>(false);
@@ -71,9 +92,10 @@ onMounted(async () => {
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
   }
-});
 
-const { width, height } = useWindowSize();
+  width.value = useWindowSize().width;
+  height.value = useWindowSize().height;
+});
 </script>
 
 <template>
@@ -92,7 +114,12 @@ const { width, height } = useWindowSize();
           <template v-slot:activator="{ props }">
             <v-btn variant="text" icon="mdi-menu" v-bind="props"></v-btn>
           </template>
-          <v-card :min-height="height" class="menu-card">
+          <v-card
+            :min-height="height"
+            min-width="350px"
+            :width="width * 0.9"
+            class="menu-card"
+          >
             <v-btn
               icon="mdi-close"
               variant="text"
