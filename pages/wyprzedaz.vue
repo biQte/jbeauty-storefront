@@ -34,6 +34,10 @@ const { data: newProducts, error } = await useFetch(`/api/products/sale`, {
 // @ts-expect-error
 products.value = newProducts.value.products;
 
+if (products.value.length < limit.value) {
+  allLoaded.value = true;
+}
+
 const fetchProducts = async () => {
   try {
     if (loading.value || allLoaded.value) return;
