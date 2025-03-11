@@ -44,7 +44,7 @@ export const useCartStore = defineStore("cart", () => {
     if (import.meta.server) return;
 
     try {
-      const cartResponse = await $fetch(`/api/cart`, {
+      const cartResponse = await $fetch(`${config.public.storeUrl}/api/cart`, {
         method: "POST",
         credentials: "include",
         body: {
@@ -78,19 +78,22 @@ export const useCartStore = defineStore("cart", () => {
       if (!cartObject.value) {
         return;
       }
-      const cartResponse = await $fetch(`/api/cart/${cartObject.value.id}`, {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          billing_address,
-          shipping_address,
-          promo_codes,
-          metadata: {
-            orderMessage,
-          },
-        }),
-      });
+      const cartResponse = await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}`,
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            billing_address,
+            shipping_address,
+            promo_codes,
+            metadata: {
+              orderMessage,
+            },
+          }),
+        }
+      );
 
       cartObject.value = cartResponse as unknown as StoreCart;
 
@@ -106,18 +109,21 @@ export const useCartStore = defineStore("cart", () => {
       if (!cartObject.value) {
         return;
       }
-      const cartResponse = await $fetch(`/api/cart/${cartObject.value.id}`, {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify({
-          shipping_address: {
-            country_code: countryCode,
-          },
-          billing_address: {
-            country_code: countryCode,
-          },
-        }),
-      });
+      const cartResponse = await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}`,
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            shipping_address: {
+              country_code: countryCode,
+            },
+            billing_address: {
+              country_code: countryCode,
+            },
+          }),
+        }
+      );
 
       cartObject.value = cartResponse as unknown as StoreCart;
 
@@ -135,7 +141,7 @@ export const useCartStore = defineStore("cart", () => {
       }
 
       const cartResponse = await $fetch(
-        `api/cart/${cartObject.value.id}/line-items`,
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/line-items`,
         {
           credentials: "include",
           method: "POST",
@@ -147,6 +153,32 @@ export const useCartStore = defineStore("cart", () => {
       );
 
       cartObject.value = cartResponse as unknown as StoreCart;
+
+      const { gtag } = useGtag();
+      gtag("event", "add_to_cart", {
+        currency: "PLN",
+        value: cartObject.value.items?.find(
+          (item) => item.variant_id === variant_id
+          // @ts-expect-error
+        )?.calculated_price?.calculated_price,
+        items: [
+          {
+            item_id: cartObject.value.items?.find(
+              (item) => item.variant_id === variant_id
+            )?.id,
+            item_name: cartObject.value.items?.find(
+              (item) => item.variant_id === variant_id
+            )?.title,
+            price: cartObject.value.items?.find(
+              (item) => item.variant_id === variant_id
+              // @ts-expect-error
+            )?.calculated_price?.calculated_price,
+            quantity: cartObject.value.items?.find(
+              (item) => item.variant_id === variant_id
+            )?.quantity,
+          },
+        ],
+      });
 
       calculateQuantity();
       getAvailableShippingOptions();
@@ -163,7 +195,7 @@ export const useCartStore = defineStore("cart", () => {
       }
 
       const cartResponse = await $fetch(
-        `/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
         {
           credentials: "include",
           method: "POST",
@@ -187,12 +219,15 @@ export const useCartStore = defineStore("cart", () => {
           );
 
           // @ts-expect-error
-          const { products } = await $fetch(`/api/products/by-ids`, {
-            credentials: "include",
-            query: {
-              productIds: cartProduct?.product_id,
-            },
-          });
+          const { products } = await $fetch(
+            `${config.public.storeUrl}/api/products/by-ids`,
+            {
+              credentials: "include",
+              query: {
+                productIds: cartProduct?.product_id,
+              },
+            }
+          );
 
           if (products[0].inventory_quantity === 0) {
             await deleteLineItem(lineItemId);
@@ -219,7 +254,7 @@ export const useCartStore = defineStore("cart", () => {
       }
 
       const response = await $fetch(
-        `/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
         {
           credentials: "include",
           method: "DELETE",
@@ -239,13 +274,16 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      const cart = await $fetch(`/api/cart/${cartObject.value.id}/promotions`, {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify({
-          promo_codes: promoCodes,
-        }),
-      });
+      const cart = await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/promotions`,
+        {
+          credentials: "include",
+          method: "POST",
+          body: JSON.stringify({
+            promo_codes: promoCodes,
+          }),
+        }
+      );
 
       cartObject.value = cart as unknown as StoreCart;
 
@@ -263,13 +301,16 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      const cart = await $fetch(`/api/cart/${cartObject.value.id}/promotions`, {
-        credentials: "include",
-        method: "DELETE",
-        body: JSON.stringify({
-          promo_codes: promoCodes,
-        }),
-      });
+      const cart = await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/promotions`,
+        {
+          credentials: "include",
+          method: "DELETE",
+          body: JSON.stringify({
+            promo_codes: promoCodes,
+          }),
+        }
+      );
 
       cartObject.value = cart as unknown as StoreCart;
 
@@ -285,7 +326,7 @@ export const useCartStore = defineStore("cart", () => {
       if (!cartObject.value) return;
 
       const cart = await $fetch(
-        `/api/cart/${cartObject.value.id}/shipping-methods`,
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/shipping-methods`,
         {
           method: "POST",
           credentials: "include",
@@ -318,9 +359,12 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
-      let cartResponse = await $fetch(`/api/cart/${cartId}`, {
-        credentials: "include",
-      });
+      let cartResponse = await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartId}`,
+        {
+          credentials: "include",
+        }
+      );
 
       if (cartResponse.completed_at !== null) {
         loading.value = false;
@@ -340,12 +384,15 @@ export const useCartStore = defineStore("cart", () => {
         }
 
         // @ts-expect-error
-        const { products } = await $fetch(`/api/products/by-ids`, {
-          credentials: "include",
-          query: {
-            productIds,
-          },
-        });
+        const { products } = await $fetch(
+          `${config.public.storeUrl}/api/products/by-ids`,
+          {
+            credentials: "include",
+            query: {
+              productIds,
+            },
+          }
+        );
 
         for (let i = 0; i < cartResponse.items.length; i++) {
           const cartProduct = cartResponse.items[i];
@@ -376,9 +423,12 @@ export const useCartStore = defineStore("cart", () => {
             5000
           );
 
-          cartResponse = await $fetch(`/api/cart/${cartId}`, {
-            credentials: "include",
-          });
+          cartResponse = await $fetch(
+            `${config.public.storeUrl}/api/cart/${cartId}`,
+            {
+              credentials: "include",
+            }
+          );
         }
       }
 
@@ -416,15 +466,18 @@ export const useCartStore = defineStore("cart", () => {
     if (!cartObject.value?.id) return;
 
     try {
-      const shipping_options = await $fetch(`/api/shipping-options/`, {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        query: {
-          cart_id: cartObject.value?.id,
-        },
-      });
+      const shipping_options = await $fetch(
+        `${config.public.storeUrl}/api/shipping-options/`,
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          query: {
+            cart_id: cartObject.value?.id,
+          },
+        }
+      );
 
       shippingOptions.value =
         shipping_options as unknown as ShippingOptionDTO[];
@@ -479,12 +532,15 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
-      const payment_providers = await $fetch(`/api/payment-providers`, {
-        credentials: "include",
-        query: {
-          region_id: cartObject.value.region_id,
-        },
-      });
+      const payment_providers = await $fetch(
+        `${config.public.storeUrl}/api/payment-providers`,
+        {
+          credentials: "include",
+          query: {
+            region_id: cartObject.value.region_id,
+          },
+        }
+      );
 
       availablePaymentProviders.value = payment_providers;
     } catch (e) {
@@ -501,13 +557,16 @@ export const useCartStore = defineStore("cart", () => {
       let paymentCollectionId = cartObject.value.payment_collection?.id;
 
       if (!paymentCollectionId) {
-        const payment_collection = await $fetch(`/api/payment-collections`, {
-          credentials: "include",
-          method: "POST",
-          body: JSON.stringify({
-            cart_id: cartObject.value.id,
-          }),
-        });
+        const payment_collection = await $fetch(
+          `${config.public.storeUrl}/api/payment-collections`,
+          {
+            credentials: "include",
+            method: "POST",
+            body: JSON.stringify({
+              cart_id: cartObject.value.id,
+            }),
+          }
+        );
 
         paymentCollectionId = payment_collection.id;
       }
@@ -515,7 +574,7 @@ export const useCartStore = defineStore("cart", () => {
       await fetchCart();
 
       await $fetch(
-        `/api/payment-collections/${paymentCollectionId}/payment-sessions`,
+        `${config.public.storeUrl}/api/payment-collections/${paymentCollectionId}/payment-sessions`,
         {
           credentials: "include",
           method: "POST",
@@ -537,7 +596,7 @@ export const useCartStore = defineStore("cart", () => {
 
       //@ts-expect-error
       const { type, cart, order, error } = await $fetch(
-        `/api/cart/${cartObject.value.id}/complete`,
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/complete`,
         {
           credentials: "include",
           method: "POST",
