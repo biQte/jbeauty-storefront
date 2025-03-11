@@ -125,6 +125,13 @@ const { width, height } = useWindowSize();
                 />
               </ul> -->
               <v-btn
+                to="/wyprzedaz"
+                @click="closeMenu"
+                class="mobile-menu-item"
+                variant="text"
+                >Wyprzedaż</v-btn
+              >
+              <v-btn
                 to="/blog"
                 @click="closeMenu"
                 class="mobile-menu-item"
@@ -200,6 +207,14 @@ const { width, height } = useWindowSize();
             :active="false"
             size="small"
             >Nowości</v-btn
+          >
+          <v-btn
+            class="menu-link"
+            variant="text"
+            :to="`/wyprzedaz`"
+            :active="false"
+            size="small"
+            >Wyprzedaż</v-btn
           >
           <!--<v-menu>
             <template v-slot:activator="{ props }">
