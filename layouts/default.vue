@@ -9,9 +9,6 @@ const cookiesAccepted = useCookie("cookiesAccepted", {
 // Funkcja sprawdzająca akceptację ciasteczek
 const checkForCookiesAcceptation = () => {
   showCookiesBanner.value = cookiesAccepted.value !== true;
-
-  console.log(showCookiesBanner.value);
-  console.log(cookiesAccepted.value);
 };
 
 const acceptCookies = () => {
