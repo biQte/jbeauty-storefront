@@ -692,6 +692,20 @@ const nextStep = async () => {
       if (activePaymentSession.provider_id.startsWith("pp_stripe")) {
         await setupStripe();
       }
+
+      const { gtag } = useGtag();
+
+      gtag("event", "add_payment_info", {
+        currency: "PLN",
+        value: cartStore.cartObject?.total, // Suma zamówienia
+        payment_type: activePaymentSession.provider_id, // np. "blik", "credit_card", "paypal"
+        items: cartStore.cartObject?.items?.map((item) => ({
+          item_id: item.id,
+          item_name: item.title,
+          price: item.unit_price,
+          quantity: item.quantity,
+        })),
+      });
     }
 
     if (step.value === 3) {
