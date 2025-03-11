@@ -207,6 +207,32 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = cartResponse as unknown as StoreCart;
 
+      const { gtag } = useGtag();
+      gtag("event", "add_to_cart", {
+        currency: "PLN",
+        value: cartObject.value.items?.find(
+          (item) => item.id === lineItemId
+          // @ts-expect-error
+        )?.calculated_price?.calculated_price,
+        items: [
+          {
+            item_id: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.id,
+            item_name: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.title,
+            price: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+              // @ts-expect-error
+            )?.calculated_price?.calculated_price,
+            quantity: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.quantity,
+          },
+        ],
+      });
+
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e: any) {
@@ -253,6 +279,32 @@ export const useCartStore = defineStore("cart", () => {
         return;
       }
 
+      const { gtag } = useGtag();
+      gtag("event", "remove_from_cart", {
+        currency: "PLN",
+        value: // prettier-ignore
+        cartObject.value.items?.find((item) => item.id === lineItemId)
+        // @ts-expect-error
+          ?.calculated_price?.calculated_price,
+        items: [
+          {
+            item_id: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.product_id,
+            item_name: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.title,
+            price: // prettier-ignore
+            cartObject.value.items?.find((item) => item.id === lineItemId)
+            // @ts-expect-error
+              ?.calculated_price?.calculated_price,
+            quantity: cartObject.value.items?.find(
+              (item) => item.id === lineItemId
+            )?.quantity,
+          },
+        ],
+      });
+
       const response = await $fetch(
         `${config.public.storeUrl}/api/cart/${cartObject.value.id}/line-items/${lineItemId}`,
         {
@@ -287,6 +339,11 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = cart as unknown as StoreCart;
 
+      const { gtag } = useGtag();
+      gtag("event", "apply_promotion_code", {
+        promotion_code: promoCodes.join(","),
+      });
+
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e) {
@@ -313,6 +370,11 @@ export const useCartStore = defineStore("cart", () => {
       );
 
       cartObject.value = cart as unknown as StoreCart;
+
+      const { gtag } = useGtag();
+      gtag("event", "remove_promotion_code", {
+        promotion_code: promoCodes.join(","),
+      });
 
       calculateQuantity();
       getAvailableShippingOptions();

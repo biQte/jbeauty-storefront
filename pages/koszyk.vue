@@ -287,6 +287,18 @@ const proceedToCheckout = async () => {
     );
   }
 
+  const { gtag } = useGtag();
+  gtag("event", "begin_checkout", {
+    currency: "PLN",
+    value: cartStore.cartObject?.total,
+    items: cartStore.cartObject?.items?.map((item) => ({
+      item_id: item.id,
+      item_name: item.title,
+      price: item.unit_price,
+      quantity: item.quantity,
+    })),
+  });
+
   router.push(ROUTES.FINALIZE_ORDER_PAGE);
   // } catch (e) {}
 };

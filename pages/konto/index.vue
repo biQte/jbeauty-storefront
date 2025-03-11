@@ -45,6 +45,7 @@ const loadOrders = async () => {
 
     ordersList.value = orders;
   } catch (e) {
+    if (!showOrders.value) return;
     snackbarStore.showSnackbar(
       "Wystąpił problem podczas pobierania zamówień",
       "error",

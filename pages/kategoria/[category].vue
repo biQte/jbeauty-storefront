@@ -122,6 +122,19 @@ useSeoMeta({
   description: `Przeglądaj produkty dostępne na Jbeauty sklep w kategorii: ${product_categories.value[0].name}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
   ogDescription: `Przeglądaj produkty dostępne na Jbeauty sklep w kategorii: ${product_categories.value[0].name}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
 });
+
+onMounted(() => {
+  const { gtag } = useGtag();
+  gtag("event", "view_item_list", {
+    item_list_name: "Kategoria: " + product_categories.value[0].name,
+    items: products.value.map((product) => ({
+      item_id: product.id,
+      item_name: product.title,
+      price: product.variants?.[0].calculated_price?.calculated_price,
+      quantity: 1,
+    })),
+  });
+});
 </script>
 
 <template>

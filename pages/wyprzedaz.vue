@@ -34,6 +34,11 @@ const { data: newProducts, error } = await useFetch(`/api/products/sale`, {
 // @ts-expect-error
 products.value = newProducts.value.products;
 
+queryOffset.value += limit.value;
+
+// @ts-expect-error
+totalProducts.value = newProducts.value.count;
+
 if (products.value.length < limit.value) {
   allLoaded.value = true;
 }
@@ -82,6 +87,19 @@ const loadMoreProducts = async ({ done }) => {
     done("empty");
   }
 };
+
+onMounted(() => {
+  const { gtag } = useGtag();
+  gtag("event", "view_item_list", {
+    item_list_name: "Wyprzedaż",
+    items: products.value.map((product) => ({
+      item_id: product.id,
+      item_name: product.title,
+      price: product.variants?.[0].calculated_price?.calculated_price,
+      quantity: 1,
+    })),
+  });
+});
 </script>
 
 <template>

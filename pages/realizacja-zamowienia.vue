@@ -553,6 +553,24 @@ const completeCart = async () => {
 
     await cartStore.fetchCart();
 
+    if (order) {
+      const { gtag } = useGtag();
+      gtag("event", "purchase", {
+        transaction_id: order?.order.id,
+        affiliation: "JBeautySklep",
+        currency: "PLN",
+        value: order.order.total,
+        tax: order.order?.tax_total,
+        shipping: order.order?.shipping_total,
+        items: order.order?.items.map((item: any) => ({
+          item_id: item.id,
+          item_name: item.title,
+          price: item.total,
+          quantity: item.quantity,
+        })),
+      });
+    }
+
     router.push(`${ROUTES.ORDER_CONFIRMATION_PAGE}/${order!.order.id}`);
   } catch (e) {
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
