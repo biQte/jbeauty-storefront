@@ -189,6 +189,24 @@ useSeoMeta({
     ? products.value[0].metadata.seoTags
     : "",
 });
+
+onMounted(() => {
+  const { gtag } = useGtag();
+  gtag("event", "view_item", {
+    currency: "PLN",
+    // @ts-expect-error
+    value: product.value!.variants?.[0].calculated_price?.calculated_price,
+    items: [
+      {
+        item_id: product.value!.id,
+        item_name: product.value!.title,
+        // @ts-expect-error
+        price: product.value!.variants?.[0].calculated_price?.calculated_price,
+        quantity: 1,
+      },
+    ],
+  });
+});
 </script>
 
 <template>
