@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
 
-const { width, height } = useWindowSize();
+// const { width, height } = useWindowSize();
+
+const width = ref();
+
+onMounted(() => {
+  width.value = useWindowSize().width;
+});
 </script>
 
 <template>
