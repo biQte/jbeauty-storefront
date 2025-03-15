@@ -69,6 +69,12 @@ font-src * data: blob: 'unsafe-inline';
       salesChannelID: process.env.NUXT_SALES_CHANNEL_ID,
       regionID: process.env.NUXT_REGION_ID,
       recommendedByCategoryID: process.env.NUXT_RECOMMENDED_BY_CATEGORY_ID,
+      metapixel: {
+        default: {
+          id: "536919092577032",
+          pageView: "/",
+        },
+      },
     },
     nitro: {
       envExpansion: true,
@@ -80,6 +86,7 @@ font-src * data: blob: 'unsafe-inline';
     routeRules: {
       "/api/**": { cors: true },
     },
+    baseURL: process.env.NUXT_STORE_URL,
   },
   compatibilityDate: "2024-07-09",
   // debug: true,
@@ -98,6 +105,7 @@ font-src * data: blob: 'unsafe-inline';
         config.plugins.push(vuetify({ autoImport: true }));
       });
     },
+    "@nuxtjs/seo",
     "@nuxtjs/sitemap",
     "@nuxt/content",
     "@nuxt/image",
@@ -106,9 +114,10 @@ font-src * data: blob: 'unsafe-inline';
     "nuxt-delay-hydration",
     "nuxt-anchorscroll",
     "nuxt-gtag",
+    "nuxt-meta-pixel",
   ],
   delayHydration: {
-    debug: false,
+    debug: process.env.NUXT_NODE_ENV === "development",
     mode: "init",
   },
   plugins: [
@@ -123,6 +132,16 @@ font-src * data: blob: 'unsafe-inline';
       autoprefixer: {},
     },
   },
+
+  seo: {
+    enabled: true,
+    redirectToCanonicalSiteUrl: true,
+  },
+
+  // nuxtseo: {
+  //   enabled: true,
+  // },
+
   // image: {
   //   // quality: 80,
   //   provider: "ipx",
@@ -147,7 +166,7 @@ font-src * data: blob: 'unsafe-inline';
       template: {
         transformAssetUrls,
         compilerOptions: {
-          isCustomElement: (tag) => ["inpost-geowidget"].includes(tag),
+          isCustomElement: (tag: any) => ["inpost-geowidget"].includes(tag),
         },
       },
     },
@@ -163,6 +182,8 @@ font-src * data: blob: 'unsafe-inline';
 
   sitemap: {
     // hostname: 'https://example.com', // Zmień na swoją domenę
+    discoverImages: true,
+    enabled: true,
     urls: async () => {
       // 1️⃣ Pobierz kategorie i produkty z Medusa, Strapi, itp.
 
@@ -254,6 +275,14 @@ font-src * data: blob: 'unsafe-inline';
         ...productUrls,
       ];
     },
-    exclude: ["/content/*"],
+    // exclude: ["/content/*"],
+  },
+  robots: {
+    enabled: true,
+    robotsTxt: true,
+    metaTag: true,
+    sitemap: `${process.env.NUXT_STORE_URL}/sitemap.xml`,
+    // disableNuxtContentIntegration: true,
+    disallow: "https://www.*",
   },
 });

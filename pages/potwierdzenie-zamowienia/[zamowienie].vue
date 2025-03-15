@@ -53,7 +53,7 @@ onMounted(async () => {
               >
                 <v-img
                   class="product-cover-image"
-                  cover
+                  contain
                   :src="item.thumbnail!"
                 ></v-img>
                 {{ item.product_title }}
@@ -89,7 +89,7 @@ onMounted(async () => {
             <th>
               <br />
               <NuxtLink :to="`/produkt/${item.product_handle}`">
-                <v-img :src="item.thumbnail!" cover></v-img>
+                <v-img :src="item.thumbnail!" contain></v-img>
                 <p>{{ item.product_title }}</p>
               </NuxtLink>
               <br />

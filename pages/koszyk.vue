@@ -299,6 +299,17 @@ const proceedToCheckout = async () => {
     })),
   });
 
+  const { $fbq } = useNuxtApp();
+
+  // @ts-expect-error
+  $fbq("track", "InitiateCheckout", {
+    value: cartStore.cartObject?.total,
+    currency: "PLN",
+    num_items: cartStore.cartObject?.items?.length,
+    content_ids: cartStore.cartObject?.items?.map((item) => item.product_id),
+    content_type: "product",
+  });
+
   router.push(ROUTES.FINALIZE_ORDER_PAGE);
   // } catch (e) {}
 };
@@ -418,7 +429,7 @@ const refreshCart = async () => {
               >
                 <v-img
                   class="product-cover-image"
-                  cover
+                  contain
                   :src="item.thumbnail!"
                 ></v-img>
                 <div>
@@ -508,7 +519,7 @@ const refreshCart = async () => {
           <tr v-for="item in cartStore.cartObject.items" :key="item.id">
             <th>
               <NuxtLink :to="`/produkt/${item.product_handle}`">
-                <v-img :src="item.thumbnail!" width="80" cover></v-img>
+                <v-img :src="item.thumbnail!" width="80" contain></v-img>
                 <p style="width: 100px">{{ item.product_title }}</p>
                 <p
                   style="color: red; max-width: 110px"

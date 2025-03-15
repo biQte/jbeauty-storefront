@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const { data: posts } = await useAsyncData("blog", () =>
-  queryCollection("blog")
-    .where("draft", "<>", false)
-    .order("date", "DESC")
-    .all()
+  queryCollection("blog").where("draft", "<>", true).order("date", "DESC").all()
 );
 
 const { width } = useWindowSize();

@@ -569,6 +569,19 @@ const completeCart = async () => {
           quantity: item.quantity,
         })),
       });
+
+      const { $fbq } = useNuxtApp();
+      // @ts-expect-error
+      $fbq("track", "Purchase", {
+        transaction_id: order?.order?.id,
+        affiliation: "JBeautySklep",
+        value: order.order?.total,
+        tax: order.order?.tax_total,
+        shipping: order.order?.shipping_total,
+        currency: "PLN",
+        content_ids: order.order?.items.map((item: any) => item.product_id),
+        content_type: "product",
+      });
     }
 
     router.push(`${ROUTES.ORDER_CONFIRMATION_PAGE}/${order!.order.id}`);
@@ -707,6 +720,14 @@ const nextStep = async () => {
         })),
       });
     }
+
+    const { $fbq } = useNuxtApp();
+
+    $fbq("track", "AddPaymentInfo", {
+      // payment_method: activePaymentSession.provider_id, // np. "blik", "credit_card"
+      value: cartStore.cartObject.total,
+      currency: "PLN",
+    });
 
     if (step.value === 3) {
       await completeCart();

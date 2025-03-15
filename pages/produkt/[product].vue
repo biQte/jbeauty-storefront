@@ -200,9 +200,31 @@ onMounted(() => {
       {
         item_id: product.value!.id,
         item_name: product.value!.title,
-        // @ts-expect-error
-        price: product.value!.variants?.[0].calculated_price?.calculated_price,
+        price:
+          // @ts-expect-error
+          product.value!.variants?.[0].calculated_price.calculated_amount,
         quantity: 1,
+      },
+    ],
+  });
+
+  const { $fbq } = useNuxtApp();
+
+  // @ts-expect-error
+  $fbq("track", "ViewContent", {
+    content_name: product.value!.title,
+    content_category: deepestCategory!.name,
+    content_ids: [product.value?.id!],
+    content_type: "product",
+    value:
+      // @ts-expect-error
+      product.value?.variants?.[0]?.calculated_price?.calculated_amount,
+    currency: "PLN",
+    contents: [
+      {
+        id: product.value?.id!,
+        quantity: 1,
+        ean: product.value?.variants?.[0].ean,
       },
     ],
   });

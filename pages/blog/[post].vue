@@ -40,7 +40,7 @@ const { width, height } = useWindowSize();
 const route = useRoute();
 const { data: post } = await useAsyncData("post", () =>
   queryCollection("blog")
-    .where("draft", "<>", false)
+    .where("draft", "<>", true)
     .where("handle", "=", `${route.params.post}`)
     .first()
 );

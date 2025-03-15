@@ -99,7 +99,6 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
       <h2>Ostatnio przeglądane:</h2>
       <Suspense>
         <template #default>
-          <!-- @vue-expect-error -->
           <LazyProductCarousel
             :products="recentlyViewedProducts.products"
             :loading="false"

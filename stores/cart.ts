@@ -160,24 +160,45 @@ export const useCartStore = defineStore("cart", () => {
         value: cartObject.value.items?.find(
           (item) => item.variant_id === variant_id
           // @ts-expect-error
-        )?.calculated_price?.calculated_price,
+        )?.calculated_price?.calculated_amount,
         items: [
           {
             item_id: cartObject.value.items?.find(
               (item) => item.variant_id === variant_id
-            )?.id,
+            )?.product_id,
             item_name: cartObject.value.items?.find(
               (item) => item.variant_id === variant_id
-            )?.title,
+            )?.product_title,
             price: cartObject.value.items?.find(
               (item) => item.variant_id === variant_id
               // @ts-expect-error
-            )?.calculated_price?.calculated_price,
+            )?.calculated_price?.calculated_amount,
             quantity: cartObject.value.items?.find(
               (item) => item.variant_id === variant_id
             )?.quantity,
           },
         ],
+      });
+
+      const { $fbq } = useNuxtApp();
+      // @ts-expect-error
+      $fbq("track", "AddToCart", {
+        content_name: cartObject.value.items?.find(
+          (item) => item.variant_id === variant_id
+        )?.product_title,
+        content_category: cartObject.value.items?.find(
+          (item) => item.variant_id === variant_id
+        )?.product_collection,
+        content_ids: [
+          cartObject.value.items?.find((item) => item.variant_id === variant_id)
+            ?.product_id,
+        ],
+        content_type: "product",
+        value: cartObject.value.items?.find(
+          (item) => item.variant_id === variant_id
+          // @ts-expect-error
+        )?.calculated_price?.calculated_amount,
+        currency: "PLN",
       });
 
       calculateQuantity();
@@ -218,10 +239,10 @@ export const useCartStore = defineStore("cart", () => {
           {
             item_id: cartObject.value.items?.find(
               (item) => item.id === lineItemId
-            )?.id,
+            )?.product_id,
             item_name: cartObject.value.items?.find(
               (item) => item.id === lineItemId
-            )?.title,
+            )?.product_title,
             price: cartObject.value.items?.find(
               (item) => item.id === lineItemId
               // @ts-expect-error
@@ -231,6 +252,27 @@ export const useCartStore = defineStore("cart", () => {
             )?.quantity,
           },
         ],
+      });
+
+      const { $fbq } = useNuxtApp();
+      // @ts-expect-error
+      $fbq("track", "AddToCart", {
+        content_name: cartObject.value.items?.find(
+          (item) => item.id === lineItemId
+        )?.product_title,
+        content_category: cartObject.value.items?.find(
+          (item) => item.id === lineItemId
+        )?.product_collection,
+        content_ids: [
+          cartObject.value.items?.find((item) => item.id === lineItemId)
+            ?.product_id,
+        ],
+        content_type: "product",
+        value: cartObject.value.items?.find(
+          (item) => item.id === lineItemId
+          // @ts-expect-error
+        )?.calculated_price?.calculated_amount,
+        currency: "PLN",
       });
 
       calculateQuantity();
