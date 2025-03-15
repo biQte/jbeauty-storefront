@@ -15,7 +15,7 @@ const loading = ref<boolean>(false);
 
 const bestsellingProducts = ref();
 const recommendedProducts = ref();
-// const recentlyViewedProducts = ref();
+const recentlyViewedProducts = ref();
 const nuxtApp = useNuxtApp();
 const width = ref();
 
@@ -76,13 +76,25 @@ const { recentlyViewed } = useRecentlyViewed();
 
 const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
 
-const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
-  await useFetch(`/api/products/by-ids`, {
-    server: true,
-    query: {
-      productIds: recentlyViewedFiltered,
-    },
-  });
+const {
+  data: recentlyViewedProductsQuery,
+  error: recentlyViewedProductsError,
+} = await useFetch(`/api/products/by-ids`, {
+  server: true,
+  query: {
+    productIds: recentlyViewedFiltered,
+  },
+});
+
+recentlyViewedProducts.value = recentlyViewedProductsQuery.value;
+
+watchEffect(() => {
+  if (newProducts.value) bestsellingProducts.value = newProducts.value;
+  if (recommendedProductsQuery.value)
+    recommendedProducts.value = recommendedProductsQuery.value;
+  if (recentlyViewedProductsQuery.value)
+    recentlyViewedProducts.value = recentlyViewedProductsQuery.value;
+});
 
 onMounted(() => {
   width.value = useWindowSize().width;
