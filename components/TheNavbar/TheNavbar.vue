@@ -21,37 +21,37 @@ const config = useRuntimeConfig();
 const width = ref();
 const height = ref();
 
-const results = await Promise.allSettled([
-  useFetch(`/api/categories/${config.public.productsCategoryID}`, {
-    server: true,
-    credentials: "include",
-  }),
-  useFetch(`/api/categories/${config.public.brandsCategoryID}`, {
-    server: true,
-    credentials: "include",
-  }),
-]);
-
-// const { data: pcats } = await useFetch(
-//   `/api/categories/${config.public.productsCategoryID}`,
-//   { server: true }
-// );
-
-// const { data: bcats } = await useFetch(
-//   `/api/categories/${config.public.brandsCategoryID}`,
-//   {
+// const results = await Promise.allSettled([
+//   useFetch(`/api/categories/${config.public.productsCategoryID}`, {
 //     server: true,
-//   }
-// );
+//     credentials: "include",
+//   }),
+//   useFetch(`/api/categories/${config.public.brandsCategoryID}`, {
+//     server: true,
+//     credentials: "include",
+//   }),
+// ]);
 
-if (results[0].status === "fulfilled") {
-  productCategories.value = results[0].value.data.value;
-  console.log(results[0].value.data);
-}
+const { data: pcats } = await useFetch(
+  `/api/categories/${config.public.productsCategoryID}`,
+  { server: true }
+);
 
-if (results[1].status === "fulfilled") {
-  brands.value = results[1].value.data.value;
-}
+const { data: bcats } = await useFetch(
+  `/api/categories/${config.public.brandsCategoryID}`,
+  {
+    server: true,
+  }
+);
+
+// if (results[0].status === "fulfilled") {
+//   productCategories.value = results[0].value.data.value;
+//   console.log(results[0].value.data);
+// }
+
+// if (results[1].status === "fulfilled") {
+//   brands.value = results[1].value.data.value;
+// }
 
 // const { data: recommendedByCategories } = await useFetch(
 //   `/api/categories/${config.public.recommendedByCategoryID}`,
@@ -60,11 +60,11 @@ if (results[1].status === "fulfilled") {
 //   }
 // );
 
-// watchEffect(() => {
-//   if (pcats.value) productCategories.value = pcats.value;
-//   if (bcats.value) brands.value = bcats.value;
-//   // if (recommendedByCategories.value) recommendedBy.value = recommendedByCategories.value;
-// });
+watchEffect(() => {
+  if (pcats.value) productCategories.value = pcats.value;
+  if (bcats.value) brands.value = bcats.value;
+  // if (recommendedByCategories.value) recommendedBy.value = recommendedByCategories.value;
+});
 
 // const productCategoryMenuOpen = ref<boolean>(false);
 // const brandCategoryMenuOpen = ref<boolean>(false);
