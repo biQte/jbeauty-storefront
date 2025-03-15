@@ -54,6 +54,28 @@ const { data: initialProductsData, error: productsError } = await useFetch(
   }
 );
 
+watchEffect(() => {
+  if (product_categories.value) {
+    if (product_categories.value.length > 0) {
+      categoryName.value = product_categories.value[0].name;
+      categoryIds.value = [
+        product_categories.value[0].id,
+        ...product_categories.value[0].category_children.map(
+          (child: any) => child.id
+        ),
+      ];
+    }
+  }
+
+  if (initialProductsData.value) {
+    // @ts-expect-error
+    products.value = initialProductsData.value.products;
+    // @ts-expect-error
+    totalProducts.value = initialProductsData.value.count;
+    queryOffset.value += limit.value;
+  }
+});
+
 await nextTick();
 
 // @ts-expect-error
@@ -117,8 +139,8 @@ const loadMoreProducts = async ({ done }) => {
 };
 
 useSeoMeta({
-  title: `JBeauty - ${product_categories.value[0].name}`,
-  ogTitle: `JBeauty - ${product_categories.value[0].name}`,
+  title: `${product_categories.value[0].name}`,
+  ogTitle: `${product_categories.value[0].name}`,
   description: `Przeglądaj produkty dostępne na Jbeauty sklep w kategorii: ${product_categories.value[0].name}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
   ogDescription: `Przeglądaj produkty dostępne na Jbeauty sklep w kategorii: ${product_categories.value[0].name}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
 });

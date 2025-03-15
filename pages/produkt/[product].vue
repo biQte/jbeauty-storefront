@@ -101,6 +101,32 @@ const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
     },
   });
 
+watchEffect(() => {
+  if (products.value) {
+    productsObject.value = products.value[0] as unknown as Product[];
+    product.value = productsObject.value as unknown as Product;
+
+    imageToShow.value = product.value.images?.[0]?.id ?? null;
+    options.value = product.value.options ?? null;
+  }
+
+  if (productsInTheSameCategory.value) {
+    productsInTheSameCategory.value = productsInTheSameCategory.value.filter(
+      (p: any) => p.id !== product.value?.id
+    );
+
+    if (productsInTheSameCategory.value.length > 12) {
+      productsInTheSameCategory.value = productsInTheSameCategory.value.slice(
+        0,
+        12
+      );
+    }
+  }
+
+  if (recentlyViewedProducts.value)
+    recentlyViewedProducts.value = recentlyViewedProducts.value;
+});
+
 const addToCart = async () => {
   try {
     const variantId = product.value!.variants![0].id;
@@ -172,10 +198,10 @@ addProduct(product.value.id);
 useSeoMeta({
   title: products.value[0].metadata?.seoTitle
     ? products.value[0].metadata.seoTitle
-    : `JBeauty - ${products.value[0].title}`,
+    : `${products.value[0].title}`,
   ogTitle: products.value[0].metadata?.seoTitle
     ? products.value[0].metadata.seoTitle
-    : `JBeauty - ${products.value[0].title}`,
+    : `${products.value[0].title}`,
   description: products.value[0].metadata?.seoDescription
     ? products.value[0].metadata.seoDescription
     : products.value[0].description,
