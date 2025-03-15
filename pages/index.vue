@@ -38,6 +38,7 @@ const results = await Promise.allSettled([
 
 if (results[0].status === "fulfilled") {
   bestsellingProducts.value = results[0].value.data.value;
+  console.log(results[0].value.data.value);
 }
 if (results[1].status === "fulfilled") {
   recommendedProducts.value = results[1].value.data.value;
