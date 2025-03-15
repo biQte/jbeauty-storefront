@@ -86,7 +86,7 @@ font-src * data: blob: 'unsafe-inline';
     routeRules: {
       "/api/**": { cors: true },
     },
-    baseURL: process.env.NUXT_STORE_URL,
+    // baseURL: process.env.NUXT_STORE_URL,
     prerender: {
       failOnError: false,
     },
@@ -286,6 +286,6 @@ font-src * data: blob: 'unsafe-inline';
     metaTag: true,
     sitemap: `${process.env.NUXT_STORE_URL}/sitemap.xml`,
     // disableNuxtContentIntegration: true,
-    disallow: "https://www.*",
+    // disallow: "https://www.*",
   },
 });
