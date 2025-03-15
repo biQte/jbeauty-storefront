@@ -46,6 +46,7 @@ const results = await Promise.allSettled([
 
 if (results[0].status === "fulfilled") {
   productCategories.value = results[0].value.data.value;
+  console.log(results[0].value.data);
 }
 
 if (results[1].status === "fulfilled") {
