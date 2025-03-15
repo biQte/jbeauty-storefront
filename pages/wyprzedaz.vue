@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: "JBeauty - Wyprzedaż",
-  ogTitle: "JBeauty - Wyprzedaż",
+  title: "Wyprzedaż",
+  ogTitle: "Wyprzedaż",
   description:
     "Wyprzedaż w JBeauty - Odkryj produkty do stylizacji paznokci w niskich cenach! Lakiery, bazy, topy, akcesoria i narzędzia stworzone dla salonów kosmetycznych i osób prywatnych.",
   ogDescription:
