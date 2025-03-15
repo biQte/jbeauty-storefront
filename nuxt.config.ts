@@ -87,6 +87,9 @@ font-src * data: blob: 'unsafe-inline';
       "/api/**": { cors: true },
     },
     baseURL: process.env.NUXT_STORE_URL,
+    prerender: {
+      failOnError: false,
+    },
   },
   compatibilityDate: "2024-07-09",
   // debug: true,
