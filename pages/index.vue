@@ -15,42 +15,74 @@ const loading = ref<boolean>(false);
 
 const bestsellingProducts = ref();
 const recommendedProducts = ref();
-const recentlyViewedProducts = ref();
+// const recentlyViewedProducts = ref();
 const nuxtApp = useNuxtApp();
 const width = ref();
+
+// const { recentlyViewed } = useRecentlyViewed();
+
+// const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
+
+// const results = await Promise.allSettled([
+//   useFetch(`/api/products/new`, {
+//     server: true,
+//     immediate: true,
+//     credentials: "include",
+//     default: () => null,
+//   }),
+//   useFetch(`/api/products/recommended`, {
+//     server: true,
+//     credentials: "include",
+//   }),
+//   useFetch(`/api/products/by-ids`, {
+//     server: true,
+//     credentials: "include",
+//     query: { productIds: recentlyViewedFiltered },
+//   }),
+// ]);
+
+// if (results[0].status === "fulfilled") {
+//   bestsellingProducts.value = results[0].value.data.value;
+//   console.log(results[0].value.data);
+// }
+// if (results[1].status === "fulfilled") {
+//   recommendedProducts.value = results[1].value.data.value;
+// }
+// if (results[2].status === "fulfilled") {
+//   recentlyViewedProducts.value = results[2].value.data.value;
+// }
+
+const { data: newProducts, error: newProductsError } = await useFetch(
+  `/api/products/new`,
+  {
+    server: true,
+  }
+);
+
+bestsellingProducts.value = newProducts.value;
+
+// return products.value;
+// };
+
+// const loadRecommendedProducts = async () => {
+const { data: recommendedProductsQuery, error: recommendedProductsError } =
+  await useFetch(`/api/products/recommended`, {
+    server: true,
+  });
+
+recommendedProducts.value = recommendedProductsQuery.value;
 
 const { recentlyViewed } = useRecentlyViewed();
 
 const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
 
-const results = await Promise.allSettled([
-  useFetch(`/api/products/new`, {
+const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
+  await useFetch(`/api/products/by-ids`, {
     server: true,
-    immediate: true,
-    credentials: "include",
-    default: () => null,
-  }),
-  useFetch(`/api/products/recommended`, {
-    server: true,
-    credentials: "include",
-  }),
-  useFetch(`/api/products/by-ids`, {
-    server: true,
-    credentials: "include",
-    query: { productIds: recentlyViewedFiltered },
-  }),
-]);
-
-if (results[0].status === "fulfilled") {
-  bestsellingProducts.value = results[0].value.data.value;
-  console.log(results[0].value.data);
-}
-if (results[1].status === "fulfilled") {
-  recommendedProducts.value = results[1].value.data.value;
-}
-if (results[2].status === "fulfilled") {
-  recentlyViewedProducts.value = results[2].value.data.value;
-}
+    query: {
+      productIds: recentlyViewedFiltered,
+    },
+  });
 
 onMounted(() => {
   width.value = useWindowSize().width;
