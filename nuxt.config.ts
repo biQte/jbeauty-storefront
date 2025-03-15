@@ -89,6 +89,7 @@ font-src * data: blob: 'unsafe-inline';
     // baseURL: process.env.NUXT_STORE_URL,
     prerender: {
       failOnError: false,
+      routes: [],
     },
   },
   compatibilityDate: "2024-07-09",
@@ -139,6 +140,8 @@ font-src * data: blob: 'unsafe-inline';
   seo: {
     enabled: true,
     redirectToCanonicalSiteUrl: true,
+    mergeWithSiteConfig: true,
+    fallbackTitle: false,
   },
 
   // nuxtseo: {
@@ -181,6 +184,7 @@ font-src * data: blob: 'unsafe-inline';
 
   site: {
     url: process.env.NUXT_STORE_URL,
+    name: "JBeauty",
   },
 
   sitemap: {

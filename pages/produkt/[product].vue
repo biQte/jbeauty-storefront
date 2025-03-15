@@ -53,8 +53,13 @@ const { data: products, error } = await useFetch(
   `/api/products/${route.params.product}`,
   {
     server: true,
+    key: `product-${route.params.product}`,
+    default: () => null,
   }
 );
+
+console.log("ssr", import.meta.server);
+console.log("SSR FETCH:", products.value, error.value);
 
 if (!products)
   snackbarStore.showSnackbar("Nie znaleziono produktu", "error", 5000);
@@ -101,31 +106,31 @@ const { data: recentlyViewedProducts, error: recentlyViewedProductsError } =
     },
   });
 
-watchEffect(() => {
-  if (products.value) {
-    productsObject.value = products.value[0] as unknown as Product[];
-    product.value = productsObject.value as unknown as Product;
+// watchEffect(() => {
+//   if (products.value) {
+//     productsObject.value = products.value[0] as unknown as Product[];
+//     product.value = productsObject.value as unknown as Product;
 
-    imageToShow.value = product.value.images?.[0]?.id ?? null;
-    options.value = product.value.options ?? null;
-  }
+//     imageToShow.value = product.value.images?.[0]?.id ?? null;
+//     options.value = product.value.options ?? null;
+//   }
 
-  if (productsInTheSameCategory.value) {
-    productsInTheSameCategory.value = productsInTheSameCategory.value.filter(
-      (p: any) => p.id !== product.value?.id
-    );
+//   if (productsInTheSameCategory.value) {
+//     productsInTheSameCategory.value = productsInTheSameCategory.value.filter(
+//       (p: any) => p.id !== product.value?.id
+//     );
 
-    if (productsInTheSameCategory.value.length > 12) {
-      productsInTheSameCategory.value = productsInTheSameCategory.value.slice(
-        0,
-        12
-      );
-    }
-  }
+//     if (productsInTheSameCategory.value.length > 12) {
+//       productsInTheSameCategory.value = productsInTheSameCategory.value.slice(
+//         0,
+//         12
+//       );
+//     }
+//   }
 
-  if (recentlyViewedProducts.value)
-    recentlyViewedProducts.value = recentlyViewedProducts.value;
-});
+//   if (recentlyViewedProducts.value)
+//     recentlyViewedProducts.value = recentlyViewedProducts.value;
+// });
 
 const addToCart = async () => {
   try {
