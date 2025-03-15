@@ -24,7 +24,11 @@ const { recentlyViewed } = useRecentlyViewed();
 const recentlyViewedFiltered = recentlyViewed.value.slice(0, 12);
 
 const results = await Promise.allSettled([
-  useFetch(`/api/products/new`, { server: true, credentials: "include" }),
+  useFetch(`/api/products/new`, {
+    server: true,
+    immediate: true,
+    credentials: "include",
+  }),
   useFetch(`/api/products/recommended`, {
     server: true,
     credentials: "include",
