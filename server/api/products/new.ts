@@ -36,9 +36,10 @@ export default defineEventHandler(async (event) => {
         appendHeader(event, "set-cookie", cookie);
       });
     }
-
+    console.log(products);
     return products;
   } catch (e) {
+    console.log(e);
     throw e;
   }
 });
