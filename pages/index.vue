@@ -28,6 +28,7 @@ const results = await Promise.allSettled([
     server: true,
     immediate: true,
     credentials: "include",
+    default: () => null,
   }),
   useFetch(`/api/products/recommended`, {
     server: true,
