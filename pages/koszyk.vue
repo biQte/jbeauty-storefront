@@ -299,6 +299,17 @@ const proceedToCheckout = async () => {
     })),
   });
 
+  const { $fbq } = useNuxtApp();
+
+  // @ts-expect-error
+  $fbq("track", "InitiateCheckout", {
+    value: cartStore.cartObject?.total,
+    currency: "PLN",
+    num_items: cartStore.cartObject?.items?.length,
+    content_ids: cartStore.cartObject?.items?.map((item) => item.product_id),
+    content_type: "product",
+  });
+
   router.push(ROUTES.FINALIZE_ORDER_PAGE);
   // } catch (e) {}
 };
@@ -373,6 +384,17 @@ const refreshCart = async () => {
 //     );
 //   }
 // });
+
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

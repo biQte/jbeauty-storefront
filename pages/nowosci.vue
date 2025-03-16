@@ -25,6 +25,18 @@ const { data: newProducts, error } = await useFetch(
 
 products.value = newProducts.value;
 
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {

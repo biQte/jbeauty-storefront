@@ -8,6 +8,18 @@ useSeoMeta({
     "Skontaktuj się z nami. Email: info@jbeautysklep.pl. Telefon: +48 792 669 926",
 });
 
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 const { width, height } = useWindowSize();
 </script>
 

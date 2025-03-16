@@ -101,6 +101,15 @@ const loadMoreProducts = async ({ done }) => {
   }
 };
 
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {

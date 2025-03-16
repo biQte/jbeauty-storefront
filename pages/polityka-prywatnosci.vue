@@ -23,6 +23,18 @@ nuxtApp.$anchorScroll!.matched.push(({ path, hash }) => {
     }
   }
 });
+
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

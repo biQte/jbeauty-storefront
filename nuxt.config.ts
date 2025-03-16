@@ -69,6 +69,12 @@ font-src * data: blob: 'unsafe-inline';
       salesChannelID: process.env.NUXT_SALES_CHANNEL_ID,
       regionID: process.env.NUXT_REGION_ID,
       recommendedByCategoryID: process.env.NUXT_RECOMMENDED_BY_CATEGORY_ID,
+      metapixel: {
+        default: {
+          id: "536919092577032",
+          pageView: "/",
+        },
+      },
     },
     nitro: {
       envExpansion: true,
@@ -80,6 +86,7 @@ font-src * data: blob: 'unsafe-inline';
     routeRules: {
       "/api/**": { cors: true },
     },
+    // baseURL: process.env.NUXT_STORE_URL,
   },
   compatibilityDate: "2024-07-09",
   // debug: true,
@@ -90,6 +97,7 @@ font-src * data: blob: 'unsafe-inline';
   build: {
     transpile: ["vuetify"],
   },
+
   devtools: { enabled: true },
   modules: [
     (_options, nuxt) => {
@@ -99,6 +107,12 @@ font-src * data: blob: 'unsafe-inline';
       });
     },
     "@nuxtjs/sitemap",
+    "@nuxtjs/robots",
+    // "nuxt-seo-utils",
+    // "nuxt-og-image",
+    // "nuxt-schema-org",npm i nuxt-link-checker
+    "nuxt-link-checker",
+    "nuxt-site-config",
     "@nuxt/content",
     "@nuxt/image",
     "@pinia/nuxt",
@@ -106,11 +120,31 @@ font-src * data: blob: 'unsafe-inline';
     "nuxt-delay-hydration",
     "nuxt-anchorscroll",
     "nuxt-gtag",
+    "nuxt-meta-pixel",
   ],
   delayHydration: {
     debug: false,
     mode: "init",
   },
+
+  site: {
+    enabled: true,
+    url: process.env.NUXT_STORE_URL,
+    name: "JBeauty",
+  },
+
+  linkChecker: {
+    report: {
+      html: true,
+      markdown: true,
+      publish: true,
+    },
+  },
+
+  // seo: {
+  //   enabled: true,
+  // },
+
   plugins: [
     "~/plugins/stripe.client.ts",
     // "~/plugins/inpostGeowidget.ts",
@@ -157,11 +191,13 @@ font-src * data: blob: 'unsafe-inline';
       process.env.NUXT_NODE_ENV !== "development" ? "G-CV9TZ8BS61" : undefined,
   },
 
-  site: {
-    url: process.env.NUXT_STORE_URL,
-  },
+  // site: {
+  //   url: process.env.NUXT_STORE_URL,
+  // },
 
   sitemap: {
+    discoverImages: true,
+    enabled: true,
     // hostname: 'https://example.com', // Zmień na swoją domenę
     urls: async () => {
       // 1️⃣ Pobierz kategorie i produkty z Medusa, Strapi, itp.
@@ -255,5 +291,14 @@ font-src * data: blob: 'unsafe-inline';
       ];
     },
     exclude: ["/content/*"],
+  },
+  robots: {
+    enabled: true,
+    robotsTxt: true,
+    metaTag: true,
+    sitemap: `${process.env.NUXT_STORE_URL}/sitemap.xml`,
+    // disableNuxtContentIntegration: true,
+    // disallow: "https://www.*",
+    disallow: [],
   },
 });

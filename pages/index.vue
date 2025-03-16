@@ -46,6 +46,18 @@ if (results[2].status === "fulfilled") {
   recentlyViewedProducts.value = results[2].value.data.value;
 }
 
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   width.value = useWindowSize().width;
 });
@@ -99,7 +111,6 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
       <h2>Ostatnio przeglądane:</h2>
       <Suspense>
         <template #default>
-          <!-- @vue-expect-error -->
           <LazyProductCarousel
             :products="recentlyViewedProducts.products"
             :loading="false"

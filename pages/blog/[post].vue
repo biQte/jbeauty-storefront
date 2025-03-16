@@ -51,6 +51,17 @@ useSeoMeta({
   ogImage: post.value?.thumbnail,
   keywords: post.value?.tags.join(","),
 });
+
+const config = useRuntimeConfig();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

@@ -110,6 +110,15 @@ useSeoMeta({
   title: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
   ogTitle: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
 });
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

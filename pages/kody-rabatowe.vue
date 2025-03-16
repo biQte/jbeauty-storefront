@@ -7,6 +7,18 @@ useSeoMeta({
   ogDescription:
     "Wyjątkowe rabaty na wyciągnięcie ręki! Sprawdź aktualne kody rabatowe w JBeauty i spełnij swoje paznokciowe marzenia w niższej cenie. Poczuj się jak królowa oszczędności i zaopatrz się w ulubione lakiery, bazy, topy oraz akcesoria. Piękne paznokcie nigdy nie były tak dostępne!",
 });
+
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

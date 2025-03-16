@@ -40,6 +40,17 @@ const sendResetPasswordToken = async () => {
     snackarStore.showSnackbar(e.toString(), "error", 5000);
   }
 };
+
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>

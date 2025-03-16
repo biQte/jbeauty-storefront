@@ -15,6 +15,16 @@ const config = useRuntimeConfig();
 const orderId = ref<string>(route.params.zamowienie as string);
 const { width, height } = useWindowSize();
 const order = ref<StoreOrder>();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(async () => {
   const orderResponse = await $fetch(`/api/order/${orderId.value}`, {
     credentials: "include",

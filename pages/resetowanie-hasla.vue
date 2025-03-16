@@ -83,6 +83,15 @@ const submit = () => {
   submitForm();
 };
 
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   if (!route.query.email || !route.query.token) {
     snackarStore.showSnackbar("Nieprawidłowy link", "error", 5000);

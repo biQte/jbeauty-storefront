@@ -190,6 +190,15 @@ useSeoMeta({
     : "",
 });
 
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   const { gtag } = useGtag();
   gtag("event", "view_item", {
@@ -203,6 +212,27 @@ onMounted(() => {
         // @ts-expect-error
         price: product.value!.variants?.[0].calculated_price?.calculated_price,
         quantity: 1,
+      },
+    ],
+  });
+
+  const { $fbq } = useNuxtApp();
+
+  // @ts-expect-error
+  $fbq("track", "ViewContent", {
+    content_name: product.value!.title,
+    content_category: deepestCategory!.name,
+    content_ids: [product.value?.id!],
+    content_type: "product",
+    value:
+      // @ts-expect-error
+      product.value?.variants?.[0]?.calculated_price?.calculated_amount,
+    currency: "PLN",
+    contents: [
+      {
+        id: product.value?.id!,
+        quantity: 1,
+        ean: product.value?.variants?.[0].ean,
       },
     ],
   });
@@ -314,13 +344,13 @@ onMounted(() => {
                     "
               class="sale-price"
             >
-              <!-- @vue-expect-error -->
               &nbsp;{{
                 new Intl.NumberFormat("pl-PL", {
                   style: "currency",
                   currency: "PLN",
                 }).format(
                   Number(
+                    // @ts-expect-error
                     product?.variants?.[0].calculated_price?.calculated_amount
                   )
                 )

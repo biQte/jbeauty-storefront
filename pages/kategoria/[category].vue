@@ -123,6 +123,15 @@ useSeoMeta({
   ogDescription: `Przeglądaj produkty dostępne na Jbeauty sklep w kategorii: ${product_categories.value[0].name}. Wysokiej jakości i przystępne cenowo produkty dostępne od ręki.`,
 });
 
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
+
 onMounted(() => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {

@@ -20,18 +20,6 @@ import { FetchError } from "@medusajs/js-sdk";
 import { useWindowSize } from "@vueuse/core";
 import InpostGeoWidget from "~/components/InpostGeoWidget.vue";
 
-useHead({
-  script: [
-    { src: "https://geowidget.inpost.pl/inpost-geowidget.js", defer: true },
-  ],
-  link: [
-    {
-      rel: "stylesheet",
-      href: "https://geowidget.inpost.pl/inpost-geowidget.css",
-    },
-  ],
-});
-
 const config = useRuntimeConfig();
 
 const cartStore = useCartStore();
@@ -98,6 +86,22 @@ const setupStripe = async () => {
 };
 
 const loadingStep = ref<boolean>(false);
+
+useHead({
+  script: [
+    { src: "https://geowidget.inpost.pl/inpost-geowidget.js", defer: true },
+  ],
+  link: [
+    {
+      rel: "stylesheet",
+      href: "https://geowidget.inpost.pl/inpost-geowidget.css",
+    },
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 
 // const locales = [
 //   { country: "Polska", value: "pl" },
@@ -569,6 +573,19 @@ const completeCart = async () => {
           quantity: item.quantity,
         })),
       });
+
+      const { $fbq } = useNuxtApp();
+      // @ts-expect-error
+      $fbq("track", "Purchase", {
+        transaction_id: order?.order?.id,
+        affiliation: "JBeautySklep",
+        value: order.order?.total,
+        tax: order.order?.tax_total,
+        shipping: order.order?.shipping_total,
+        currency: "PLN",
+        content_ids: order.order?.items.map((item: any) => item.product_id),
+        content_type: "product",
+      });
     }
 
     router.push(`${ROUTES.ORDER_CONFIRMATION_PAGE}/${order!.order.id}`);
@@ -705,6 +722,14 @@ const nextStep = async () => {
           price: item.unit_price,
           quantity: item.quantity,
         })),
+      });
+
+      const { $fbq } = useNuxtApp();
+
+      $fbq("track", "AddPaymentInfo", {
+        // payment_method: activePaymentSession.provider_id, // np. "blik", "credit_card"
+        value: cartStore.cartObject.total,
+        currency: "PLN",
       });
     }
 
@@ -1093,7 +1118,7 @@ onMounted(() => {
           class="parcel-locker"
           v-if="
             cartStore.availableShippingOptions
-              ?.find((option) => option.id === selectedShippingOption)
+              ?.find((option: any) => option.id === selectedShippingOption)
               ?.name.toLowerCase()
               .includes('paczkomat')
           "
@@ -1408,7 +1433,7 @@ onMounted(() => {
                 !cartStore.cartObject?.shipping_address?.first_name) ||
               (step === 2 &&
                 cartStore.availableShippingOptions
-                  ?.find((option) => option.id === selectedShippingOption)
+                  ?.find((option: any) => option.id === selectedShippingOption)
                   ?.name.toLowerCase()
                   .includes('paczkomat') &&
                 !parcelLockerName)

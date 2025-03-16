@@ -7,6 +7,18 @@ useSeoMeta({
 definePageMeta({
   isAccesibleAfterLogin: false,
 });
+
+const config = useRuntimeConfig();
+const route = useRoute();
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: `${config.public.storeUrl}${route.path}`,
+    },
+  ],
+});
 </script>
 
 <template>
