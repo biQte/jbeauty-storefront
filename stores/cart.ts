@@ -368,6 +368,26 @@ export const useCartStore = defineStore("cart", () => {
     try {
       if (!cartObject.value) return;
 
+      let currentPromoCodes: string[] = [];
+
+      // @ts-expect-error
+      for (let i = 0; i < cartObject.value.promotions.length; i++) {
+        // @ts-expect-error
+        const currentPromotion = cartObject.value.promotions[i];
+        currentPromoCodes.push(currentPromotion.code);
+      }
+
+      await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/promotions`,
+        {
+          credentials: "include",
+          method: "DELETE",
+          body: JSON.stringify({
+            promo_codes: currentPromoCodes,
+          }),
+        }
+      );
+
       const cart = await $fetch(
         `${config.public.storeUrl}/api/cart/${cartObject.value.id}/promotions`,
         {

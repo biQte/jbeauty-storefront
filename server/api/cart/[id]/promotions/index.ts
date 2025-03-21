@@ -2,8 +2,6 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const id = getRouterParam(event, "id");
 
-  console.log("the fuck");
-
   try {
     if (event.method !== "POST" && event.method !== "DELETE") {
       throw createError({
