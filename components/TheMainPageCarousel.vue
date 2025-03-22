@@ -30,11 +30,14 @@ onMounted(() => {
     <!-- <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
       <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
     </NuxtLink> -->
-    <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
-      <!-- src="/public/web.webp" contain -->
+    <NuxtLink :to="`/kategoria/victoria-vynn-forget-me-nude`">
+      <!-- <v-carousel-item
+        src="/public/forgetmenude2.webp"
+        contain
+      ></v-carousel-item> -->
       <v-carousel-item>
         <NuxtImg
-          src="/web.webp"
+          src="/forgetmenude.webp"
           loading="eager"
           importance="high"
           width="2000"
@@ -43,11 +46,18 @@ onMounted(() => {
         />
       </v-carousel-item>
     </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-pomodoro`">
-      <v-carousel-item
-        src="/public/VYNN_VV_POMODORO_banery_www_-2000x600.webp"
-        contain
-      ></v-carousel-item>
+    <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
+      <!-- src="/public/web.webp" contain -->
+      <v-carousel-item>
+        <NuxtImg
+          src="/web.webp"
+          loading="lazy"
+          importance="low"
+          width="2000"
+          height="600"
+          fit="contain"
+        />
+      </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-mousse`">
       <v-carousel-item
