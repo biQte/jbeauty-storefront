@@ -159,6 +159,14 @@ onMounted(async () => {
                 >Wyprzedaż</v-btn
               >
               <v-btn
+                :to="`/kategoria/promocja-tygodnia`"
+                @click="closeMenu"
+                class="mobile-menu-item"
+                variant="text"
+              >
+                Promocja tygodnia
+              </v-btn>
+              <v-btn
                 to="/blog"
                 @click="closeMenu"
                 class="mobile-menu-item"
@@ -242,6 +250,14 @@ onMounted(async () => {
             :active="false"
             size="small"
             >Wyprzedaż</v-btn
+          >
+          <v-btn
+            class="menu-link"
+            variant="text"
+            :to="`/kategoria/promocja-tygodnia`"
+            :active="false"
+            size="small"
+            >Promocja tygodnia</v-btn
           >
           <!--<v-menu>
             <template v-slot:activator="{ props }">
