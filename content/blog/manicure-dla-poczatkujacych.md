@@ -1,6 +1,6 @@
 ---
 title: "Manicure dla początkujących - co jest niezbędne na start?"
-handle: "manicure-dla-początkujących-co-jest-niezbędne-na-start"
+handle: "manicure-dla-poczatkujacych-co-jest-niezbedne-na-start"
 date: 2025-02-26
 draft: false
 tags:
