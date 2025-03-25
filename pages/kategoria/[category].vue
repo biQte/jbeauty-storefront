@@ -231,8 +231,8 @@ onMounted(() => {
                 :class="{
                   'text-gray-400 line-through':
                     // @ts-expect-error
-                    product.variants?.[0].calculated_price?.price_list_type ===
-                    'sale',
+                    product.variants?.[0].calculated_price?.calculated_price
+                      .price_list_type === 'sale',
                 }"
               >
                 {{
