@@ -251,7 +251,7 @@ onMounted(() => {
                   product.variants?.[0].calculated_price?.calculated_price
                     .price_list_type === 'sale'
                 "
-                class="text-lg font-bold text-pink-500"
+                class="text-lg font-bold text-[#ff5c8a]"
               >
                 {{
                   new Intl.NumberFormat("pl-PL", {
@@ -265,20 +265,13 @@ onMounted(() => {
                 }}
               </span>
             </div>
-
-            <!-- <span
-              v-if="product.variants?.[0].inventory_quantity! < 1"
-              class="text-sm text-red-500"
-            >
-              Chwilowo niedostępny
-            </span> -->
           </div>
         </NuxtLink>
 
         <button
           class="text-sm w-full py-2 rounded-b-lg font-semibold transition-colors"
           :class="{
-          'bg-pink-500 hover:bg-pink-600 text-white':
+          'bg-[#ff5c8a] hover:bg-pink-600 text-white':
             product.variants?.[0].inventory_quantity! > 0,
           'bg-gray-300 text-gray-500 cursor-not-allowed':
             product.variants?.[0].inventory_quantity! < 1,
@@ -333,68 +326,11 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
-// .category-page-wrapper {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   gap: 2rem;
-//   width: 100%;
-//   .products-container {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     width: 100%;
-//     @media only screen and (max-width: 720px) {
-//       justify-content: start;
-//     }
-//     .products-wrapper {
-//       align-self: center;
-//       display: grid;
-//       grid-template-columns: repeat(auto-fit, minmax(340px, 340px));
-//       width: 100%;
-//       gap: 15px;
-//       max-width: 90%;
-
-//       & > * {
-//         width: 340px;
-//         margin-bottom: 0.5rem;
-//       }
-//     }
-//   }
-// }
-
-// h1 {
-//   font-size: 2rem;
-//   padding: 0 2rem;
-//   width: 100%;
-//   text-align: start;
-
-//   @media only screen and (max-width: 720px) {
-//     padding: 0;
-//   }
-// }
-
-// h2 {
-//   font-size: 1rem !important;
-// }
-
-// .product-price {
-//   font-size: 1rem !important;
-// }
-
-// .strike {
-//   text-decoration: line-through;
-// }
-
-// .sale-price {
-//   font-size: 1.2rem;
-//   color: $primary-color;
-// }
 </style>
