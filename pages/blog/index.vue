@@ -1,22 +1,22 @@
 <script setup lang="ts">
-// const { data: posts } = await useAsyncData("blog", () => {
-//   return queryCollection("blog")
-//     .where("draft", "<>", false)
-//     .order("date", "DESC")
-//     .all();
-// });
+const { data: posts } = await useAsyncData("blog", async () => {
+  return await queryCollection("blog")
+    .where("draft", "<>", false)
+    .order("date", "DESC")
+    .all();
+});
 
 // const { data: posts } = await useAsyncData("blog", () => $fetch("/api/blog"));
 
-const posts = ref();
+// const posts = ref();
 
-const { data, error } = await useFetch("/api/blog", {
-  server: true,
-});
+// const { data, error } = await useFetch("/api/blog", {
+//   server: true,
+// });
 
-if (!error.value) {
-  posts.value = data.value || [];
-}
+// if (!error.value) {
+//   posts.value = data.value || [];
+// }
 
 console.log(posts.value);
 
