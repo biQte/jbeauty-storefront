@@ -38,11 +38,15 @@ const { width, height } = useWindowSize();
 
 <script setup lang="ts">
 const route = useRoute();
+// const { data: post } = await useAsyncData("post", () =>
+//   queryCollection("blog")
+//     .where("draft", "<>", false)
+//     .where("handle", "=", `${route.params.post}`)
+//     .first()
+// );
+
 const { data: post } = await useAsyncData("post", () =>
-  queryCollection("blog")
-    .where("draft", "<>", false)
-    .where("handle", "=", `${route.params.post}`)
-    .first()
+  $fetch(`/api/blog/${route.params.post}`)
 );
 
 useSeoMeta({

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-const { data: posts } = await useAsyncData("blog", () =>
-  queryCollection("blog")
-    .where("draft", "<>", false)
-    .order("date", "DESC")
-    .all()
-);
+// const { data: posts } = await useAsyncData("blog", () => {
+//   return queryCollection("blog")
+//     .where("draft", "<>", false)
+//     .order("date", "DESC")
+//     .all();
+// });
+
+const { data: posts } = await useAsyncData("blog", () => $fetch("/api/blog"));
 
 const { width } = useWindowSize();
 
