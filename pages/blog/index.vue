@@ -6,7 +6,19 @@
 //     .all();
 // });
 
-const { data: posts } = await useAsyncData("blog", () => $fetch("/api/blog"));
+// const { data: posts } = await useAsyncData("blog", () => $fetch("/api/blog"));
+
+const posts = ref();
+
+const results = await Promise.allSettled([
+  useFetch("/api/blog", { server: true }),
+]);
+
+if (results[0].status === "fulfilled") {
+  posts.value = results[0].value.data.value;
+} else {
+  posts.value = [];
+}
 
 const { width } = useWindowSize();
 
