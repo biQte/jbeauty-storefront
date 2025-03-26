@@ -15,10 +15,13 @@ const results = await Promise.allSettled([
 ]);
 
 if (results[0].status === "fulfilled") {
+  console.log(results[0].value.data.value);
   posts.value = results[0].value.data.value;
 } else {
   posts.value = [];
 }
+
+console.log(posts.value);
 
 const { width } = useWindowSize();
 
