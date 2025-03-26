@@ -10,15 +10,12 @@
 
 const posts = ref();
 
-const results = await Promise.allSettled([
-  useFetch("/api/blog", { server: true }),
-]);
+const { data, error } = await useFetch("/api/blog", {
+  server: true,
+});
 
-if (results[0].status === "fulfilled") {
-  console.log(results[0].value.data.value);
-  posts.value = results[0].value.data.value;
-} else {
-  posts.value = [];
+if (!error.value) {
+  posts.value = data.value || [];
 }
 
 console.log(posts.value);
