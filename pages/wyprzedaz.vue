@@ -232,13 +232,6 @@ const addToCart = async (product: StoreProduct) => {
                 }}
               </span>
             </div>
-
-            <span
-              v-if="product.variants?.[0].inventory_quantity! < 1"
-              class="text-sm text-red-500"
-            >
-              - Chwilowo niedostępny
-            </span>
           </div>
         </NuxtLink>
 
