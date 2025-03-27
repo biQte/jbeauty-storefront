@@ -568,7 +568,7 @@ const completeCart = async () => {
         shipping: order.order?.shipping_total,
         items: order.order?.items.map((item: any) => ({
           item_id: item.id,
-          item_name: item.title,
+          item_name: item.product_title,
           price: item.total,
           quantity: item.quantity,
         })),
