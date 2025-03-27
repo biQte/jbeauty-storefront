@@ -57,6 +57,69 @@ font-src * data: blob: 'unsafe-inline';
       scrollBehaviorType: "smooth",
     },
   },
+  routeRules: {
+    "/produkt/pb-nails-lakier-hybrydowy-ge383-bluetiful-10ml": {
+      redirect: {
+        to: "/kategoria/lakiery-hybrydowe",
+        statusCode: 301,
+      },
+    },
+    "/produkt/pb-nails-lakier-hybrydowy-max-white-5ml": {
+      redirect: {
+        to: "/kategoria/lakiery-hybrydowe",
+        statusCode: 301,
+      },
+    },
+    "/produkt/pb-nails-top-do-hybryd-i-zeli-fancy-top-coat-10ml": {
+      redirect: {
+        to: "/kategoria/bazy-i-topy",
+        statusCode: 301,
+      },
+    },
+    "/produkt/excellent-pro-blok-polerski-czterostronny-premium-biay": {
+      redirect: {
+        to: "/kategoria/narzedzia",
+        statusCode: 301,
+      },
+    },
+    "/produkt/excellent-pro-mini-buffer-100150-50szt": {
+      redirect: {
+        to: "/kategoria/narzedzia",
+        statusCode: 301,
+      },
+    },
+    "/produkt/excellent-pro-builder-gel-with-thixotropy-natural-look-rose-30g":
+      {
+        redirect: {
+          to: "/kategoria/zele-budujace",
+          statusCode: 301,
+        },
+      },
+    "/produkt/victoria-vynn-brillant-gel-16-rose-quartz-5g": {
+      redirect: {
+        to: "/kategoria/zele-kolorowe",
+        statusCode: 301,
+      },
+    },
+    "/produkt/victoria-vynn-brillant-gel-17-eternal-pink-5g": {
+      redirect: {
+        to: "/kategoria/zele-kolorowe",
+        statusCode: 301,
+      },
+    },
+    "/produkt/victoria-vynn-brillant-gel-25-quartz-crystal-5g": {
+      redirect: {
+        to: "/kategoria/zele-kolorowe",
+        statusCode: 301,
+      },
+    },
+    "/produkt/victoria-vynn-brillant-gel-53-triffle-5g": {
+      redirect: {
+        to: "/kategoria/zele-kolorowe",
+        statusCode: 301,
+      },
+    },
+  },
   runtimeConfig: {
     public: {
       medusaUrl: process.env.NUXT_MEDUSA_URL,
