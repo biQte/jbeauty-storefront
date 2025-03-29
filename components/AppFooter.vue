@@ -1,4 +1,4 @@
-<script setup lang="ts"></script>
+<!-- <script setup lang="ts"></script>
 
 <template>
   <div class="footer-wrapper">
@@ -130,4 +130,97 @@
     font-size: 1.4rem;
   }
 }
-</style>
+</style> -->
+
+<script setup lang="ts">
+const currentYear = new Date().getFullYear();
+</script>
+
+<template>
+  <footer class="bg-gray-100 text-gray-800 mt-20 pt-10 pb-6 px-6">
+    <div
+      class="max-w-screen-xl mx-auto grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+    >
+      <!-- Kolumna 1: O nas -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">O nas</h4>
+        <ul class="space-y-2 text-sm">
+          <li><NuxtLink to="/regulamin">Regulamin</NuxtLink></li>
+          <li>
+            <NuxtLink to="/regulamin#shipping-and-payments"
+              >Dostawa i płatność</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink to="/regulamin#withdrawal">Odstąpienie od umowy</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/polityka-prywatnosci">Polityka prywatności</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/polityka-prywatnosci#cookies"
+              >Polityka Cookies</NuxtLink
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolumna 2: Kontakt -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Kontakt</h4>
+        <ul class="space-y-2 text-sm">
+          <li>Żegocina 102</li>
+          <li>32-731 Żegocina</li>
+          <li>
+            <a href="mailto:info@jbeautysklep.pl">info@jbeautysklep.pl</a>
+          </li>
+          <li><a href="tel:+48792669926">792 669 926</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolumna 3: Konto -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Dane osobowe</h4>
+        <ul class="space-y-2 text-sm">
+          <li><NuxtLink to="/konto">Konto</NuxtLink></li>
+          <li><NuxtLink to="/konto?showOrders=true">Zamówienia</NuxtLink></li>
+        </ul>
+      </div>
+
+      <!-- Kolumna 4: Social media -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Znajdziesz nas na</h4>
+        <div class="flex items-center gap-4">
+          <a
+            href="https://www.tiktok.com/@jbeautysklep.pl"
+            target="_blank"
+            aria-label="TikTok"
+          >
+            <svg
+              class="w-7 h-7 fill-[#ff5c8a]"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.instagram.com/jbeautysklep/"
+            target="_blank"
+            aria-label="Instagram"
+          >
+            <v-icon icon="mdi-instagram" size="28" color="#ff5c8a"></v-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dolna belka -->
+    <div class="mt-10 text-center text-sm text-gray-500 border-t pt-4">
+      &copy; JBeauty Joanna Bilska {{ currentYear }}. Wszelkie prawa
+      zastrzeżone.
+    </div>
+  </footer>
+</template>
