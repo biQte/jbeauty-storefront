@@ -115,10 +115,13 @@ const addToCart = async (product: StoreProduct) => {
           <div
             class="w-full aspect-square bg-gray-100 flex items-center justify-center overflow-hidden"
           >
-            <img
+            <nuxt-img
               :src="product.thumbnail!"
               class="object-contain w-full h-full"
               :alt="product.title"
+              format="webp"
+              quality="20"
+              size="340"
             />
           </div>
 

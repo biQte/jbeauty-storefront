@@ -87,12 +87,16 @@ const navigateToSearchPage = () => {
           "
         >
           <div class="product-result-content">
-            <v-img
+            <nuxt-img
               :src="product.thumbnail!"
               width="50"
               height="50"
-              cover
-            ></v-img>
+              :alt="product.title"
+              format="webp"
+              quality="20"
+              size="50"
+              fit="cover"
+            />
             <div class="titles-content">
               <v-list-item-title>{{ product.title }}</v-list-item-title>
               <v-list-item-subtitle>

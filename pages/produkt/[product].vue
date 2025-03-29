@@ -249,12 +249,15 @@ onMounted(() => {
               <div
                 class="w-auto h-full object-center object-cover px-4 space-y-4"
               >
-                <img
+                <nuxt-img
                   v-for="(image, index) in product?.images || []"
                   :key="image.id"
                   width="150"
-                  alt=""
+                  :alt="product!.title + index"
                   :src="image.url"
+                  format="webp"
+                  quality="50"
+                  size="150"
                   class="cursor-pointer"
                   @click="currentIndex = index"
                   v-show="!loading"
@@ -285,6 +288,7 @@ onMounted(() => {
                       contain
                       class="w-full"
                       :src="image.url"
+                      :alt="product!.title + index"
                       @click="showOverlay(index)"
                     >
                       <v-overlay
@@ -298,8 +302,9 @@ onMounted(() => {
                           contain
                           :width="width"
                           :height="height"
+                          :alt="product!.title + index"
                           :src="product?.images?.[currentIndex].url"
-                        ></v-img>
+                        />
                       </v-overlay>
                     </v-img>
                   </v-carousel-item>

@@ -11,72 +11,80 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- show-arrows="hover" -->
-  <!-- :height="width * (9 / 16) * 0.7" -->
   <v-carousel
     show-arrows="hover"
     hide-delimiter-background
     interval="3000"
-    :height="Math.round(width * (3 / 10)) + 'px'"
+    height="100%"
     cycle
     class="carousel"
   >
-    <!-- <NuxtLink :to="`/kategoria/pb-nails`">
-      <v-carousel-item
-        src="/public/black-weekend-web2.jpg"
-        contain
-      ></v-carousel-item>
-    </NuxtLink> -->
-    <!-- <NuxtLink :to="`/kategoria/victoria-vynn-black-friday`">
-      <v-carousel-item src="/public/unnamed.jpg" contain></v-carousel-item>
-    </NuxtLink> -->
     <NuxtLink :to="`/kategoria/victoria-vynn-forget-me-nude`">
-      <!-- <v-carousel-item
-        src="/public/forgetmenude2.webp"
-        contain
-      ></v-carousel-item> -->
       <v-carousel-item>
-        <NuxtImg
+        <nuxt-img
           src="/forgetmenude.webp"
           loading="eager"
           importance="high"
-          width="2000"
-          height="600"
-          fit="contain"
+          alt="vv-forget-me-nude"
+          format="webp"
+          quality="80"
+          class="w-full h-full object-cover"
+          :sizes="[320, 640, 768, 1024, 1280, 2000]"
+          fit="cover"
         />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
-      <!-- src="/public/web.webp" contain -->
       <v-carousel-item>
-        <NuxtImg
+        <nuxt-img
           src="/web.webp"
           loading="lazy"
           importance="low"
-          width="2000"
-          height="600"
-          fit="contain"
+          alt="pb-nails-nowe-ceny"
+          format="webp"
+          quality="80"
+          class="w-full h-full object-cover"
+          :sizes="[320, 640, 768, 1024, 1280, 2000]"
+          fit="cover"
         />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-mousse`">
-      <v-carousel-item
-        src="/public/vynn_vv_MOUSSE_HDT_FREE_banery_dystr_www_2000x600.webp"
-        contain
-      ></v-carousel-item>
+      <v-carousel-item>
+        <nuxt-img
+          src="/vynn_vv_MOUSSE_HDT_FREE_banery_dystr_www_2000x600.webp"
+          loading="lazy"
+          importance="low"
+          alt="vv-mousse"
+          format="webp"
+          quality="80"
+          class="w-full h-full object-cover"
+          :sizes="[320, 640, 768, 1024, 1280, 2000]"
+          fit="cover"
+        />
+      </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-easy-fiber-gel`">
-      <v-carousel-item
-        src="/public/vynn_vv_EASY_fiber_HDT_FREE_banery_dystr_www_2000x600.webp"
-        contain
-      ></v-carousel-item>
+      <v-carousel-item>
+        <nuxt-img
+          src="/vynn_vv_EASY_fiber_HDT_FREE_banery_dystr_www_2000x600.webp"
+          loading="lazy"
+          importance="low"
+          alt="vv-easy-fiber"
+          format="webp"
+          quality="80"
+          class="w-full h-full object-cover"
+          :sizes="[320, 640, 768, 1024, 1280, 2000]"
+          fit="cover"
+        />
+      </v-carousel-item>
     </NuxtLink>
   </v-carousel>
 </template>
 
 <style lang="scss" scoped>
 .carousel-item-component {
-  width: 100%;
+  width: 100vw;
   display: flex;
   align-items: start;
   height: 100%;

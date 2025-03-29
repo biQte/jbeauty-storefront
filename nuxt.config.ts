@@ -149,6 +149,9 @@ font-src * data: blob: 'unsafe-inline';
     routeRules: {
       "/api/**": { cors: true },
     },
+    prerender: {
+      routes: ["/blog"],
+    },
     // baseURL: process.env.NUXT_STORE_URL,
   },
   compatibilityDate: "2024-07-09",
@@ -204,6 +207,18 @@ font-src * data: blob: 'unsafe-inline';
     },
   },
 
+  image: {
+    provider: "ipx",
+    domains: ["api.jbeautysklep.pl", "https://api.jbeautysklep.pl"],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+    },
+  },
+
   // seo: {
   //   enabled: true,
   // },
@@ -248,6 +263,21 @@ font-src * data: blob: 'unsafe-inline';
         },
       },
     },
+    // build: {
+    //   rollupOptions: {
+    //     output: {
+    //       manualChunks(id) {
+    //         if (id.includes("node_modules")) {
+    //           // dziel paczki zależności
+    //           if (id.includes("vue")) return "vue";
+    //           if (id.includes("lodash")) return "lodash";
+    //           if (id.includes("@headlessui")) return "headlessui";
+    //           return "vendor";
+    //         }
+    //       },
+    //     },
+    //   },
+    // },
   },
   gtag: {
     id:
