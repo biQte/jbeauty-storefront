@@ -150,7 +150,7 @@ font-src * data: blob: 'unsafe-inline';
       "/api/**": { cors: true },
     },
     prerender: {
-      routes: ["/blog"],
+      routes: ["/blog", "/blog/*"],
     },
     // baseURL: process.env.NUXT_STORE_URL,
   },
