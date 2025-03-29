@@ -67,10 +67,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 
 <template>
   <div class="index-wrapper">
-    <div
-      class="carousel-placeholder"
-      :style="{ minHeight: carouselHeight + 'px' }"
-    >
+    <div class="carousel-placeholder">
       <TheMainPageCarousel />
     </div>
     <div class="bestsellers-wrapper">
@@ -131,12 +128,18 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 <style lang="scss" scoped>
 .index-wrapper {
   .carousel-placeholder {
-    width: 100%;
-    min-height: 400px;
+    width: 100vw;
+    // min-height: 600px;
 
-    @media only screen and (max-width: 720px) {
-      min-height: 100px;
-    }
+    height: calc(100vw * (3 / 10));
+
+    // @media only screen and (max-width: 1400px) {
+    //   min-height: 300px;
+    // }
+
+    // @media only screen and (max-width: 720px) {
+    //   min-height: 100px;
+    // }
   }
   .bestsellers-wrapper,
   .recently-viewed-wrapper {
