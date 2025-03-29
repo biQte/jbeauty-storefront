@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import { type StoreProduct } from "@medusajs/types";
-import { ROUTES } from "../constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 const props = defineProps<{
   products: StoreProduct[] | null;
@@ -14,23 +14,22 @@ const snackbarStore = useSnackbarStore();
 const sessionStore = useSessionStore();
 const router = useRouter();
 const { width } = useWindowSize();
-const isPaused = ref(false); // Flaga do kontrolowania pauzy karuzeli
-const showDialog = ref<boolean>(false);
+const showDialog = ref(false);
 const currentlyAddedProductTitle = ref<string>();
+const isHovered = ref<number | null>(null);
+const isPaused = ref(false);
 
-const chunkedProducts = computed(() => {
-  const chunkSize =
-    width.value >= 1600
-      ? 4
-      : width.value >= 1140
-      ? 3
-      : width.value >= 720
-      ? 2
-      : 1;
-  return props.products ? chunkArray(props.products, chunkSize) : [];
+const visibleCount = computed(() => {
+  return width.value >= 1600
+    ? 4
+    : width.value >= 1140
+    ? 3
+    : width.value >= 720
+    ? 2
+    : 1;
 });
 
-function chunkArray(arr: any[], size: number) {
+function chunkArray<T>(arr: T[], size: number): T[][] {
   return arr.length
     ? Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
         arr.slice(i * size, i * size + size)
@@ -38,23 +37,61 @@ function chunkArray(arr: any[], size: number) {
     : [];
 }
 
+const chunkedProducts = computed(() =>
+  props.products ? chunkArray(props.products, visibleCount.value) : []
+);
+
+const currentSlide = ref(0);
+let intervalId: ReturnType<typeof setInterval>;
+
+onMounted(() => {
+  intervalId = setInterval(() => {
+    if (!isPaused.value) nextSlide();
+  }, 6000);
+});
+
+onUnmounted(() => clearInterval(intervalId));
+
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % chunkedProducts.value.length;
+};
+
+const prevSlide = () => {
+  currentSlide.value =
+    (currentSlide.value - 1 + chunkedProducts.value.length) %
+    chunkedProducts.value.length;
+};
+
+const goToSlide = (index: number) => {
+  currentSlide.value = index;
+};
+
+const formatPrice = (value?: number | null) => {
+  if (!value) return "";
+  return new Intl.NumberFormat("pl-PL", {
+    style: "currency",
+    currency: "PLN",
+  }).format(value);
+};
+
 const addToCart = async (product: StoreProduct) => {
   currentlyAddedProductTitle.value = product.title;
   try {
-    const variantId = product!.variants![0].id;
+    const variantId = product.variants![0].id;
 
-    if (cartStore.cartObject === null || cartStore.cartObject === undefined) {
+    if (!cartStore.cartObject) {
       await cartStore.createCart(undefined);
     }
 
-    if (
-      cartStore.cartObject?.items?.find((item) => item.variant_id === variantId)
-    ) {
-      const item = cartStore.cartObject?.items?.find(
-        (item) => item.variant_id === variantId
-      );
+    const existingItem = cartStore.cartObject?.items?.find(
+      (item) => item.variant_id === variantId
+    );
 
-      await cartStore.updateLineItem(item!.id, item!.quantity++);
+    if (existingItem) {
+      await cartStore.updateLineItem(
+        existingItem.id,
+        existingItem.quantity + 1
+      );
     } else {
       await cartStore.addLineItem(variantId, 1);
       if (sessionStore.session && !cartStore.cartObject?.email) {
@@ -71,201 +108,227 @@ const addToCart = async (product: StoreProduct) => {
     showDialog.value = true;
   } catch (e) {
     const { message, color, timeout } = handleFetchError(e);
-    if (message !== "") snackbarStore.showSnackbar(message, color, timeout);
+    if (message) snackbarStore.showSnackbar(message, color, timeout);
+  }
+};
+
+let touchStartX = 0;
+let touchEndX = 0;
+const handleTouchStart = (e: TouchEvent) => {
+  touchStartX = e.changedTouches[0].screenX;
+};
+const handleTouchEnd = (e: TouchEvent) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleGesture();
+};
+const handleGesture = () => {
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) nextSlide();
+    else prevSlide();
   }
 };
 </script>
 
 <template>
-  <v-carousel
-    v-if="loading || chunkedProducts.length"
-    hide-delimiter-background
-    hide-delimiters
-    show-arrows
-    interval="5000"
-    :cycle="!isPaused"
-  >
-    <template v-if="loading">
-      <v-carousel-item
-        v-for="n in width >= 1600
-          ? 4
-          : width >= 1140
-          ? 3
-          : width >= 720
-          ? 2
-          : 1"
-        :key="'skeleton-' + n"
+  <div class="relative w-full overflow-hidden pb-20">
+    <div
+      class="flex transition-transform duration-700 ease-in-out"
+      :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
+      @mouseenter="isPaused = true"
+      @mouseleave="isPaused = false"
+      @touchstart.passive="handleTouchStart"
+      @touchend.passive="handleTouchEnd"
+    >
+      <div
+        v-for="(chunk, chunkIndex) in chunkedProducts"
+        :key="chunkIndex"
+        class="flex gap-6 justify-center min-w-full"
       >
-        <v-card width="340px">
-          <v-skeleton-loader type="image" :width="340" :height="340" />
-          <v-skeleton-loader type="heading" />
-          <v-skeleton-loader type="text" />
-        </v-card>
-      </v-carousel-item>
-    </template>
-
-    <template v-else>
-      <v-carousel-item
-        v-for="(productChunk, index) in chunkedProducts"
-        :key="index"
-      >
-        <div class="product-chunk">
-          <v-card
-            v-for="(product, productIndex) in productChunk"
-            :key="product.id"
-            class="product-card"
-            width="340px"
-            @mouseenter="isPaused = true"
-            @mouseleave="isPaused = false"
+        <div
+          v-for="(product, index) in chunk"
+          :key="product.id"
+          class="bg-white rounded-lg shadow hover:shadow-md overflow-hidden flex flex-col transition-transform hover:-translate-y-1 w-[340px]"
+        >
+          <NuxtLink
+            :to="`/produkt/${product.handle}`"
+            class="flex flex-col flex-grow"
           >
-            <NuxtLink :to="`/produkt/${product.handle}`">
-              <NuxtImg
+            <div
+              class="w-full aspect-square bg-gray-100 flex items-center justify-center overflow-hidden"
+            >
+              <nuxt-img
                 :src="product.thumbnail!"
-                :loading="index === 0 && productIndex === 0 ? 'eager' : 'lazy'"
-                :importance="
-                  index === 0 && productIndex === 0 ? 'high' : 'auto'
-                "
-                cover
-                width="340"
-                height="340"
+                class="object-contain w-full h-full"
+                :alt="product.title"
+                format="webp"
+                quality="20"
+                size="340"
               />
-              <v-card-item>
-                <v-card-title
-                  ><h2>{{ product.title }}</h2></v-card-title
+            </div>
+
+            <div class="flex-grow flex flex-col px-4 pt-2 pb-4">
+              <h2 class="text-sm font-medium line-clamp-2">
+                {{ product.title }}
+              </h2>
+
+              <div class="flex gap-2 items-center mt-auto">
+                <span
+                  class="text-lg font-semibold"
+                  :class="{
+                    'text-gray-400 line-through':
+                      product.variants?.[0].calculated_price?.calculated_price
+                        ?.price_list_type === 'sale',
+                  }"
                 >
-                <v-card-subtitle>
-                  <span
-                    class="product-price"
-                    :class="{
-                      strike:
-                        product.variants?.[0].calculated_price?.calculated_price?.price_list_type === 'sale' &&
-                        product.variants?.[0].inventory_quantity! > 0 &&
-                        product.variants?.[0].calculated_price?.original_amount !==
-                          product.variants?.[0].calculated_price.calculated_amount,
-                    }"
-                  >
-                    {{
-                      new Intl.NumberFormat("pl-PL", {
-                        style: "currency",
-                        currency: "PLN",
-                      }).format(
-                        product.variants?.[0].calculated_price?.original_amount!
-                      )
-                    }}
-                  </span>
-                  <span
-                    v-if="
-                      product.variants?.[0].calculated_price?.calculated_price?.price_list_type === 'sale' &&
-                      product.variants?.[0].inventory_quantity! > 0 &&
-                      product.variants?.[0].calculated_price?.original_amount !==
-                        product.variants?.[0].calculated_price.calculated_amount
-                    "
-                    class="sale-price"
-                  >
-                    &nbsp;{{
-                      new Intl.NumberFormat("pl-PL", {
-                        style: "currency",
-                        currency: "PLN",
-                      }).format(
-                        Number(
-                          product.variants?.[0].calculated_price
-                            ?.calculated_amount
-                        )
-                      )
-                    }}
-                  </span>
-                  <b v-if="product.variants?.[0].inventory_quantity! < 1">
-                    - Chwilowo niedostępny</b
-                  >
-                </v-card-subtitle>
-              </v-card-item>
-            </NuxtLink>
+                  {{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      product.variants?.[0].calculated_price?.original_amount!
+                    )
+                  }}
+                </span>
 
-            <!-- PRZYCISK SZYBKIEGO DODAWANIA DO KOSZYKA (ZAWSZE WIDOCZNY) -->
-            <v-btn
-              class="quick-add-btn"
-              icon
-              size="small"
-              type="text"
-              v-if="product.variants?.[0].inventory_quantity! >= 1"
-              @click.stop="addToCart(product)"
-            >
-              <v-icon color="primary">mdi-cart</v-icon>
-            </v-btn>
+                <span
+                  v-if="
+                    product.variants?.[0].calculated_price?.calculated_price
+                      ?.price_list_type === 'sale'
+                  "
+                  class="text-lg font-bold text-[#ff5c8a]"
+                >
+                  {{
+                    new Intl.NumberFormat("pl-PL", {
+                      style: "currency",
+                      currency: "PLN",
+                    }).format(
+                      Number(
+                        product.variants?.[0].calculated_price
+                          ?.calculated_amount
+                      )
+                    )
+                  }}
+                </span>
+              </div>
+            </div>
+          </NuxtLink>
 
-            <v-dialog
-              v-model="showDialog"
-              width="auto"
-              persistent
-              transition="dialog-top-transition"
-            >
-              <v-card
-                max-width="500"
-                prepend-icon="mdi-cart-outline"
-                :text="currentlyAddedProductTitle"
-                title="Dodano do koszyka"
-              >
-                <template v-slot:actions>
-                  <div class="added-to-cart-modal-actions">
-                    <v-btn @click="showDialog = false" color="success"
-                      >Kontynuuj zakupy</v-btn
-                    >
-                    <v-btn @click="router.push(ROUTES.CART_PAGE)"
-                      >Przejdź do koszyka</v-btn
-                    >
-                  </div>
-                </template>
-              </v-card>
-            </v-dialog>
-          </v-card>
+          <button
+            class="text-sm w-full py-2 rounded-b-lg font-semibold transition-colors"
+            :class="{
+      'bg-[#ff5c8a] hover:bg-pink-600 text-white': product.variants?.[0].inventory_quantity! > 0,
+      'bg-gray-300 text-gray-500 cursor-not-allowed': product.variants?.[0].inventory_quantity! < 1,
+    }"
+            :disabled="product.variants?.[0].inventory_quantity! < 1"
+            @click="addToCart(product)"
+          >
+            {{
+              product.variants?.[0].inventory_quantity! > 0
+                ? "Dodaj do koszyka"
+                : "Chwilowo niedostępny"
+            }}
+          </button>
         </div>
-      </v-carousel-item>
-    </template>
-  </v-carousel>
+      </div>
+    </div>
+
+    <!-- Strzałki -->
+    <button
+      @click="prevSlide"
+      class="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-50 border border-gray-300"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 text-gray-700"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+    <button
+      @click="nextSlide"
+      class="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-50 border border-gray-300"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 text-gray-700"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
+
+    <!-- Kropeczki -->
+    <div class="flex justify-center gap-2 mt-6 pb-6">
+      <span
+        v-for="(dot, i) in chunkedProducts.length"
+        :key="i"
+        class="w-3 h-3 rounded-full cursor-pointer"
+        :class="{
+          'bg-[#ff5c8a]': currentSlide === i,
+          'bg-gray-300': currentSlide !== i,
+        }"
+        @click="goToSlide(i)"
+      ></span>
+    </div>
+
+    <!-- Dialog dodania -->
+    <v-dialog
+      v-model="showDialog"
+      width="auto"
+      persistent
+      transition="dialog-top-transition"
+    >
+      <v-card
+        max-width="500"
+        prepend-icon="mdi-cart-outline"
+        :text="currentlyAddedProductTitle"
+        title="Dodano do koszyka"
+      >
+        <template v-slot:actions>
+          <div class="added-to-cart-modal-actions">
+            <v-btn @click="showDialog = false" color="success"
+              >Kontynuuj zakupy</v-btn
+            >
+            <v-btn @click="router.push(ROUTES.CART_PAGE)"
+              >Przejdź do koszyka</v-btn
+            >
+          </div>
+        </template>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
-<style lang="scss" scoped>
-.product-chunk {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-}
-
-.product-card {
-  position: relative;
+<style scoped>
+.line-clamp-2 {
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-/* Przycisk dodawania do koszyka zawsze widoczny */
-.quick-add-btn {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  // background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  z-index: 1000;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
 }
-
-/* Gwarancja widoczności */
-.product-card:hover .quick-add-btn {
-  opacity: 1;
-}
-
-.strike {
-  text-decoration: line-through;
-}
-
-.sale-price {
-  font-size: 1.2rem;
-  color: $primary-color;
-}
-
-h2 {
-  font-size: 1rem !important;
-}
-
-.product-price {
-  font-size: 1rem !important;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
