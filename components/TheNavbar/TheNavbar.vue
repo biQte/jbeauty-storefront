@@ -104,28 +104,28 @@ onMounted(async () => {
       <div class="hamburger-and-logo-wrapper">
         <v-menu
           v-model="mobileMenu"
-          location="end"
-          :min-height="height"
+          location="start"
           :width="width"
           scrim="#FFFFFF"
-          opacity="100"
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ props }">
             <v-btn variant="text" icon="mdi-menu" v-bind="props"></v-btn>
           </template>
-          <v-card
-            :min-height="height"
-            min-width="350px"
-            :width="width * 0.9"
-            class="menu-card"
-          >
+          <v-card min-width="350px" :width="width" class="menu-card">
             <v-btn
               icon="mdi-close"
               variant="text"
               @click="mobileMenu = false"
             ></v-btn>
             <ul class="mobile-menu">
+              <v-btn
+                to="/"
+                @click="closeMenu"
+                class="mobile-menu-item"
+                variant="text"
+                >Strona główna</v-btn
+              >
               <ul class="product-categories">
                 <TheNavbarMobileCategoryItem
                   :category="productCategories[0]"
@@ -384,6 +384,7 @@ onMounted(async () => {
       align-items: center;
       justify-content: center;
       .logo {
+        padding-left: 15px;
         font-size: 2rem;
         font-family: "Great Vibes", cursive;
       }
