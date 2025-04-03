@@ -23,7 +23,7 @@ const lastName = ref<string>(sessionStore.session?.last_name!);
 
 const config = useRuntimeConfig();
 
-if (route.query.showOrders) {
+if (route.query.showorders) {
   showOrders.value = true;
 }
 
