@@ -183,7 +183,7 @@ const currentYear = new Date().getFullYear();
         <h4 class="text-lg font-semibold mb-3">Dane osobowe</h4>
         <ul class="space-y-2 text-sm">
           <li><NuxtLink to="/konto">Konto</NuxtLink></li>
-          <li><NuxtLink to="/konto?showOrders=true">Zamówienia</NuxtLink></li>
+          <li><NuxtLink to="/konto?showorders=true">Zamówienia</NuxtLink></li>
         </ul>
       </div>
 
