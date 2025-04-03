@@ -13,11 +13,12 @@ const cartStore = useCartStore();
 const snackbarStore = useSnackbarStore();
 const sessionStore = useSessionStore();
 const router = useRouter();
-const { width } = useWindowSize();
+const { width } = useWindowSize({ initialWidth: 390 });
 const showDialog = ref(false);
 const currentlyAddedProductTitle = ref<string>();
 const isHovered = ref<number | null>(null);
 const isPaused = ref(false);
+const isClient = ref(false);
 
 const visibleCount = computed(() => {
   return width.value >= 1600
@@ -38,13 +39,19 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
 }
 
 const chunkedProducts = computed(() =>
-  props.products ? chunkArray(props.products, visibleCount.value) : []
+  props.products && isClient.value
+    ? chunkArray(props.products, visibleCount.value)
+    : []
 );
 
 const currentSlide = ref(0);
 let intervalId: ReturnType<typeof setInterval>;
 
 onMounted(() => {
+  isClient.value = true;
+  nextTick(() => {
+    currentSlide.value = 0;
+  });
   intervalId = setInterval(() => {
     if (!isPaused.value) nextSlide();
   }, 6000);
