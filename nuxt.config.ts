@@ -119,6 +119,12 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/produkt/pb-nails-limitowany-lakier-hybrydowy-drop-10-golden-hour-5ml": {
+      redirect: {
+        to: "/kategoria/lakiery-hybrydowe",
+        statusCode: 301,
+      },
+    },
   },
   runtimeConfig: {
     public: {
