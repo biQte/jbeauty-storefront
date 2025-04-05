@@ -16,7 +16,7 @@ export default defineNuxtPlugin(() => {
   })(
     window,
     document,
-    `https://static.hj.contentsquare.net/c/csq-5362100`,
+    `https://static.hj.contentsquare.net/c/csq-`,
     ".js",
     5362100
   );
