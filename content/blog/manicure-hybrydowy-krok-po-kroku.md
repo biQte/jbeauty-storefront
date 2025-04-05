@@ -6,11 +6,11 @@ draft: false
 tags:
   [
     "manicure",
-    "manicurehybrydowy",
+    "manicure hybrydowy",
     "hybryda",
     "paznokcie",
-    "stylizacjapaznokci",
-    "krokpokroku",
+    "stylizacja paznokci",
+    "krok po kroku",
     "diy",
     "uroda",
     "kosmetyki",
