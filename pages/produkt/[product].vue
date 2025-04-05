@@ -309,7 +309,13 @@ onMounted(() => {
                 <v-carousel
                   :height="null"
                   hide-delimiters
-                  :show-arrows="product?.images?.length > 1 ? 'hover' : false"
+                  :show-arrows="
+                    product?.images?.length > 1
+                      ? width <= 1024
+                        ? true
+                        : 'hover'
+                      : false
+                  "
                   v-show="!loading"
                   v-model="currentIndex"
                 >
