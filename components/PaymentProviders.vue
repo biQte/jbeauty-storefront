@@ -1,7 +1,10 @@
 <template>
   <div class="w-full mt-4">
     <!-- WRAPPER dla resetu stylu rodzica -->
-    <div class="w-full flex justify-center lg:justify-start">
+    <div
+      class="w-full flex flex-col gap-2 items-center lg:items-start justify-center lg:justify-start"
+    >
+      Akceptujemy płatności:
       <div
         class="flex flex-wrap items-center lg:justify-items-start lg:w-full gap-2"
       >
