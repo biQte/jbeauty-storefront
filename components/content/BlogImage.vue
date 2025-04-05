@@ -3,6 +3,10 @@ defineProps({
   src: String,
   alt: String,
   align: String,
+  height: {
+    type: Number,
+    required: false,
+  },
 });
 </script>
 
@@ -10,7 +14,7 @@ defineProps({
   <div class="blog-image-container" :class="align">
     <v-img
       min-height="100"
-      min-width="200"
+      :height="height ? height : ''"
       :src="src"
       :alt="alt"
       contain
@@ -45,6 +49,7 @@ defineProps({
   float: right !important;
   margin-left: 1rem !important;
   width: 50% !important;
+  width: auto !important;
   @media only screen and (max-width: 720px) {
     width: 100% !important;
     text-align: center !important;
