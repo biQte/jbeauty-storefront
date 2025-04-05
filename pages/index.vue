@@ -113,9 +113,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
             :loading="false"
             v-if="recentlyViewedProducts"
           />
-          <p v-else>
-            Zacznij przeglądać produkty aby zaczęły się tutaj pojawiać
-          </p>
+          <p v-else>Przeglądaj produkty, aby zaczęły się tutaj wyświetlać.</p>
         </template>
         <template #fallback>
           <ProductCarouselSkeletonLoader />

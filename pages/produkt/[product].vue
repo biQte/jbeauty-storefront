@@ -572,7 +572,7 @@ onMounted(() => {
         :loading="false"
         v-if="recentlyViewedProducts"
       />
-      <p v-else>Zacznij przeglądać produkty aby zaczęły się tutaj pojawiać</p>
+      <p v-else>Przeglądaj produkty, aby zaczęły się tutaj wyświetlać.</p>
     </div>
   </div>
 </template>
