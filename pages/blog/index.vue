@@ -18,8 +18,6 @@ const { data: posts } = await useAsyncData("blog", async () => {
 //   posts.value = data.value || [];
 // }
 
-console.log(posts.value);
-
 const { width } = useWindowSize();
 
 useSeoMeta({
