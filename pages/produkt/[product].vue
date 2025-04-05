@@ -21,6 +21,15 @@ const showDescription = ref<boolean>(true);
 const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
+
+const { data: products, error } = await useFetch(
+  `/api/products/${route.params.product}`,
+  {
+    server: true,
+    immediate: true,
+  }
+);
+
 // const customText = ref("");
 // const customTextError = ref(false);
 
@@ -49,12 +58,16 @@ const findDeepestProductCategory = () => {
   return deepestCategory;
 };
 
-const { data: products, error } = await useFetch(
-  `/api/products/${route.params.product}`,
-  {
-    server: true,
-  }
-);
+// if (error) {
+//   console.log("pogo pogo pogo", error);
+//   snackbarStore.showSnackbar(
+//     "Nie znaleziono produktu, sprawdź czy adres jest poprawny",
+//     "error",
+//     5000
+//   );
+//   // router.push(ROUTES.NOT_FOUND);
+//   throw error;
+// }
 
 if (!products)
   snackbarStore.showSnackbar("Nie znaleziono produktu", "error", 5000);
@@ -410,6 +423,7 @@ onMounted(() => {
               ></v-btn>
             </div>
           </div>
+          <PaymentProviders />
         </div>
       </div>
 
