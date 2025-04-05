@@ -38,7 +38,8 @@ const { width, height } = useWindowSize();
 
 <script setup lang="ts">
 const route = useRoute();
-const { data: post } = await useAsyncData(
+const post = ref();
+const { data: postData } = await useAsyncData(
   "post",
   async () =>
     await queryCollection("blog")
@@ -46,6 +47,18 @@ const { data: post } = await useAsyncData(
       .where("handle", "=", `${route.params.post}`)
       .first()
 );
+
+if (postData.value) {
+  post.value = postData.value;
+} else {
+  post.value = null;
+}
+
+watchEffect(() => {
+  if (post.value) {
+    post.value = postData.value;
+  }
+});
 
 // const { data: post } = await useAsyncData("post", () =>
 //   $fetch(`/api/blog/${route.params.post}`)
