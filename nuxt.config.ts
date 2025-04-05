@@ -156,7 +156,12 @@ font-src * data: blob: 'unsafe-inline';
       "/api/**": { cors: true },
     },
     prerender: {
-      routes: ["/blog", "/blog/**.*"],
+      routes: [
+        "/blog",
+        "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start",
+        "/blog/manicure-hybrydowy-krok-po-kroku",
+        "/blog/tiksotropia-w-zelach-do-stylizacji-paznokci",
+      ],
     },
     // baseURL: process.env.NUXT_STORE_URL,
   },
