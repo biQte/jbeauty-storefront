@@ -258,7 +258,7 @@ onMounted(() => {
       <div class="flex flex-col lg:flex-row">
         <div class="lg:w-3/5 lg:pr-14">
           <div class="flex">
-            <div class="hidden lg:flex flex-col items-center mr-4">
+            <!-- <div class="hidden lg:flex flex-col items-center mr-4">
               <div
                 class="w-auto h-full object-center object-cover px-4 space-y-4"
               >
@@ -280,13 +280,34 @@ onMounted(() => {
                   class="w-24 h-24 bg-gray-200 animate-pulse"
                 ></div>
               </div>
+            </div> -->
+            <!-- DESKTOP (po lewej) -->
+            <div class="hidden lg:flex flex-col items-center mr-4">
+              <div
+                class="w-auto h-full object-center object-cover px-4 space-y-4"
+              >
+                <nuxt-img
+                  v-for="(image, index) in product?.images || []"
+                  :key="image.id"
+                  width="150"
+                  :alt="product!.title + index"
+                  :src="image.url"
+                  format="webp"
+                  quality="50"
+                  size="150"
+                  class="cursor-pointer"
+                  @click="currentIndex = index"
+                />
+              </div>
             </div>
+
             <div
               class="h-auto w-full flex-1 flex flex-col rounded-lg overflow-hidden"
             >
               <div class="w-auto h-full">
                 <!-- @vue-expect-error -->
                 <v-carousel
+                  :height="null"
                   hide-delimiters
                   :show-arrows="product?.images?.length > 1 ? 'hover' : false"
                   v-show="!loading"
@@ -326,6 +347,22 @@ onMounted(() => {
                   v-show="loading"
                   class="w-full h-64 bg-gray-200 animate-pulse"
                 ></div>
+
+                <!-- MOBILKI (pod dużym zdjęciem) -->
+                <div class="flex lg:hidden justify-center flex-wrap gap-2 mt-4">
+                  <nuxt-img
+                    v-for="(image, index) in product?.images || []"
+                    :key="'mobile-' + image.id"
+                    width="80"
+                    :alt="product!.title + index"
+                    :src="image.url"
+                    format="webp"
+                    quality="50"
+                    size="80"
+                    class="cursor-pointer border border-gray-200 rounded"
+                    @click="currentIndex = index"
+                  />
+                </div>
               </div>
             </div>
           </div>
