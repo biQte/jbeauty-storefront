@@ -16,8 +16,8 @@ export default defineNuxtPlugin(() => {
   })(
     window,
     document,
-    "https://static.hj.contentsquare.net/c/csq-",
+    `https://static.hj.contentsquare.net/c/csq-5362100`,
     ".js",
-    process.env.NUXT_HOTJAR_ID
+    5362100
   );
 });
