@@ -125,6 +125,12 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/kody-rabatowe": {
+      redirect: {
+        to: "/",
+        statusCode: 301,
+      },
+    },
   },
   runtimeConfig: {
     public: {
@@ -157,6 +163,17 @@ font-src * data: blob: 'unsafe-inline';
     },
     prerender: {
       routes: [
+        "/",
+        "/regulamin",
+        "/kontakt",
+        "/login",
+        "/rejestracja",
+        "/polityka-prywatnosci",
+        "/nie-pamietam-hasla",
+        "/konto",
+        "/resetowanie-hasla",
+        "/wyprzedaz",
+        "/nowosci",
         "/blog",
         "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start",
         "/blog/manicure-hybrydowy-krok-po-kroku",
