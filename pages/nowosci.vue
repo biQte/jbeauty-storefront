@@ -21,6 +21,7 @@ const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
 const router = useRouter();
+const fetchedOnce = ref(false);
 
 const { data: newProducts, error } = await useFetch(
   `/api/products/new?limit=40`,
@@ -44,7 +45,7 @@ useHead({
   ],
 });
 
-onMounted(() => {
+onMounted(async () => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {
     item_list_name: "Nowości",
@@ -55,6 +56,21 @@ onMounted(() => {
       quantity: 1,
     })),
   });
+
+  if (fetchedOnce.value) return;
+  fetchedOnce.value = true;
+
+  const { data: clientNewProducts, error } = await useFetch(
+    `/api/products/new?limit=40`,
+    {
+      credentials: "include",
+    }
+  );
+
+  if (clientNewProducts.value) {
+    await nextTick();
+    products.value = clientNewProducts.value;
+  }
 });
 
 const addToCart = async (product: StoreProduct) => {

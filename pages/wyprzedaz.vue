@@ -27,6 +27,7 @@ const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
 const router = useRouter();
+const fetchedOnce = ref(false);
 
 const infiniteScrollEl = ref<HTMLElement | null>(null);
 useInfiniteScroll(infiniteScrollEl, () => fetchProducts(), { distance: 200 });
@@ -110,7 +111,7 @@ useHead({
   ],
 });
 
-onMounted(() => {
+onMounted(async () => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {
     item_list_name: "Wyprzedaż",
@@ -121,6 +122,28 @@ onMounted(() => {
       quantity: 1,
     })),
   });
+
+  if (fetchedOnce.value) return;
+  fetchedOnce.value = true;
+
+  const { data: clientSaleProducts, error } = await useFetch(
+    `/api/products/sale`,
+    {
+      credentials: "include",
+      query: {
+        offset: 0,
+        limit: 40,
+      },
+    }
+  );
+
+  if (clientSaleProducts.value) {
+    await nextTick();
+    // @ts-expect-error
+    products.value = clientSaleProducts.value.products;
+    // @ts-expect-error
+    totalProducts.value = clientSaleProducts.value.count;
+  }
 });
 
 const addToCart = async (product: StoreProduct) => {

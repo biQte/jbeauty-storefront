@@ -18,6 +18,7 @@ const recommendedProducts = ref();
 const recentlyViewedProducts = ref();
 const nuxtApp = useNuxtApp();
 const width = ref();
+const fetchedOnce = ref(false);
 
 const { recentlyViewed } = useRecentlyViewed();
 
@@ -58,8 +59,50 @@ useHead({
   ],
 });
 
-onMounted(() => {
+onMounted(async () => {
   width.value = useWindowSize().width;
+  if (fetchedOnce.value) return;
+  fetchedOnce.value = true;
+
+  const { data: clientBestsellers } = await useFetch("/api/products/new", {
+    server: false,
+    credentials: "include",
+  });
+
+  // aktualizuj płynnie
+  if (clientBestsellers.value) {
+    await nextTick(); // żeby nie kolidować z renderem
+    bestsellingProducts.value = clientBestsellers.value;
+  }
+
+  const { data: clientRecommended } = await useFetch(
+    "/api/products/recommended",
+    {
+      server: false,
+      credentials: "include",
+    }
+  );
+
+  // aktualizuj płynnie
+  if (clientRecommended.value) {
+    await nextTick(); // żeby nie kolidować z renderem
+    recommendedProducts.value = clientRecommended.value;
+  }
+
+  const { data: clientRecentlyViewed } = await useFetch(
+    "/api/products/by-ids",
+    {
+      server: false,
+      credentials: "include",
+      query: { productIds: recentlyViewedFiltered },
+    }
+  );
+
+  // aktualizuj płynnie
+  if (clientRecentlyViewed.value) {
+    await nextTick(); // żeby nie kolidować z renderem
+    recentlyViewedProducts.value = clientRecentlyViewed.value;
+  }
 });
 
 const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
