@@ -13,13 +13,12 @@ const brands = ref();
 
 const nuxtApp = useNuxtApp();
 const mobileMenu = ref<boolean>(false);
-const isClient = ref(false);
 
-const isMobile = useMediaQuery("(max-width: 1400px)");
-const isMobileComputed = computed(() => (isClient ? isMobile.value : false));
 const config = useRuntimeConfig();
-const width = ref();
-const height = ref();
+const { width, height } = useWindowSize({
+  initialWidth: 390,
+  initialHeight: 550,
+});
 
 const results = await Promise.allSettled([
   useFetch(`/api/categories/${config.public.productsCategoryID}`, {
@@ -88,19 +87,15 @@ const closeMenu = () => {
 const cartId = useCookie("cart_id");
 
 onMounted(async () => {
-  isClient.value = true;
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
   }
-
-  width.value = useWindowSize().width;
-  height.value = useWindowSize().height;
 });
 </script>
 
 <template>
   <div class="navbar-wrapper">
-    <div class="mobile-wrapper" v-show="isMobileComputed">
+    <div class="mobile-wrapper" v-show="width <= 1440">
       <div class="hamburger-and-logo-wrapper">
         <v-menu
           v-model="mobileMenu"
@@ -189,7 +184,7 @@ onMounted(async () => {
         <TheNavbarTheMobileNavbarActionList />
       </div>
     </div>
-    <div class="desktop-wrapper" v-show="!isMobileComputed">
+    <div class="desktop-wrapper" v-show="width > 1440">
       <div class="navbar-wrapper-top">
         <NuxtLink to="/"><div class="logo">JBeauty</div></NuxtLink>
         <div class="search-bar">
