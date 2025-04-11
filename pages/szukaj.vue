@@ -30,28 +30,30 @@ const cartStore = useCartStore();
 const sessionStore = useSessionStore();
 const snackbarStore = useSnackbarStore();
 const router = useRouter();
+const isLoading = ref(true);
 
-const { data: searchProducts, error } = await useFetch(`/api/products`, {
-  credentials: "include",
-  query: {
-    q: query.value,
-    limit: limit.value,
-    offset: queryOffset.value,
-  },
-  server: true,
-  immediate: true,
-});
+// const { data: searchProducts, error } = await useFetch(
+//   `/api/products/deep-search`,
+//   {
+//     credentials: "include",
+//     query: {
+//       q: query.value,
+//       limit: limit.value,
+//       offset: queryOffset.value,
+//     },
+//     server: true,
+//     immediate: true,
+//   }
+// );
 
-// @ts-expect-error
-products.value = searchProducts.value.products;
+// products.value = searchProducts.value.products;
 
-queryOffset.value += limit.value;
-// @ts-expect-error
-totalProducts.value = searchProducts.value.count;
+// queryOffset.value += limit.value;
+// totalProducts.value = searchProducts.value.count;
 
-if (products.value.length < limit.value) {
-  allLoaded.value = true;
-}
+// if (products.value.length < limit.value) {
+//   allLoaded.value = true;
+// }
 
 const fetchProducts = async () => {
   try {
@@ -59,7 +61,7 @@ const fetchProducts = async () => {
 
     loading.value = true;
 
-    const result = await $fetch(`/api/products`, {
+    const result = await $fetch(`/api/products/deep-search`, {
       credentials: "include",
       query: {
         q: query.value,
@@ -115,7 +117,7 @@ useHead({
   ],
 });
 
-onMounted(() => {
+onMounted(async () => {
   const { gtag } = useGtag();
   gtag("event", "view_item_list", {
     item_list_name: "Wyniki wyszukiwania: " + query,
@@ -126,6 +128,9 @@ onMounted(() => {
       quantity: 1,
     })),
   });
+
+  await fetchProducts();
+  isLoading.value = false;
 });
 
 const addToCart = async (product: StoreProduct) => {
@@ -178,6 +183,7 @@ watch(
 
 <template>
   <div class="container mx-auto px-4 py-8 max-w-screen-xl">
+    <!-- <div v-if="isLoading"> -->
     <h1 class="text-3xl font-bold mb-6">Wyniki wyszukiwania: {{ query }}</h1>
 
     <div
@@ -308,6 +314,8 @@ watch(
       </v-card>
     </v-dialog>
   </div>
+  <!-- <div v-else>Trwa ładowanie...</div>
+  </div> -->
 </template>
 
 <style lang="scss" scoped>

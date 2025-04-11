@@ -131,6 +131,12 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/produkt/pb-nails-lakier-hybrydowy-ge343-elf-5ml": {
+      redirect: {
+        to: "/kategoria/lakiery-hybrydowe",
+        statusCode: 301,
+      },
+    },
     "/kody-rabatowe": {
       redirect: {
         to: "/",
@@ -426,6 +432,6 @@ font-src * data: blob: 'unsafe-inline';
     sitemap: `${process.env.NUXT_STORE_URL}/sitemap.xml`,
     // disableNuxtContentIntegration: true,
     // disallow: "https://www.*",
-    disallow: [],
+    disallow: ["https://jbeautysklep.pl/szukaj*"],
   },
 });

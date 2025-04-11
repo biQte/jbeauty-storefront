@@ -15,7 +15,9 @@ const search = ref<string>("");
 const results = ref<StoreProduct[]>([]);
 const showMenu = ref(false);
 
-watch(search, async (newSearch) => {
+const debouncedSearch = useDebounce(search, 500);
+
+watch(debouncedSearch, async (newSearch) => {
   if (!newSearch || newSearch.trim().length < 2) {
     showMenu.value = false;
     return;
@@ -25,7 +27,7 @@ watch(search, async (newSearch) => {
     loading.value = true;
 
     // @ts-expect-error
-    const { products } = await $fetch("/api/products", {
+    const { products } = await $fetch("/api/products/deep-search", {
       credentials: "include",
       query: {
         limit: 5,
@@ -140,8 +142,13 @@ const navigateToSearchPage = () => {
         <v-list-item v-if="results.length === 0 && search.length < 2">
           <v-list-item-title>Zacznij pisać aby szukać</v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="results.length === 0 && search.length > 2">
+        <v-list-item
+          v-if="results.length === 0 && search.length > 2 && !loading"
+        >
           <v-list-item-title>Brak wyników</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="loading">
+          <v-list-item-title>Ładowanie...</v-list-item-title>
         </v-list-item>
         <v-list-item v-if="results.length > 0" @click="navigateToSearchPage">
           <v-list-item-title>Zobacz więcej wyników</v-list-item-title>
