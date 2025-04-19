@@ -4,8 +4,6 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
 
-    console.log(query);
-
     const response = await $fetch.raw(
       `${config.public.medusaUrl}/store/shipping-options`,
       {

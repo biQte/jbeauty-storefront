@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event); // Pobranie ciała żądania (działa tylko dla POST/PUT)
 
   try {
-    console.log(authorization);
     // Wykonanie żądania do Medusa API
     const response = await $fetch.raw(
       `${config.public.medusaUrl}/auth/customer/${authProvider}/update`,

@@ -32,7 +32,6 @@ onMounted(async () => {
 
   // @ts-expect-error
   order.value = orderResponse.order as StoreOrder;
-  console.log(order.value);
 });
 </script>
 
