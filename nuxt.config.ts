@@ -119,6 +119,12 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/produkt/victoria-vynn-brillant-gel-26-calcite-8ml": {
+      redirect: {
+        to: "/kategoria/zele-kolorowe",
+        statusCode: 301,
+      },
+    },
     "/produkt/victoria-vynn-brillant-gel-37-heliodor-5g": {
       redirect: {
         to: "/kategoria/zele-kolorowe",
