@@ -19,13 +19,13 @@ onMounted(() => {
     cycle
     class="carousel"
   >
-    <NuxtLink :to="`/kategoria/victoria-vynn-forget-me-nude`">
+    <NuxtLink :to="`/kategoria/victoria-vynn-luna-glass`">
       <v-carousel-item>
         <nuxt-img
-          src="/forgetmenude.webp"
+          src="/luna-glass.webp"
           loading="eager"
           importance="high"
-          alt="vv-forget-me-nude"
+          alt="vv-forget-luna-glass"
           format="webp"
           quality="80"
           class="w-full h-full object-cover"
