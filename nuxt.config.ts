@@ -196,7 +196,7 @@ font-src * data: blob: 'unsafe-inline';
         "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start",
         "/blog/manicure-hybrydowy-krok-po-kroku",
         "/blog/tiksotropia-w-zelach-do-stylizacji-paznokci",
-        "blog/zzadbane-dlonie-jak-skutecznie-pielegnowac-skorki-wokol-paznokci"
+        "/blog/zzadbane-dlonie-jak-skutecznie-pielegnowac-skorki-wokol-paznokci"
       ],
     },
     // baseURL: process.env.NUXT_STORE_URL,
