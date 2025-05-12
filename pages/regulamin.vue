@@ -142,7 +142,7 @@ useHead({
       </li>
       <li>
         Klient może porozumieć się telefonicznie ze Sprzedawcą w godzinach
-        8:00-16:00.
+        10:00-14:00.
       </li>
     </ol>
     <h2>&#167; 4 Wymagania techniczne</h2>
