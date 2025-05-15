@@ -19,64 +19,19 @@ onMounted(() => {
     cycle
     class="carousel"
   >
+    <NuxtLink :to="`/kategoria/victoria-vynn-buildmania`">
+      <v-carousel-item>
+        <TheMainPageCarouselItem desktop="/build-mania-desktop.webp" mobile="build-mania-mobile.webp" alt="vv-buildmania" :is-first="true" />
+      </v-carousel-item>
+    </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-luna-glass`">
       <v-carousel-item>
-        <nuxt-img
-          src="/luna-glass.webp"
-          loading="eager"
-          importance="high"
-          alt="vv-forget-luna-glass"
-          format="webp"
-          quality="80"
-          class="w-full h-full object-cover"
-          :sizes="[320, 640, 768, 1024, 1280, 2000]"
-          fit="cover"
-        />
+        <TheMainPageCarouselItem desktop="/luna-glass.webp" mobile="/luna-glass-mobile.webp" alt="vv-luna-glass" />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
       <v-carousel-item>
-        <nuxt-img
-          src="/web.webp"
-          loading="lazy"
-          importance="low"
-          alt="pb-nails-nowe-ceny"
-          format="webp"
-          quality="80"
-          class="w-full h-full object-cover"
-          :sizes="[320, 640, 768, 1024, 1280, 2000]"
-          fit="cover"
-        />
-      </v-carousel-item>
-    </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-mousse`">
-      <v-carousel-item>
-        <nuxt-img
-          src="/vynn_vv_MOUSSE_HDT_FREE_banery_dystr_www_2000x600.webp"
-          loading="lazy"
-          importance="low"
-          alt="vv-mousse"
-          format="webp"
-          quality="80"
-          class="w-full h-full object-cover"
-          :sizes="[320, 640, 768, 1024, 1280, 2000]"
-          fit="cover"
-        />
-      </v-carousel-item>
-    </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-easy-fiber-gel`">
-      <v-carousel-item>
-        <nuxt-img
-          src="/vynn_vv_EASY_fiber_HDT_FREE_banery_dystr_www_2000x600.webp"
-          loading="lazy"
-          importance="low"
-          alt="vv-easy-fiber"
-          format="webp"
-          quality="80"
-          class="w-full h-full object-cover"
-          :sizes="[320, 640, 768, 1024, 1280, 2000]"
-          fit="cover"
-        />
+        <TheMainPageCarouselItem desktop="/web.webp" mobile="/zele-nizsze-ceny-mobile.webp" alt="pb-nails-nowe-ceny" />
       </v-carousel-item>
     </NuxtLink>
   </v-carousel>
