@@ -174,6 +174,10 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 
     height: calc(100vw * (3 / 10));
 
+    @media (max-width: 767px) {
+      height: calc(100vw * (1.7)); // bardziej pionowy układ
+    }
+
     // @media only screen and (max-width: 1400px) {
     //   min-height: 300px;
     // }
