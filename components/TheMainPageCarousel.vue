@@ -19,9 +19,14 @@ onMounted(() => {
     cycle
     class="carousel"
   >
+    <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'">
+      <v-carousel-item>
+        <TheMainPageCarouselItem desktop="/vv-boost-base.webp" mobile="/vv-boost-base-mobile.webp" alt="vv-boost-base" :is-first="true" />
+      </v-carousel-item>
+    </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-buildmania`">
       <v-carousel-item>
-        <TheMainPageCarouselItem desktop="/build-mania-desktop.webp" mobile="build-mania-mobile.webp" alt="vv-buildmania" :is-first="true" />
+        <TheMainPageCarouselItem desktop="/build-mania-desktop.webp" mobile="build-mania-mobile.webp" alt="vv-buildmania" />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-luna-glass`">
