@@ -298,7 +298,6 @@ const handleGesture = () => {
     <v-dialog
       v-model="showDialog"
       width="auto"
-      persistent
       transition="dialog-top-transition"
     >
       <v-card
