@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo(ROUTES.ROOT_PAGE);
   }
 
-  if (to.path === ROUTES.ACCOUNT_PAGE && !sessionStore.isAuthenticated) {
-    return navigateTo(ROUTES.LOGIN_PAGE);
+  if (to.path.includes(ROUTES.ACCOUNT_PAGE) && !sessionStore.isAuthenticated) {
+    return navigateTo(ROUTES.LOGIN_PAGE + `?redirect=${encodeURIComponent(to.fullPath)}`);
   }
 });
