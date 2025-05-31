@@ -15,8 +15,6 @@ import {
 import type { HttpTypes, CartDTO } from "@medusajs/types";
 import { ROUTES } from "../constants/routes";
 import { FetchError } from "@medusajs/js-sdk";
-// import { Stripe } from "stripe";
-// import { loadStripe } from "@stripe/stripe-js";
 import { useWindowSize } from "@vueuse/core";
 import InpostGeoWidget from "~/components/InpostGeoWidget.vue";
 
@@ -28,30 +26,31 @@ const router = useRouter();
 const route = useRoute();
 const snackbarStore = useSnackbarStore();
 const nuxtApp = useNuxtApp();
-// const stripe = nuxtApp.$stripe;
 const { width, height } = useWindowSize();
-// let stripe: any = null;
 const stripe = nuxtApp.$stripe;
 let elements: any = null;
+const savedAddresses = ref<any[]>([]);
+const selectedAddressId = ref<string | null>(null);
 
-let stripeLoadingSuccess = ref<boolean>(true);
+const fetchSavedAddresses = async () => {
+  const { data, error } = await useFetch('/api/customers/me/addresses', {
+    credentials: 'include',
+  });
+  if (data.value) {
+    savedAddresses.value = data.value;
+  } else {
+    console.error('Błąd pobierania adresów:', error.value);
+  }
+};
 
-// const stripePromise = loadStripe(String(config.public.stripePublicKey));
+let stripeLoadingSuccess = ref<boolean>(true)
 
 const setupStripe = async () => {
-  // stripe = await stripePromise;
-
   if (!stripe) {
     snackbarStore.showSnackbar("Wystąpił nieoczekiwany błąd", "error", 5000);
 
     return;
   }
-
-  // if (!selectedPaymentMethod.value) {
-  //   snackbarStore.showSnackbar("Nie wybrano metody płatności", "error", 5000);
-
-  //   return;
-  // }
 
   await cartStore.fetchCart();
 
@@ -103,20 +102,6 @@ useHead({
   ],
 });
 
-// const locales = [
-//   { country: "Polska", value: "pl" },
-//   { country: "Niemcy", value: "de" },
-// ];
-
-// const country = ref(
-//   cartStore.cartObject?.shipping_address
-//     ? locales.find(
-//         (item) =>
-//           item.value === cartStore.cartObject?.shipping_address?.country_code
-//       )
-//     : locales.find((item) => item.value === "pl")
-// );
-
 const orderDataSchema = yupObject({
   isAuthenticated: yupBoolean(),
   firstName: yupString()
@@ -130,7 +115,7 @@ const orderDataSchema = yupObject({
     .max(100, () => "Podane nazwisko jest za długie")
     .trim(),
   email: yupString()
-    .email()
+    .email("Należy podać poprawny adres email")
     .trim()
     .when("isAuthenticated", {
       is: false,
@@ -145,7 +130,6 @@ const orderDataSchema = yupObject({
     ),
   postalCode: yupString()
     .required("Należy podać kod pocztowy")
-    // .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
     .min(5, "Kod pocztowy jest za krótki")
     .max(6, "Kod pocztowy jest za długi")
     .trim(),
@@ -162,9 +146,6 @@ const orderDataSchema = yupObject({
   houseNumber: yupString()
     .required("Należy podać numer domu/lokalu")
     .max(50, "Podany numer domu/lokalu jest za długi")
-    .trim(),
-  appartmentNumber: yupString()
-    .max(50, "Podany numer apartamentu jest za długi")
     .trim(),
   wantsInvoice: yupBoolean(),
   differentThanShipping: yupBoolean(),
@@ -197,7 +178,6 @@ const orderDataSchema = yupObject({
       otherwise: (schema) => schema.notRequired(),
     }),
   companyPostalCode: yupString()
-    // .matches(/^\d{2}-\d{3}$/, "Kod pocztowy musi być w formacie XX-XXX")
     .min(5, "Kod pocztowy jest za krótki")
     .max(6, "Kod pocztowy jest za długi")
     .trim()
@@ -232,9 +212,6 @@ const orderDataSchema = yupObject({
       then: (schema) => schema.required("Należy podać numer domu/lokalu"),
       otherwise: (schema) => schema.notRequired(),
     }),
-  companyAppartmentNumber: yupString()
-    .max(50, "Podany numer apartamentu jest za długi")
-    .trim(),
 });
 
 const step = ref<number>(1);
@@ -267,7 +244,6 @@ const postalCode = useField<string>("postalCode");
 const city = useField<string>("city");
 const street = useField<string>("street");
 const houseNumber = useField<string>("houseNumber");
-const appartmentNumber = useField<string>("appartmentNumber");
 const phoneNumber = useField<string>("phoneNumber");
 const wantsInvoice = useField<boolean>("wantsInvoice");
 const differentThanShipping = useField<boolean>("differentThanShipping");
@@ -277,7 +253,6 @@ const companyPostalCode = useField<string>("companyPostalCode");
 const companyCity = useField<string>("companyCity");
 const companyStreet = useField<string>("companyStreet");
 const companyhouseNumber = useField<string>("companyHouseNumber");
-const companyAppartmentNumber = useField<string>("companyAppartmentNumber");
 const companyPhoneNumber = useField<string>("companyPhoneNumber");
 
 const parcelLockerName = ref<string>("");
@@ -290,8 +265,6 @@ const showParcelLockerDialog = ref<boolean>(false);
 const showParcelLockerDialogModel = ref<boolean>(true);
 
 function updatePostalCode(value: string) {
-  // if (cartStore.cartObject?.shipping_address?.country_code !== "pl") return;
-
   const digitsOnly = value.replace(/\D/g, "");
 
   if (digitsOnly.length <= 5) {
@@ -376,15 +349,8 @@ watch(
         : "";
       street.value.value = newOptions.cartObject.shipping_address.address_1
         ? newOptions.cartObject.shipping_address.address_1
-            .split(" ")
-            .slice(0, -1)
-            .join(" ")
         : "";
-      houseNumber.value.value = newOptions.cartObject.shipping_address.address_1
-        ? newOptions.cartObject.shipping_address.address_1.split(" ").pop()!
-        : "";
-      appartmentNumber.value.value = newOptions.cartObject.shipping_address
-        .address_2
+      houseNumber.value.value = newOptions.cartObject.shipping_address.address_2
         ? newOptions.cartObject.shipping_address.address_2
         : "";
       phoneNumber.value.value = newOptions.cartObject.shipping_address.phone
@@ -428,16 +394,9 @@ watch(
         companyStreet.value.value = newOptions.cartObject.billing_address
           ?.address_1
           ? newOptions.cartObject.billing_address.address_1
-              .split(" ")
-              .slice(0, -1)
-              .join(" ")
           : "";
         companyhouseNumber.value.value = newOptions.cartObject.billing_address
-          ?.address_1
-          ? newOptions.cartObject.billing_address.address_1.split(" ").pop()!
-          : "";
-        companyAppartmentNumber.value.value = newOptions.cartObject
-          .billing_address?.address_2
+          ?.address_2
           ? newOptions.cartObject.billing_address.address_2
           : "";
         companyPhoneNumber.value.value = newOptions.cartObject.billing_address
@@ -484,10 +443,8 @@ const submitForm = handleSubmit(async (values) => {
       postal_code: postalCode.value.value,
       phone: phoneNumber.value.value,
       city: city.value.value,
-      address_1: street.value.value + " " + houseNumber.value.value,
-      address_2: appartmentNumber.value.value
-        ? appartmentNumber.value.value
-        : undefined,
+      address_1: street.value.value,
+      address_2: houseNumber.value.value,
       company:
         wantsInvoice.value.value && !differentThanShipping.value.value
           ? companyName.value.value
@@ -518,10 +475,8 @@ const submitForm = handleSubmit(async (values) => {
             phone: companyPhoneNumber.value.value,
             city: companyCity.value.value,
             address_1:
-              companyStreet.value.value + " " + companyhouseNumber.value.value,
-            address_2: companyAppartmentNumber.value.value
-              ? companyAppartmentNumber.value.value
-              : undefined,
+              companyStreet.value.value,
+            address_2: companyhouseNumber.value.value,
             company: companyName.value.value,
             metadata: {
               vatNumber: vatNumber.value.value,
@@ -594,14 +549,6 @@ const completeCart = async () => {
   }
 };
 
-// watch(
-//   () => route.params,
-//   async (newParams) => {
-//     if (newParams.redirect_status === "succeeded") {
-//       await completeCart();
-//     }
-//   }
-// );
 onMounted(async () => {
   await cartStore.fetchCart();
 
@@ -612,24 +559,7 @@ onMounted(async () => {
   }
 
   stripeLoadingSuccess.value = false;
-
-  // if (!cartStore.cartObject?.shipping_address) {
-  //   await cartStore.updateCountry("pl");
-  // } else {
-  //   country.value = locales.find(
-  //     (item) =>
-  //       item.value === cartStore.cartObject?.shipping_address?.country_code
-  //   );
-  // }
 });
-
-// watch(country, async (newValue, oldValue) => {
-//   if (oldValue === newValue) return;
-
-//   await cartStore.updateCountry(newValue!.value);
-
-//   await cartStore.getAvailableShippingOptions();
-// });
 
 const prevStep = () => {
   step.value--;
@@ -686,14 +616,6 @@ const nextStep = async () => {
           ? "pp_stripe_stripe"
           : "pp_system_default"
       );
-      // if (
-      //   // @ts-expect-error
-      //   cartStore.cartObject.payment_collection?.payment_sessions?.[0].provider_id.includes(
-      //     "stripe"
-      //   )
-      // ) {
-      //   await setupStripe();
-      // }
       const activePaymentSession =
         cartStore.cartObject.payment_collection?.payment_sessions?.[0];
 
@@ -734,6 +656,7 @@ const nextStep = async () => {
     }
 
     if (step.value === 3) {
+      await maybeSaveAddress();
       await completeCart();
     }
 
@@ -786,6 +709,19 @@ const widgetHtml = ref<string>(
     `
 );
 
+const wasModifiedShipping = ref(false);
+const wasModifiedBilling = ref(false);
+const originalShippingAddressSnapshot = ref<any | null>(null);
+const originalBillingAddressSnapshot = ref<any | null>(null);
+
+function stripEmptyFields(obj: any) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, v]) => v !== '' && v !== null && v !== undefined
+    )
+  );
+}
+
 const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerName.value = name;
   parcelLockerCity.value = addressDetails.city;
@@ -794,67 +730,10 @@ const setOrChangeParcelLocker = (name: any, addressDetails: any) => {
   parcelLockerProvince.value = addressDetails.province;
   parcelLockerStreet.value = addressDetails.street;
   showParcelLockerDialog.value = false;
-
-  // listenForParcelLockerSelect();
 };
-
-// let pointSelectListener: any = null;
-
-// const addEventListenerForPointSelect = () => {
-//   // if (pointSelectListener) {
-//   //   document.removeEventListener("onpointselect", pointSelectListener);
-//   // }
-
-//   pointSelectListener = (event: any) => {
-//     setOrChangeParcelLocker(event.detail.name, event.detail.address_details);
-//   };
-
-//   document.addEventListener("onpointselect", pointSelectListener);
-// };
-
-// watch(showParcelLockerDialog, (newValue) => {
-//   if (newValue) {
-//     // When dialog opens, add event listener
-//     addEventListenerForPointSelect();
-//   } else {
-//     // When dialog closes, remove event listener
-//     if (pointSelectListener) {
-//       document.removeEventListener("onpointselect", pointSelectListener);
-//     }
-//   }
-// });
-
-let parcelLockerEventListener: any = null;
-
-// watch(parcelLockerEventListener, (newValue) => {
-// });
-
-// const listenForParcelLockerSelect = () => {
-//   document.removeEventListener("onpointselect", () => {});
-
-//   document.addEventListener("onpointselect", (event: any) => {
-//     setOrChangeParcelLocker(
-//       event["detail"]["name"],
-//       event["detail"]["address_details"]
-//     );
-//   });
-// };
 
 onMounted(() => {
   isClient.value = true;
-
-  // const widget = document.getElementById("geowidget");
-  // parcelLockerEventListener = document.addEventListener(
-  //   "onpointselect",
-  //   (event) => {
-  //     setOrChangeParcelLocker(
-  //       // @ts-expect-error
-  //       event["detail"]["name"],
-  //       // @ts-expect-error
-  //       event["detail"]["address_details"]
-  //     );
-  //   }
-  // );
 
   document.addEventListener("onpointselect", (event: any) => {
     setOrChangeParcelLocker(
@@ -863,9 +742,120 @@ onMounted(() => {
     );
   });
 
-  // listenForParcelLockerSelect();
-  // addEventListenerForPointSelect();
+  fetchSavedAddresses();
 });
+
+const selectAddress = (address: any) => {
+  selectedAddressId.value = address.id;
+  // Uzupełnij formularz checkoutObject z danymi adresu
+  form.value.first_name = address.first_name;
+  form.value.last_name = address.last_name;
+  form.value.address_1 = address.address_1;
+  form.value.address_2 = address.address_2;
+  form.value.city = address.city;
+  form.value.postal_code = address.postal_code;
+  form.value.country_code = address.country_code;
+  form.value.phone = address.phone;
+  form.value.company = address.company;
+  form.value.metadata = address.metadata;
+};
+
+const handleAddressUpdated = () => {
+  fetchSavedAddresses();
+};
+
+const fillAddressFromSaved = (address: any) => {
+  if(!address.differentThanShipping){
+    firstName.value.value = address.firstName;
+    lastName.value.value = address.lastName;
+    email.value.value = address.email;
+    postalCode.value.value = address.postalCode;
+    city.value.value = address.city;
+    street.value.value = address.street;
+    houseNumber.value.value = address.appartment;
+    phoneNumber.value.value = address.phoneNumber;
+    wantsInvoice.value.value = address.wantsInvoice || false;
+    differentThanShipping.value.value =
+      address.differentThanShipping || false;
+    vatNumber.value.value = address.vatNumber || "";
+    companyName.value.value = address.company || "";
+    companyPostalCode.value.value = address.companyPostalCode || "";
+    companyCity.value.value = address.companyCity || "";
+    companyStreet.value.value = address.companyStreet || "";
+    companyhouseNumber.value.value = address.companyHouseNumber || "";
+    companyPhoneNumber.value.value = address.companyPhoneNumber || "";
+    parcelLockerName.value = address.parcelLockerName || "";
+    parcelLockerCity.value = address.parcelLockerCity || "";
+    parcelLockerPostalCode.value = address.parcelLockerPostalCode || "";
+    parcelLockerBuildingNumber.value =
+      address.parcelLockerBuildingNumber || "";
+    parcelLockerProvince.value = address.parcelLockerProvince || "";
+    parcelLockerStreet.value = address.parcelLockerStreet || "";
+
+    updatePhoneNumber(address.phoneNumber);
+    updatePostalCode(address.postalCode);
+
+    originalShippingAddressSnapshot.value = { ...address };
+    console.log("Address filled from saved address", originalShippingAddressSnapshot.value);
+  }
+  if(address.differentThanShipping){
+    companyName.value.value = address.company;
+    companyPostalCode.value.value = address.postalCode;
+    companyCity.value.value = address.city;
+    companyStreet.value.value = address.street;
+    companyhouseNumber.value.value = address.appartment;
+    companyPhoneNumber.value.value = address.phoneNumber;
+    vatNumber.value.value = address.vatNumber;
+    differentThanShipping.value.value = true;
+    wantsInvoice.value.value = address.wantsInvoice || false;
+
+    updateCompanyPhoneNumber(address.phoneNumber);
+    updateCompanyPostalCode(address.postalCode);
+
+    originalBillingAddressSnapshot.value = { ...address };
+    console.log("Billing address filled from saved address", originalBillingAddressSnapshot.value);
+  }
+};
+
+const maybeSaveAddress = async () => {
+  if (!wasModifiedShipping.value) return;
+
+  const body = {
+    firstName: form.value.firstName,
+    lastName: form.value.lastName,
+    company: form.value.company,
+    address_1: form.value.street,
+    address_2: form.value.appartment,
+    city: form.value.city,
+    country_code: 'pl',
+    postalCode: form.value.postalCode,
+    phoneNumber: form.value.phoneNumber,
+    is_default_billing: false,
+    is_default_shipping: false,
+    metadata: {
+      wantsInvoice: form.value.wantsInvoice,
+      differentThanShipping: form.value.differentThanShipping,
+      vatNumber: form.value.vatNumber,
+      parcelLockerName: form.value.parcelLockerName,
+      parcelLockerCity: form.value.parcelLockerCity,
+      parcelLockerStreet: form.value.parcelLockerStreet,
+      parcelLockerPostalCode: form.value.parcelLockerPostalCode,
+      parcelLockerProvince: form.value.parcelLockerProvince,
+      parcelLockerBuildingNumber: form.value.parcelLockerBuildingNumber
+    }
+  };
+
+  try {
+    await $fetch('/api/customers/me/addresses', {
+      method: 'POST',
+      credentials: 'include',
+      body
+    });
+    console.log('Adres został zapisany jako nowy.');
+  } catch (e) {
+    console.error('Nie udało się zapisać adresu:', e);
+  }
+};
 </script>
 
 <template>
@@ -881,15 +871,6 @@ onMounted(() => {
     <template v-slot:item.1>
       <h3>Dostawa</h3>
       <br />
-      <!-- <v-select
-        v-model="country"
-        label="Kraj"
-        :items="locales"
-        item-title="country"
-        item-value="value"
-        return-object
-        variant="solo"
-      ></v-select> -->
       <v-radio-group
         v-model="selectedShippingOption"
         label="Wybierz metodę dostawy"
@@ -911,6 +892,20 @@ onMounted(() => {
       </v-radio-group>
     </template>
     <template v-slot:item.2>
+      <!-- <div v-if="savedAddresses.length" class="saved-addresses">
+        <p class="mb-2 text-sm font-semibold">Zapisane adresy:</p>
+        <div class="flex flex-wrap gap-2">
+          <SavedAddressCard
+            v-for="addr in savedAddresses"
+            :key="addr.id"
+            v-bind="addr"
+            @selected="selectAddress"
+            @updated="handleAddressUpdated"
+          />
+        </div>
+        <UDivider class="my-6" />
+      </div> -->
+      <CheckoutAddressSelector @fill-form="fillAddressFromSaved" />
       <h2>Dane</h2>
       <br />
       <form @submit.prevent="submit" v-if="displayForm">
@@ -980,13 +975,6 @@ onMounted(() => {
           ></v-text-field>
         </div>
         <div class="input-row">
-          <v-text-field
-            density="compact"
-            class="text-input"
-            v-model="appartmentNumber.value.value"
-            :error-messages="appartmentNumber.errorMessage.value"
-            label="Numer apartamentu"
-          ></v-text-field>
           <v-text-field
             density="compact"
             class="text-input"
@@ -1081,13 +1069,6 @@ onMounted(() => {
             <v-text-field
               density="compact"
               class="text-input"
-              v-model="companyAppartmentNumber.value.value"
-              :error-messages="companyAppartmentNumber.errorMessage.value"
-              label="Numer apartamentu"
-            ></v-text-field>
-            <v-text-field
-              density="compact"
-              class="text-input"
               v-model="companyPhoneNumber.value.value"
               autocomplete="tel-national"
               :error-messages="companyPhoneNumber.errorMessage.value"
@@ -1161,102 +1142,10 @@ onMounted(() => {
                   :token="'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDcyMjI1ODMsImlhdCI6MTczMTg2MjU4MywianRpIjoiNzYzYjgxYmQtNzZmMC00MDhkLWFhMDAtMDJhOWYzMWU3MTI1IiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYTVmMmQyMmEtYzAxMi00NTY5LTk5NmYtZTc0OTA4NTI0NGJjIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImE1ZjJkMjJhLWMwMTItNDU2OS05OTZmLWU3NDkwODUyNDRiYyIsImFsbG93ZWRfcmVmZXJyZXJzIjoiamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.Hi1EmMvBsGwJO8JyaqV0AukG2iWJ9uhSStqBe4MCJG-4i6Ndb4jjEx_tYmUxuymKJeKKnLiti1PnQE3ZOMgFNJsnb1ZPKfcM0kGe-llD5RnbKsBqPQEJYon2vxMAeG_-ZjYy9NjwhhVZ35XD-1ERA-6Ah-7EgquUwl_fgN6i81ameJHD0yu4oci4t_DBMWQ8eHwaL1HOB3uMIksVIVTvbrAU4rZ5WKLSrVpw2j50mWxMAgrk-2c94NnO4zWM8nmjYPjw-H-JkFORLXHDFaQyVdC_aYCvdnJe7l0r2iSAQNvlT_F4iwjc3QKZ0Zfb9yCeVXPzbEBqml9xGenNOSxpyA'"
                 />
               </v-card-text>
-              <!-- <v-card-actions>
-                <v-btn @click="showParcelLockerDialogModel = false"
-                  >Zamknij</v-btn
-                >
-              </v-card-actions> -->
             </v-card>
           </div>
-
-          <!-- <v-dialog
-            max-width="800"
-            v-model="showParcelLockerDialogModel"
-            v-if="showParcelLockerDialog"
-            persistent
-          >
-            <v-card title="Wybierz paczkomat" min-height="500">
-              <InpostGeoWidget
-                :config="'parcelcollect247'"
-                :sandbox="false"
-                :language="'pl'"
-                :token="'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDcyMjI1ODMsImlhdCI6MTczMTg2MjU4MywianRpIjoiNzYzYjgxYmQtNzZmMC00MDhkLWFhMDAtMDJhOWYzMWU3MTI1IiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYTVmMmQyMmEtYzAxMi00NTY5LTk5NmYtZTc0OTA4NTI0NGJjIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImE1ZjJkMjJhLWMwMTItNDU2OS05OTZmLWU3NDkwODUyNDRiYyIsImFsbG93ZWRfcmVmZXJyZXJzIjoiamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.Hi1EmMvBsGwJO8JyaqV0AukG2iWJ9uhSStqBe4MCJG-4i6Ndb4jjEx_tYmUxuymKJeKKnLiti1PnQE3ZOMgFNJsnb1ZPKfcM0kGe-llD5RnbKsBqPQEJYon2vxMAeG_-ZjYy9NjwhhVZ35XD-1ERA-6Ah-7EgquUwl_fgN6i81ameJHD0yu4oci4t_DBMWQ8eHwaL1HOB3uMIksVIVTvbrAU4rZ5WKLSrVpw2j50mWxMAgrk-2c94NnO4zWM8nmjYPjw-H-JkFORLXHDFaQyVdC_aYCvdnJe7l0r2iSAQNvlT_F4iwjc3QKZ0Zfb9yCeVXPzbEBqml9xGenNOSxpyA'"
-              />
-               <div class="geowidget" :v-html="widgetHtml"> 
-               <inpost-geowidget
-                id="geowidget"
-                token="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwNDcyMjI1ODMsImlhdCI6MTczMTg2MjU4MywianRpIjoiNzYzYjgxYmQtNzZmMC00MDhkLWFhMDAtMDJhOWYzMWU3MTI1IiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpfMUJmY1BtX09uMzBKV2VNVEtkUmM4VkVzMzhpN3Y5Ui14VzcxbDBaYk1BIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiYTVmMmQyMmEtYzAxMi00NTY5LTk5NmYtZTc0OTA4NTI0NGJjIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImE1ZjJkMjJhLWMwMTItNDU2OS05OTZmLWU3NDkwODUyNDRiYyIsImFsbG93ZWRfcmVmZXJyZXJzIjoiamJlYXV0eXNrbGVwLnBsIiwidXVpZCI6IjlhODIwYmU2LTJmMjItNDA1Ny05MTBlLThiODEwMDg5M2M3NCJ9.Hi1EmMvBsGwJO8JyaqV0AukG2iWJ9uhSStqBe4MCJG-4i6Ndb4jjEx_tYmUxuymKJeKKnLiti1PnQE3ZOMgFNJsnb1ZPKfcM0kGe-llD5RnbKsBqPQEJYon2vxMAeG_-ZjYy9NjwhhVZ35XD-1ERA-6Ah-7EgquUwl_fgN6i81ameJHD0yu4oci4t_DBMWQ8eHwaL1HOB3uMIksVIVTvbrAU4rZ5WKLSrVpw2j50mWxMAgrk-2c94NnO4zWM8nmjYPjw-H-JkFORLXHDFaQyVdC_aYCvdnJe7l0r2iSAQNvlT_F4iwjc3QKZ0Zfb9yCeVXPzbEBqml9xGenNOSxpyA"
-                language="pl"
-                style="width: 100%; height: 500px; overflow: hidden"
-                onpoint="onpointselect"
-                config="parcelcollect247"
-              ></inpost-geowidget>
-              </div>
-            </v-card>
-          </v-dialog> -->
         </div>
       </form>
-      <!-- <div class="saved-address" v-if="!displayForm">
-        <v-list>
-          <v-list-item
-            ><template v-slot:title>Adres dostawy</template></v-list-item
-          >
-          <v-list-item>
-            {{ cartStore.cartObject!.shipping_address!.first_name }}
-            {{ cartStore.cartObject!.shipping_address!.last_name }}
-          </v-list-item>
-          <v-list-item>
-            {{ cartStore.cartObject!.shipping_address!.address_1 }}
-            <span v-if="cartStore.cartObject!.shipping_address!.address_2"
-              >, {{ cartStore.cartObject!.shipping_address!.address_2 }}</span
-            >
-          </v-list-item>
-          <v-list-item
-            >{{ cartStore.cartObject!.shipping_address!.postal_code }},
-            {{ cartStore.cartObject!.shipping_address!.city }}</v-list-item
-          >
-        </v-list>
-        <v-list>
-          <v-list-item
-            ><template v-slot:title>Dane kontaktowe</template></v-list-item
-          >
-          <v-list-item>{{ cartStore.cartObject!.email }}</v-list-item>
-          <v-list-item>{{
-            cartStore.cartObject!.shipping_address!.phone
-          }}</v-list-item>
-        </v-list>
-        <v-list>
-          <v-list-item
-            ><template v-slot:title>Adres rozliczeniowy</template></v-list-item
-          >
-          <v-list-item
-            v-if="
-              !wantsInvoice.value.value ||
-              (wantsInvoice.value.value && !differentThanShipping.value.value)
-            "
-            >Taki sam jak adres dostawy</v-list-item
-          >
-          <v-list-item v-if="wantsInvoice.value.value">{{
-            cartStore.cartObject!.billing_address?.company
-          }}</v-list-item>
-          <v-list-item v-if="wantsInvoice.value.value">{{
-            cartStore.cartObject!.billing_address?.metadata?.vatNumber
-          }}</v-list-item>
-          <v-list-item
-            v-if="wantsInvoice.value.value && differentThanShipping.value.value"
-            >{{ cartStore.cartObject!.billing_address?.address_1 }}
-            <span v-if="cartStore.cartObject!.billing_address?.address_2"
-              >, {{ cartStore.cartObject!.billing_address.address_2 }}</span
-            ></v-list-item
-          >
-          <v-list-item
-            v-if="wantsInvoice.value.value && differentThanShipping.value.value"
-            >{{ cartStore.cartObject!.billing_address?.postal_code }},
-            {{ cartStore.cartObject!.billing_address?.city }}</v-list-item
-          >
-        </v-list>
-        <v-btn variant="text" @click="editingForm = true">Edytuj</v-btn>
-      </div> -->
     </template>
     <template v-slot:item.3>
       <h3>Zamówienie</h3>
@@ -1376,13 +1265,6 @@ onMounted(() => {
         </v-table>
       </v-sheet>
       <v-divider :thickness="16" :opacity="0"></v-divider>
-      <!-- <v-sheet border>
-        <v-table>
-          <tbody>
-            <tr>
-              <th>Razem(Zawiera 23% VAT)</th>
-              <th></th>
-              <th> -->
       <h4>
         Razem(Zawiera 23% VAT)
         <span class="strike" v-if="cartStore.cartObject?.discount_total">{{
@@ -1407,11 +1289,6 @@ onMounted(() => {
           }}</span
         >
       </h4>
-      <!-- </th>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-sheet> -->
     </template>
     <template v-slot:actions>
       <v-stepper-actions>
