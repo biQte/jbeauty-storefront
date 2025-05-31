@@ -333,14 +333,18 @@ const goToCheckout = () => {
     </div>
 
     <div class="mt-8 px-4 lg:px-0">
-  <div class="w-[100%] mx-auto flex flex-col gap-2">
-    <h2 class="text-xl font-bold">Polecane</h2>
-    <LazyProductCarousel
-      :products="recommendedProducts"
-      :loading="false"
-    />
-  </div>
-</div>
+      <div class="w-[100%] mx-auto flex flex-col gap-2">
+        <h2 class="text-xl font-bold">Polecane</h2>
+        <LazyProductCarousel
+          :products="recommendedProducts"
+          :loading="false"
+        />
+      </div>
+    </div>
+
+    <div class="-mx-4 lg:-mx-[calc((100vw-1024px)/2)] px-0" v-if="!cartStore.cartObject?.items || cartStore.cartObject?.items.length < 1">
+        <TheHomePageBanner />
+    </div>
   </div>
 </template>
 
