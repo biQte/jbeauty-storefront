@@ -21,9 +21,12 @@ const showDescription = ref<boolean>(true);
 const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
+// const loyaltyPoints = ref<number | null>(null);
 
 const { data: products, error } = await useFetch(
-  `/api/products/${route.params.product}`,
+  // `/api/products/${route.params.product}`,
+  `/api/products/handle/${route.params.product}`,
+
   {
     server: true,
     immediate: true,
@@ -180,6 +183,23 @@ const toggleDetails = () => {
 
 const { addProduct } = useRecentlyViewed();
 
+// const calculateLoyaltyPointsForProduct = async () => {
+//   const loyaltyPointsResponse = await $fetch(
+//     `/api/products/handle/${route.params.product}/calculate-loyalty-points`,
+//     {
+//       credentials: 'include',
+//       method: "GET",
+//     }
+//   );
+
+//   if(!loyaltyPointsResponse){
+//     return;
+//   }
+
+//   // @ts-expect-error
+//   loyaltyPoints.value = loyaltyPointsResponse.points as number;
+// }
+
 addProduct(product.value.id);
 
 useSeoMeta({
@@ -213,6 +233,7 @@ useHead({
 });
 
 onMounted(() => {
+  // calculateLoyaltyPointsForProduct();
   const { gtag } = useGtag();
   gtag("event", "view_item", {
     currency: "PLN",
@@ -466,6 +487,8 @@ onMounted(() => {
               ></v-btn>
             </div>
           </div>
+          <!-- <p v-if="loyaltyPoints">Zyskujesz: {{ loyaltyPoints }} pkt.</p> -->
+
           <PaymentProviders />
         </div>
       </div>
@@ -575,7 +598,6 @@ onMounted(() => {
     <v-dialog
       v-model="showDialog"
       width="auto"
-      persistent
       transition="dialog-top-transition"
     >
       <v-card
