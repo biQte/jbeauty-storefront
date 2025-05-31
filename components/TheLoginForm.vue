@@ -15,6 +15,8 @@ const sessionStore = useSessionStore();
 
 const snackbarStore = useSnackbarStore();
 
+const route = useRoute();
+
 const { width, height } = useWindowSize();
 
 const loading = ref<boolean>(false);
@@ -74,6 +76,11 @@ const login = async (loginData: InferType<typeof loginSchema>) => {
     snackbarVisible.value = true;
 
     sessionStore.session = customer as unknown as CustomerDTO;
+
+    if(route.query.redirect) {
+      router.push(route.query.redirect as string);
+      return;
+    }
 
     router.push(ROUTES.AFTER_LOGIN_HOMEPAGE);
   } catch (e) {
