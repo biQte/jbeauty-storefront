@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
             Cookie: getHeader(event, "cookie") || "",
           },
           query: {
-            fields: "+billing_address.metadata,+shipping_address.metadata",
+            fields: "+billing_address.metadata,+shipping_address.metadata,+metadata",
           },
         }
       );
