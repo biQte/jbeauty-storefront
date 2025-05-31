@@ -13,9 +13,13 @@ const snackbarStore = useSnackbarStore();
 
 const router = useRouter();
 
-const { width, height } = useWindowSize();
+// const loyalty = useLoyaltyPoints();
 
-const showOrders = ref<boolean>(false);
+const { width = 390, height = 500 } = useWindowSize();
+
+const loyaltyPoints = ref<number | null>(null);
+
+// const showOrders = ref<boolean>(false);
 
 const email = ref<string>(sessionStore.session?.email!);
 const firstName = ref<string>(sessionStore.session?.first_name!);
@@ -23,36 +27,36 @@ const lastName = ref<string>(sessionStore.session?.last_name!);
 
 const config = useRuntimeConfig();
 
-if (route.query.showorders) {
-  showOrders.value = true;
-}
+// if (route.query.showorders) {
+//   showOrders.value = true;
+// }
 
-watch(showOrders, async (newValue) => {
-  if (newValue && !ordersList.value) {
-    loading.value = true;
-    await loadOrders();
-    loading.value = false;
-  }
-});
+// watch(showOrders, async (newValue) => {
+//   if (newValue && !ordersList.value) {
+//     loading.value = true;
+//     await loadOrders();
+//     loading.value = false;
+//   }
+// });
 
-const ordersList = ref<any[]>();
+// const ordersList = ref<any[]>();
 
-const loadOrders = async () => {
-  try {
-    const orders = await $fetch(`/api/order`, {
-      credentials: "include",
-    });
+// const loadOrders = async () => {
+//   try {
+//     const orders = await $fetch(`/api/order`, {
+//       credentials: "include",
+//     });
 
-    ordersList.value = orders;
-  } catch (e) {
-    if (!showOrders.value) return;
-    snackbarStore.showSnackbar(
-      "Wystąpił problem podczas pobierania zamówień",
-      "error",
-      5000
-    );
-  }
-};
+//     ordersList.value = orders;
+//   } catch (e) {
+//     if (!showOrders.value) return;
+//     snackbarStore.showSnackbar(
+//       "Wystąpił problem podczas pobierania zamówień",
+//       "error",
+//       5000
+//     );
+//   }
+// };
 
 const saveAccountData = async () => {
   try {
@@ -84,7 +88,8 @@ const saveAccountData = async () => {
 
 const showChangeAccountDataDialog = ref<boolean>(false);
 
-loadOrders();
+
+// loadOrders();
 
 const logout = async () => {
   try {
@@ -100,15 +105,30 @@ const logout = async () => {
   }
 };
 
-// onMounted(() => {
-//   if (route.query.showOrders) {
-//     showOrders.value = true;
-//   }
-// });
+onMounted(async () => {
+  // if (route.query.showOrders) {
+  //   showOrders.value = true;
+  // }
+  await nextTick();
+
+  // const { data, error } = await loyalty.getLoyaltyPoints();
+  // if(error.value){
+  //   console.error('Error fetching loyalty points:', error.value);
+  //   loyaltyPoints.value = null;
+  //   return;
+  // }
+
+  // if (data.value) {
+  //   // @ts-expect-error
+  //   loyaltyPoints.value = data.value.points;
+  // } else {
+  //   loyaltyPoints.value = null;
+  // }
+});
 
 useSeoMeta({
-  title: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
-  ogTitle: `JBeauty - ${showOrders.value ? "Zamówienia" : "Konto"}`,
+  title: `JBeauty - "Konto"`,
+  ogTitle: `JBeauty - "Konto"`,
 });
 
 useHead({
@@ -123,33 +143,33 @@ useHead({
 
 <template>
   <v-sheet class="account-page-wrapper" :height="height * 0.7">
-    <v-toolbar
+    <!-- <v-toolbar
       density="compact"
       class="account-page-toolbar"
       color="transparent"
     >
       <v-btn
-        @click="showOrders = false"
-        :active="!showOrders"
         active-color="primary"
         rounded="false"
       >
         Dane
       </v-btn>
       <v-btn
-        @click="showOrders = true"
-        :active="showOrders"
         active-color="primary"
         rounded="false"
       >
         Zamówienia
       </v-btn>
-    </v-toolbar>
-    <v-card :width="width < 720 ? width * 0.9 : width * 0.5" v-if="!showOrders">
+      <v-btn>
+        Adresy
+      </v-btn>
+    </v-toolbar> -->
+    <AccountLinks />
+    <v-card :width="width < 720 ? width * 0.9 : width * 0.5">
       <v-card-title>
         Witaj, {{ sessionStore.session?.first_name }}
       </v-card-title>
-      <v-card-subtitle> Tutaj znajdują się twoje dane </v-card-subtitle>
+      <!-- <v-card-subtitle v-if="loyaltyPoints">Posiadasz {{ loyaltyPoints }}pkt.</v-card-subtitle> -->
       <v-card-text>
         <p>Imię: {{ sessionStore.session?.first_name }}</p>
         <p>Nazwisko: {{ sessionStore.session?.last_name }}</p>
@@ -164,7 +184,7 @@ useHead({
             >Zmień dane</v-btn
           >
         </p>
-        <v-dialog :width="width * 0.5" v-model="showChangeAccountDataDialog">
+        <v-dialog :width="width < 720 ? width * 0.9 : width * 0.5" v-model="showChangeAccountDataDialog">
           <v-card>
             <v-card-title> Zmiana danych konta </v-card-title>
             <v-card-text>
@@ -188,7 +208,7 @@ useHead({
         <v-btn color="primary" @click="logout">Wyloguj się</v-btn>
       </v-card-text>
     </v-card>
-    <v-card :width="width < 720 ? width * 0.9 : width * 0.5" v-if="showOrders">
+    <!-- <v-card :width="width < 720 ? width * 0.9 : width * 0.5" v-if="showOrders">
       <v-card-title>Twoje zamówienia</v-card-title>
       <v-card-subtitle>Tutaj możesz zobaczyć swoje zamówienia</v-card-subtitle>
       <v-card-text>
@@ -226,7 +246,7 @@ useHead({
           </v-list-item>
         </v-list>
       </v-card-text>
-    </v-card>
+    </v-card> -->
   </v-sheet>
 </template>
 
@@ -235,8 +255,8 @@ useHead({
   // padding: 0 15%;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  justify-content: start;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
   height: 100%;
   width: 100%;
