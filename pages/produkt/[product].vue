@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { ProductOption, Product } from "@medusajs/client-types";
 import { ROUTES } from "../../constants/routes";
+import { getProductSchema } from "~/utils/product-schema";
 
 const loading = ref<boolean>(false);
 const route = useRoute();
@@ -216,7 +217,8 @@ useSeoMeta({
     ? products.value[0].metadata.seoDescription
     : products.value[0].description,
   ogImage: products.value[0].thumbnail,
-  ogImageUrl: products.value[0].thumbnail,
+  twitterCard: 'summary_large_image',
+  ogUrl: `${config.public.storeUrl}/produkt/${products.value[0].handle}`,
   twitterImage: products.value[0].thumbnail,
   keywords: products.value[0].metadata?.seoTags
     ? products.value[0].metadata.seoTags
@@ -230,6 +232,12 @@ useHead({
       href: `${config.public.storeUrl}${route.path}`,
     },
   ],
+  script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify(getProductSchema(product.value))
+    }
+  ]
 });
 
 onMounted(() => {

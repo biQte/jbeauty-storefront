@@ -18,6 +18,12 @@ useHead({
       href: `${config.public.storeUrl}${route.path}`,
     },
   ],
+  script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify(getContactPageSchema()),
+    }
+  ]
 });
 
 const { width, height } = useWindowSize();

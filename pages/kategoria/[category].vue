@@ -177,6 +177,12 @@ useHead({
       href: `${config.public.storeUrl}${route.path}`,
     },
   ],
+  script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify(getItemListSchema(products.value))
+    }
+  ]
 });
 
 onMounted(() => {
