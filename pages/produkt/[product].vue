@@ -211,11 +211,11 @@ useSeoMeta({
     ? products.value[0].metadata.seoTitle
     : `JBeauty - ${products.value[0].title}`,
   description: products.value[0].metadata?.seoDescription
-    ? products.value[0].metadata.seoDescription
-    : products.value[0].description,
+    ? products.value[0].metadata.seoDescription.slice(0, 157) + "..."
+    : products.value[0].description.slice(0, 157) + "...",
   ogDescription: products.value[0].metadata?.seoDescription
-    ? products.value[0].metadata.seoDescription
-    : products.value[0].description,
+    ? products.value[0].metadata.seoDescription.slice(0, 157) + "..."
+    : products.value[0].description.slice(0, 157) + "...",
   ogImage: products.value[0].thumbnail,
   twitterCard: 'summary_large_image',
   ogUrl: `${config.public.storeUrl}/produkt/${products.value[0].handle}`,
