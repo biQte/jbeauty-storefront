@@ -116,6 +116,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 
 <template>
   <div class="index-wrapper">
+    <h1>JBeauty - Z pasji do paznokci</h1>
     <div class="carousel-placeholder">
       <TheMainPageCarousel />
     </div>
@@ -219,5 +220,9 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
 h2 {
   margin-left: 10%;
   font-size: 2rem;
+}
+
+h1 {
+  display: none;
 }
 </style>

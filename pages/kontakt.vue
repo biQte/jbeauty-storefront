@@ -34,14 +34,14 @@ const { width, height } = useWindowSize();
     <h1>Kontakt</h1>
     <div class="contact-wrapper">
       <div class="text-wrapper">
-        <h3>
+        <h2>
           Masz pytania? Napisz:
           <a href="mailto:info@jbeautysklep.pl">info@jbeautysklep.pl</a>
-        </h3>
-        <h3>
+        </h2>
+        <h2>
           Wolisz zadzwonić? Telefon: <a href="tel:+48792669926">792 669 926</a>
-        </h3>
-        <h4>Możesz również skorzystać formularza kontaktowego.</h4>
+        </h2>
+        <h3>Możesz również skorzystać formularza kontaktowego.</h3>
         <div class="form-wrapper">
           <form
             action="https://formsubmit.co/a7589d8489d4702682a64ac853cd68b9"
@@ -90,7 +90,7 @@ const { width, height } = useWindowSize();
               <input type="submit" value="Prześlij" />
             </div>
             <br />
-            <h5>Zwykle odpowiadamy do 24 godzin.</h5>
+            <h4>Zwykle odpowiadamy do 24 godzin.</h4>
           </form>
         </div>
       </div>
@@ -220,7 +220,7 @@ h1 {
   }
 }
 
-h3 {
+h2 {
   font-size: 1.5rem;
   font-weight: 400;
   @media only screen and (max-width: 720px) {
@@ -228,7 +228,7 @@ h3 {
   }
 }
 
-h4 {
+h3 {
   font-size: 1.2rem;
   font-weight: 400;
   @media only screen and (max-width: 720px) {
@@ -238,7 +238,7 @@ h4 {
   }
 }
 
-h5 {
+h4 {
   font-size: 1rem;
   font-weight: 400;
 }

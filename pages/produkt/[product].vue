@@ -407,9 +407,9 @@ onMounted(() => {
           <h1 v-show="!loading" class="font-semibold text-3xl">
             {{ product?.title }}
           </h1>
-          <h3 v-show="!loading" class="font-semibold text-2xl">
+          <h2 v-show="!loading" class="font-semibold text-2xl">
             {{ product?.subtitle }}
-          </h3>
+          </h2>
           <p v-show="!loading && product?.variants" class="text-lg mt-2 mb-4">
             <!-- @vue-expect-error -->
             <span
