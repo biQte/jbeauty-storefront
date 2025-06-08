@@ -50,6 +50,14 @@ if (results[2].status === "fulfilled") {
 const config = useRuntimeConfig();
 const route = useRoute();
 
+const { data: blogPosts } = await useAsyncData("blog", async () => {
+  return await queryCollection("blog")
+    .where("draft", "<>", false)
+    .order("date", "DESC")
+    .limit(3)
+    .all();
+});
+
 useHead({
   link: [
     {
@@ -170,6 +178,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
         </template>
       </Suspense>
     </div>
+     <BlogPreview v-if="blogPosts?.length" :posts="blogPosts" />
   </div>
 </template>
 
