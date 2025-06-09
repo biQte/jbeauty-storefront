@@ -19,22 +19,22 @@ onMounted(() => {
     cycle
     class="carousel"
   >
-    <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'">
+    <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'" aria-label="vitamin-boost-base">
       <v-carousel-item>
         <TheMainPageCarouselItem desktop="/vv-boost-base.webp" mobile="/vv-boost-base-mobile.webp" alt="vv-boost-base" :is-first="true" />
       </v-carousel-item>
     </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-buildmania`">
+    <NuxtLink :to="`/kategoria/victoria-vynn-buildmania`" aria-label="build-mania">
       <v-carousel-item>
         <TheMainPageCarouselItem desktop="/build-mania-desktop.webp" mobile="build-mania-mobile.webp" alt="vv-buildmania" />
       </v-carousel-item>
     </NuxtLink>
-    <NuxtLink :to="`/kategoria/victoria-vynn-luna-glass`">
+    <NuxtLink :to="`/kategoria/victoria-vynn-luna-glass`" aria-label="luna-glass">
       <v-carousel-item>
         <TheMainPageCarouselItem desktop="/luna-glass.webp" mobile="/luna-glass-mobile.webp" alt="vv-luna-glass" />
       </v-carousel-item>
     </NuxtLink>
-    <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`">
+    <NuxtLink :to="`/kategoria/pb-nails-nowe-ceny`" aria-label="pb-nails-nowe-ceny">
       <v-carousel-item>
         <TheMainPageCarouselItem desktop="/web.webp" mobile="/zele-nizsze-ceny-mobile.webp" alt="pb-nails-nowe-ceny" />
       </v-carousel-item>
