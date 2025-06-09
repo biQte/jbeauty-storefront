@@ -169,7 +169,7 @@ const currentYear = new Date().getFullYear();
       <div>
         <h4 class="text-lg font-semibold mb-3">Kontakt</h4>
         <ul class="space-y-2 text-sm">
-          <li><a href="https://jbeautysklep.pl/kontakt">Formularz kontaktowy</a></li>
+          <li><NuxtLink to="/kontakt">Formularz kontaktowy</NuxtLink></li>
           <li>Żegocina 102</li>
           <li>32-731 Żegocina</li>
           <li>
