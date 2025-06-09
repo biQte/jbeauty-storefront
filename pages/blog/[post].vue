@@ -54,9 +54,10 @@ if (postData.value) {
   post.value = null;
 }
 
-watchEffect(() => {
+watchEffect(async () => {
   if (post.value) {
     post.value = postData.value;
+    await nextTick();
   }
 });
 
