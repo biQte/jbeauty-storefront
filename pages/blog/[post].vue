@@ -39,13 +39,16 @@ const { width, height } = useWindowSize();
 <script setup lang="ts">
 const route = useRoute();
 const post = ref();
-const { data: postData } = await useAsyncData(
-  "post",
-  async () =>
-    await queryCollection("blog")
+const { data: postData, refresh } = await useAsyncData(
+  `post-${route.params.post}`,
+  () =>
+    queryCollection("blog")
       .where("draft", "<>", false)
       .where("handle", "=", `${route.params.post}`)
-      .first()
+      .first(),
+  {
+    watch: [() => route.params.post],
+  }
 );
 
 if (postData.value) {
