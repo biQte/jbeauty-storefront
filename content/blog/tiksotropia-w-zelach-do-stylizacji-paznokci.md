@@ -21,7 +21,6 @@ tags: [
 thumbnail: '/zel-z-tiksotropia.webp'
 ---
 
-## Co to jest tiksotropia?
 
 Tiksotropia to zjawisko, w którym materiał zmienia swoją lepkość pod wpływem siły mechanicznej – na przykład mieszania lub nacisku. W praktyce oznacza to, że substancja staje się bardziej płynna, gdy jest poruszana, a następnie wraca do swojej pierwotnej, gęstszej formy, gdy siła przestaje działać.
 
