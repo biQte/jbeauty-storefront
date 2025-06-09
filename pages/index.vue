@@ -161,6 +161,7 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
         <template #fallback> <ProductCarouselSkeletonLoader /> </template>
       </Suspense>
     </div>
+     <BlogPreview v-if="blogPosts?.length" :posts="blogPosts" />
     <br />
     <div class="recently-viewed-wrapper">
       <h2>Ostatnio przeglądane:</h2>
@@ -178,7 +179,6 @@ const carouselHeight = computed(() => Math.round(width.value * (3 / 10)));
         </template>
       </Suspense>
     </div>
-     <BlogPreview v-if="blogPosts?.length" :posts="blogPosts" />
   </div>
 </template>
 
