@@ -162,6 +162,7 @@ font-src * data: blob: 'unsafe-inline';
       salesChannelID: process.env.NUXT_SALES_CHANNEL_ID,
       regionID: process.env.NUXT_REGION_ID,
       recommendedByCategoryID: process.env.NUXT_RECOMMENDED_BY_CATEGORY_ID,
+      cmsUrl: process.env.NUXT_CMS_URL,
       metapixel: {
         default: {
           id: "536919092577032",
@@ -196,7 +197,8 @@ font-src * data: blob: 'unsafe-inline';
         "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start",
         "/blog/manicure-hybrydowy-krok-po-kroku",
         "/blog/tiksotropia-w-zelach-do-stylizacji-paznokci",
-        "/blog/zzadbane-dlonie-jak-skutecznie-pielegnowac-skorki-wokol-paznokci"
+        "/blog/zadbane-dlonie-jak-skutecznie-pielegnowac-skorki-wokol-paznokci",
+        "/blog/koniec-tpo-w-produktach-do-paznokci-co-to-oznacza-dla-branzy-beauty"
       ],
     },
     // baseURL: process.env.NUXT_STORE_URL,
