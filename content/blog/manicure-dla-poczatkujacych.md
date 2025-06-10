@@ -75,7 +75,7 @@ Jeśli chcesz stylizować paznokcie profesjonalnie, koniecznie musisz zainwestow
 - Szkolenia online – idealne, jeśli nie masz możliwości dojazdu, np. na platformach edukacyjnych lub u znanych stylistek.
 - Warsztaty indywidualne – dają możliwość nauki 1:1 z instruktorem.
 
-:blog-image{src="/produkty-na-start2.webp" alt="Produkty na start" align="center"}
+:blog-image{src="/produkty-na-start2.webp" alt="Produkty na start" align="center" height="500"}
 
 ## Jak zacząć pierwsze stylizacje na klientkach?
 

@@ -39,7 +39,7 @@ Dehydrator i primer bezkwasowy to kluczowe preparaty, które zwiększają trwał
 
 Po przygotowaniu płytki nadszedł czas na bazę hybrydową. Możesz użyć cienkiego pędzelka, aby ułatwić sobie precyzyjną aplikację. Warto wybrać bazę tej samej marki co wcześniejsze preparaty, aby zapewnić ich kompatybilność.
 
-:blog-image{src="/manicure-hybrydowy-krok-po-kroku2.webp" alt="Manicure hybrydowy krok po kroku" align="center"}
+:blog-image{src="/manicure-hybrydowy-krok-po-kroku2.webp" alt="Manicure hybrydowy krok po kroku" align="center" height="500"}
 
 ## 5. Aplikacja lakieru hybrydowego
 
