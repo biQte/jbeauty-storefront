@@ -8,7 +8,7 @@ const router = useRouter();
 
 <template>
   <section class="blog-preview-wrapper">
-    <h3 class="blog-preview-title">Najświesze na blogu</h3>
+    <h3 class="blog-preview-title">Najświeższe na blogu</h3>
     <div class="blog-preview-grid">
       <div
         class="blog-preview-card"
