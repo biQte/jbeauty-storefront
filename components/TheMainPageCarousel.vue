@@ -21,7 +21,7 @@ onMounted(() => {
   >
     <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'" aria-label="vitamin-boost-base">
       <v-carousel-item>
-        <TheMainPageCarouselItem desktop="/vv-boost-base.webp" mobile="/vv-boost-base-mobile.webp" alt="vv-boost-base" :is-first="true" />
+        <TheMainPageCarouselItem desktop="/vv-boost-base.webp" mobile="/vv-boost-base-mobile.webp" alt="vv-boost-base" placeholder="/vv-boost-base-placeholder.webp" mobile-placeholder="/vv-boost-base-mobile-placeholder.webp" :is-first="true" />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="`/kategoria/victoria-vynn-buildmania`" aria-label="build-mania">

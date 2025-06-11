@@ -3,6 +3,8 @@ const props = defineProps<{
   desktop: string;
   mobile: string;
   alt: string;
+  placeholder?: string;
+  mobilePlaceholder?: string;
   isFirst?: boolean;
 }>();
 
@@ -18,6 +20,7 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
     :src="isMobile ? mobile : desktop"
     :loading="loading"
     :importance="importance"
+    :placeholder="isMobile && mobilePlaceholder ? mobilePlaceholder : placeholder ? placeholder : undefined"
     :alt="alt"
     format="webp"
     quality="80"
