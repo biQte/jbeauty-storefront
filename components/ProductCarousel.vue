@@ -13,6 +13,7 @@ const cartStore = useCartStore();
 const snackbarStore = useSnackbarStore();
 const sessionStore = useSessionStore();
 const router = useRouter();
+const route = useRoute();
 const { width } = useWindowSize({ initialWidth: 390 });
 const showDialog = ref(false);
 const currentlyAddedProductTitle = ref<string>();
@@ -112,7 +113,9 @@ const addToCart = async (product: StoreProduct) => {
       }
     }
 
-    showDialog.value = true;
+    if(route.path !== ROUTES.CART_PAGE) {
+      showDialog.value = true;
+    }
   } catch (e) {
     const { message, color, timeout } = handleFetchError(e);
     if (message) snackbarStore.showSnackbar(message, color, timeout);
@@ -171,6 +174,7 @@ const handleGesture = () => {
                 format="webp"
                 quality="20"
                 size="340"
+                :placeholder="[340, 340, 5, 0]"
               />
             </div>
 
