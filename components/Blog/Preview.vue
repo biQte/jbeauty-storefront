@@ -85,7 +85,7 @@ const router = useRouter();
   }
 
   .blog-preview-btn {
-    background: #ff5c6a;
+    background: #ff5c8a;
     color: white;
     border: none;
     padding: 0.6rem 1.4rem;
