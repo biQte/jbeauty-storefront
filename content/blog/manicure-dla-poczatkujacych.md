@@ -26,11 +26,11 @@ Jeśli szukasz porad na temat samego wykonania manicure hybrydowego, zajrzyj do 
 
 ---
 
-## Podstawowe wyposażenie stylistki paznokci
+<h2 id="podstawowe-wyposazenie-stylistki-paznokci"><a href="#podstawowe-wyposazenie-stylistki-paznokci">Podstawowe wyposażenie stylistki paznokci</a></h2>
 
 Każda początkująca stylistka powinna zaopatrzyć się w niezbędne produkty i akcesoria, które umożliwią jej prawidłowe wykonanie stylizacji paznokci. W co zainwestować na początek?
 
-#### Sprzęt i narzędzia
+<h4 id="sprzet-i-narzedzia"><a href="#sprzet-i-narzedzia">Sprzęt i narzędzia</a></h4>
 
 1. Lampa UV/LED – niezbędna do utwardzania lakierów hybrydowych, żeli i baz budujących. Warto zainwestować w model o mocy minimum 48W dla szybszego utwardzania.
 2. Frezarka do paznokci – przydatna do usuwania hybrydy, opracowywania skórek i modelowania paznokci.
@@ -57,11 +57,11 @@ Każda początkująca stylistka powinna zaopatrzyć się w niezbędne produkty i
 
 ---
 
-## Szkolenia dla początkujących stylistek paznokci
+<h2 id="szkolenia-dla-poczatkujacych-stylistek-paznokci"><a href="#szkolenia-dla-poczatkujacych-stylistek-paznokci">Szkolenia dla początkujących stylistek paznokci</a></h2>
 
 Jeśli chcesz stylizować paznokcie profesjonalnie, koniecznie musisz zainwestować w kursy i szkolenia. Profesjonalne szkolenie da Ci solidne podstawy i ułatwi start w zawodzie.
 
-#### Przykładowe rodzaje kursów:
+<h4 id="przykladowe-rodzaje-kursow"><a href="#przykladowe-rodzaje-kursow">Przykładowe rodzaje kursów:</a></h4>
 
 - Podstawowy kurs manicure hybrydowego – idealny dla osób, które nigdy wcześniej nie wykonywały stylizacji.
 - Kurs manicure kombinowanego i frezarkowego – uczy przede wszystkim precyzyjnego opracowania skórek.
@@ -69,7 +69,7 @@ Jeśli chcesz stylizować paznokcie profesjonalnie, koniecznie musisz zainwestow
 - Kurs zdobień paznokci – uczy technik nail art, ombre, babyboomer, french itp.
 - Szkolenie z bezpieczeństwa i higieny pracy – bardzo ważne przy pracy z klientami.
 
-#### Gdzie szukać szkoleń?
+<h4 id="gdzie-szukac-szkolen"><a href="#gdzie-szukac-szkolen">Gdzie szukać szkoleń?</a></h4>
 
 - Stacjonarne kursy w akademiach stylizacji paznokci.
 - Szkolenia online – idealne, jeśli nie masz możliwości dojazdu, np. na platformach edukacyjnych lub u znanych stylistek.
@@ -77,7 +77,7 @@ Jeśli chcesz stylizować paznokcie profesjonalnie, koniecznie musisz zainwestow
 
 :blog-image{src="/produkty-na-start2.webp" alt="Produkty na start" align="center" height="500"}
 
-## Jak zacząć pierwsze stylizacje na klientkach?
+<h2 id="jak-zaczac-pierwsze-stylizacje-na-klientkach"><a id="#jak-zaczac-pierwsze-stylizacje-na-klientkach">Jak zacząć pierwsze stylizacje na klientkach?</a></h2>
 
 Jeśli chcesz zacząć stylizować paznokcie innym, warto:
 
@@ -89,7 +89,7 @@ Jeśli chcesz zacząć stylizować paznokcie innym, warto:
 
 ---
 
-## Gdzie kupować produkty?
+<h2 id="gdzie-kupowac-produkty"><a href="#gdzie-kupowac-produkty">Gdzie kupować produkty?</a></h2>
 
 Najlepiej wybierać sprawdzone marki, które oferują wysokiej jakości produkty, np. Victoria Vynn, Staleks, Excellent Pro, PB Nails. Dobrym pomysłem jest zakup zestawu startowego, który zawiera wszystkie podstawowe elementy potrzebne do rozpoczęcia pracy.
 

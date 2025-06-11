@@ -23,15 +23,15 @@ Manicure hybrydowy od dawna cieszy się ogromną popularnością wśród kobiet.
 
 Jak wykonać manicure hybrydowy? Oto 6 kroków, które zapewnią trwały i estetyczny efekt:
 
-## 1. Odsunięcie i wycięcie skórek
+<h2 id="odsuniecie-i-wyciecie-skorek"><a href="#odsuniecie-i-wyciecie-skorek">1. Odsunięcie i wycięcie skórek</a></h2>
 
 Do odsunięcia skórek możesz użyć drewnianego patyczka lub kopytka, np. [Multikopytko Excellent Pro](https://jbeautysklep.pl/produkt/excellent-pro-multifunction-pusher). Ważne jest również dokładne usunięcie nabłonków z powierzchni płytki, co zapewni lepszą przyczepność stylizacji. Do wycięcia skórek najlepiej sprawdzą się nożyczki lub cążki, np. z firmy [Staleks](https://jbeautysklep.pl/kategoria/staleks). Wykonuj ten krok ostrożnie, aby uniknąć zacięć.
 
-## 2. Nadanie kształtu i zmatowienie płytki
+<h2 id="nadanie-ksztaltu-i-zmatowienie-plytki"><a href="#nadanie-ksztaltu-i-zmatowienie-plytki">2. Nadanie kształtu i zmatowienie płytki</a></h2>
 
 Nadaj paznokciom pożądany kształt za pomocą pilniczka o gradacji 240. Do zmatowienia płytki użyj polerki lub pilnika o niskiej gradacji. Unikaj nadmiernego piłowania, aby nie osłabić paznokci. Na koniec dokładnie usuń pył przy pomocy szczoteczki.
 
-## 3. Chemiczne przygotowanie płytki
+<h2 id="chemiczne-przygotowanie-plytki"><a href="#chemiczne-przygotowanie-plytki">3. Chemiczne przygotowanie płytki</a></h2>
 
 Dehydrator i primer bezkwasowy to kluczowe preparaty, które zwiększają trwałość manicure. Dehydrator usuwa wilgoć i odtłuszcza płytkę paznokcia, a primer, poprzez pozostawienie lepkiej warstwy, poprawia przyczepność produktów.
 
@@ -49,7 +49,7 @@ Malowanie lakierem to zdecydowanie ulubiony etap większości z nas. Pamiętaj, 
 
 Aby zabezpieczyć stylizację i nadać paznokciom połysk, nałóż top hybrydowy. Jeśli używasz topu z warstwą dyspersyjną, pamiętaj o przemyciu go cleanerem po utwardzeniu. Dla lepszego efektu możesz delikatnie wyrównać wolny brzeg paznokcia pilnikiem – nie wpłynie to negatywnie na trwałość hybrydy. Na zakończenie nałóż oliwkę do skórek lub krem nawilżający.
 
-### Manicure hybrydowy a długość paznokci
+<h3 id="manicure-hybrydowy-a-dlugosc-paznokci"><a href="#manicure-hybrydowy-a-dlugosc-paznokci">anicure hybrydowy a długość paznokci</a></h3>
 
 Warto pamiętać, że manicure hybrydowy najlepiej sprawdza się na krótkich paznokciach. Baza hybrydowa jest miękka i elastyczna, co może prowadzić do złamania długich paznokci. Jeśli chcesz przedłużyć paznokcie, warto sięgnąć po twardsze materiały, takie jak żel lub akrylożel.
 

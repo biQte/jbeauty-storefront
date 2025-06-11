@@ -23,7 +23,7 @@ Od września 2025 roku w Unii Europejskiej zacznie obowiązywać zakaz stosowani
 
 ---
 
-## Co to jest TPO i do czego służy?
+<h2 id="co-to-jest-tpo-i-do-czego-sluzy"><a href="#co-to-jest-tpo-i-do-czego-sluzy">Co to jest TPO i do czego służy?</a></h2>
 
 **TPO**, czyli *Trimethylbenzoyl Diphenylphosphine Oxide*, to związek chemiczny pełniący rolę **fotoinicjatora**. W praktyce – to dzięki niemu żele i lakiery hybrydowe twardnieją w lampie UV lub LED. Jest niewidoczny, działa błyskawicznie i przez lata był uznawany za niezastąpiony w produktach światłoutwardzalnych.
 
@@ -31,11 +31,11 @@ Od września 2025 roku w Unii Europejskiej zacznie obowiązywać zakaz stosowani
 
 TPO trafiło na listę substancji, które mogą negatywnie wpływać na zdrowie człowieka. Zostało sklasyfikowane jako **substancja toksyczna dla rozrodczości** – tzw. kategoria 1B w klasyfikacji CMR (rakotwórcze, mutagenne, reprotoksyczne). Tego typu składniki nie mogą być wykorzystywane w kosmetykach w UE, jeśli nie uzyskają specjalnego wyjątku – a TPO takiego wyjątku nie otrzymało.
 
-## Co dokładnie mówi prawo?
+<h2 id="co-dokladnie-mowi-prawo"><a href="#co-dokladnie-mowi-prawo">Co dokładnie mówi prawo?</a></h2>
 
 Zgodnie z rozporządzeniem unijnym, **od 1 września 2025 roku nie będzie wolno wprowadzać do obrotu ani udostępniać produktów kosmetycznych zawierających TPO**. Przepisy te dotyczą zarówno producentów, jak i dystrybutorów oraz salonów kosmetycznych – niezależnie od tego, czy produkt był zakupiony wcześniej.
 
-## Jakie produkty mogą zawierać TPO?
+<h2 id="jakie-produkty-moga-zwierac-tpo"><a href="#jakie-produkty-moga-zwierac-tpo">Jakie produkty mogą zawierać TPO?</a></h2>
 
 Najczęściej znajdziesz go w:
 
@@ -48,7 +48,7 @@ W składzie INCI TPO może być oznaczone jako:
 - `Trimethylbenzoyl Diphenylphosphine Oxide`,
 - `Diphenyl(2,4,6-trimethylbenzoyl)phosphine oxide`.
 
-## Co powinnaś zrobić jako stylistka lub właścicielka salonu?
+<h2 id="co-powinnas-zrobic-jako-stylistka-lub-wlascicielka-salonu"><a href="#co-powinnas-zrobic-jako-stylistka-lub-wlascicielka-salonu">Co powinnaś zrobić jako stylistka lub właścicielka salonu?</a></h2>
 
 **Przejrzyj składy** – Sprawdź etykiety produktów w swoim salonie. Jeśli zawierają TPO, nie będą mogły być legalnie używane po wrześniu 2025.
 
@@ -58,7 +58,7 @@ W składzie INCI TPO może być oznaczone jako:
 
 **Bądź na bieżąco z dokumentacją** – Szczególnie jeśli korzystasz z marek spoza UE, zawsze żądaj karty charakterystyki produktu (MSDS) i upewnij się, że jest zgodna z unijnymi regulacjami.
 
-## Czy stare produkty trzeba wyrzucić?
+<h2 id="czy-stare-produkty-trzeba-wyrzucic"><a href="#czy-stare-produkty-trzeba-wyrzucic">Czy stare produkty trzeba wyrzucić?</a></h2>
 
 Nie ma jeszcze jednoznacznego stanowiska w sprawie tzw. *sell-through*, czyli wykorzystywania wcześniej kupionych produktów do wyczerpania zapasów. Jednak zgodnie z aktualną interpretacją – **wszystko, co zawiera TPO, po 1 września 2025 nie powinno być używane w usługach kosmetycznych**.
 

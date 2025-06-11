@@ -26,13 +26,13 @@ Tiksotropia to zjawisko, w którym materiał zmienia swoją lepkość pod wpływ
 
 To zjawisko jest dobrze znane w przemyśle chemicznym i kosmetycznym, a jednym z popularnych zastosowań tiksotropii są żele do stylizacji paznokci.
 
-### Tiksotropia w żelach do paznokci
+<h3 id="tiksotropia-w-zelach-do-paznokci"><a href="tiksotropia-w-zelach-do-paznokci">Tiksotropia w żelach do paznokci</a></h3>
 
 Żele z tiksotropią to innowacyjne produkty w stylizacji paznokci, które bardzo ułatwiają pracę stylistkom paznokci. Jak to działa?
 * Podczas aplikacji, gdy pędzelek porusza się po powierzchni paznokcia, żel staje się bardziej płynny, co ułatwia równomierne rozprowadzenie produktu.
 * Po nałożeniu żel wraca do swojej pierwotnej, gęstszej konsystencji, co sprawia, że nie spływa na skórki i nie zalewa wałów paznokciowych.
 
-### Zalety żeli tiksotropowych
+<h3 id="zalety-zeli-tiksotropowych"><a href="#zalety-zeli-tiksotropowych">Zalety żeli tiksotropowych</a></h3>
 
 1. Lepsza kontrola nad produktem
 Tradycyjne żele mogą być zbyt rzadkie (spływają na skórki) lub zbyt gęste (trudne do rozprowadzenia). Dzięki tiksotropii produkt jest łatwy w aplikacji, ale jednocześnie stabilny na paznokciu.
@@ -48,13 +48,13 @@ Ponieważ żel nie spływa po nałożeniu, można uniknąć problemu z rozlewani
 
 :blog-image{src="/rozlany-zel.webp" alt="Tiksotropia" align="right" height="300"}
 
-### Dla kogo są żele tiksotropowe?
+<h3 id="dla-kogo-sa-zele-tiksotropowe"><a href="#dla-kogo-sa-zele-tiksotropowe">Dla kogo są żele tiksotropowe?</a></h3>
 
 * Dla stylistek paznokci, które cenią sobie komfort pracy i precyzję
 * Dla początkujących, którzy chcą uniknąć problemów z rzadkimi lub zbyt gęstymi żelami
 * Dla osób, które samodzielnie wykonują manicure żelowy i chcą ułatwić sobie aplikację
 
-### Przykłady żeli z tiksotropią: 
+<h3 id="przyklady-zeli-z-tiksotropia"><a href="przyklady-zeli-z-tiksotropia">Przykłady żeli z tiksotropią: </a></h3>
 * [Excellent Pro - Builder Gel with Thixotropy](/kategoria/excellent-pro-builder-gel-with-thixotropy)
 * [Victoria Vynn - Mousse Gel ](/kategoria/victoria-vynn-mousse)
 * [PB Nails - Easy Way](/kategoria/pb-nails-easy-way)

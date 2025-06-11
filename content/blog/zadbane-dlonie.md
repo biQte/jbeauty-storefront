@@ -20,14 +20,14 @@ thumbnail: "/zadbane-dlonie-2.webp"
 
 Piękne dłonie to nie tylko równo spiłowane paznokcie i modny lakier – to przede wszystkim zdrowe i zadbane skórki. Choć często o nich zapominamy, to właśnie one pełnią funkcję ochronną dla macierzy paznokcia i wpływają na estetykę całej dłoni. Jak o nie dbać, by uniknąć suchych skórek, zadzierania czy stanów zapalnych? Sprawdź poniżej!
 
-## 1. Codzienne nawilżenie – podstawa pielęgnacji
+<h2 id="codzienne-nawilzenie-podstawa-pielegnacji"><a href="#codzienne-nawilzenie-podstawa-pielegnacji">1. Codzienne nawilżenie – podstawa pielęgnacji</a></h2>
 Skórki wymagają regularnego nawilżania – tak samo jak usta czy dłonie. Najlepiej stosować specjalistyczne olejki lub kremy z witaminami A, E i F, które poprawiają elastyczność naskórka. Dobrze działają też oleje roślinne – np. migdałowy, jojoba czy arganowy.
 
 Pro tip: Zawsze po umyciu rąk delikatnie wmasuj odrobinę olejku w skórki – to mały gest, który robi dużą różnicę.
 
 Wypróbuj: [Victoria Vynn Perfumowana Oliwka z drobinkami](https://jbeautysklep.pl/produkt/victoria-vynn-senso-oliwka-do-pielegnacji-love-me-9ml)
 
-## 2. Witaminowy zastrzyk od środka
+<h2 id="witaminowy-zastrzyk-od-srodka"><a href="#witaminowy-zastrzyk-od-srodka">2. Witaminowy zastrzyk od środka</a></h2>
 Skórki, które są przesuszone, pękają lub rogowacieją, mogą sygnalizować niedobory witamin. Najważniejsze z nich to:
 - Witamina A – regeneruje naskórek
 - Witamina E – działa przeciwzapalnie i chroni przed wolnymi rodnikami
@@ -36,17 +36,17 @@ Skórki, które są przesuszone, pękają lub rogowacieją, mogą sygnalizować 
 
 Warto wzbogacić dietę o warzywa liściaste, orzechy, jajka, awokado czy suplementy wspierające kondycję skóry i paznokci.
 
-## 3. Delikatne, ale skuteczne usuwanie skórek
+<h2 id="delikatne-ale-skuteczne-usuwanie-skorek"><a href="#delikatne-ale-skuteczne-usuwanie-skorek">3. Delikatne, ale skuteczne usuwanie skórek</a></h2>
 Zamiast wycinać skórki, lepiej je zmiękczyć i odsunąć – to bezpieczniejsze i mniej inwazyjne.
 
 Polecamy: [Victoria Vynn Cuticle Jelly Remover](https://jbeautysklep.pl/produkt/victoria-vynn-cuticle-jelly-remover-30ml) – żelowy preparat do usuwania skórek, który w ciągu kilkudziesięciu sekund zmiękcza nawet najbardziej oporne fragmenty naskórka. Dzięki żelowej konsystencji nie spływa i jest bardzo wydajny. Idealny zarówno do manicure domowego, jak i profesjonalnego.
 
 :blog-image{src="/zadbane-dlonie-1.webp" alt="Zadbane dłonie" height="500"}
 
-## 4. Rytuały raz w tygodniu 
+<h2 id="rytualy-raz-w-tygodniu"><a href="#rytualy-raz-w-tygodniu">4. Rytuały raz w tygodniu </a></h2>
 Raz w tygodniu warto wykonać delikatny peeling (np. z cukru i oleju kokosowego), by usunąć martwy naskórek i poprawić wchłanianie składników aktywnych. W chłodne dni świetnie sprawdzi się także kąpiel dłoni w ciepłym naparze z rumianku – działa zmiękczająco i łagodząco.
 
-## 5. Ochrona przed czynnikami zewnętrznymi
+<h2 id="ochrona-przed-czynnikami-zewnetrznymi"><a href="#ochrona-przed-czynnikami-zewnetrznymi">5. Ochrona przed czynnikami zewnętrznymi</a></h2>
 Agresywne detergenty, zmiany temperatur, alkohol w płynach dezynfekcyjnych – wszystko to osłabia skórki. Noś rękawiczki do prac domowych, stosuj kremy z gliceryną, mocznikiem lub pantenolem, i zawsze miej pod ręką balsam do rąk.
 
 ---
