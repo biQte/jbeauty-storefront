@@ -149,6 +149,12 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/kategoria/promocje-tygodnia": {
+      redirect: {
+        to: "/promocje",
+        statusCode: 301,
+      },
+    },
   },
   runtimeConfig: {
     public: {
@@ -271,6 +277,16 @@ font-src * data: blob: 'unsafe-inline';
       lg: 1024,
       xl: 1280,
     },
+    ipx: {
+      modifiers: {
+        quality: 75,
+        format: "webp",        
+      },
+      maxAge: 30 * 24 * 60 * 60,
+      http: {
+        maxAge: 30 * 24 * 60 * 60
+      }
+    }
   },
 
   // seo: {
@@ -433,6 +449,15 @@ font-src * data: blob: 'unsafe-inline';
         { loc: "/rejestracja", changefreq: "monthly", priority: 0.7 },
         { loc: "/regulamin", changefreq: "monthly", priority: 0.7 },
         { loc: "/polityka-prywatnosci", changefreq: "monthly", priority: 0.7 },
+        { loc: "/blog", changefreq: "daily", priority: 0.9 },
+        { loc: "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start", changefreq: "daily", priority: 0.9 },
+        { loc: "/blog/manicure-hybrydowy-krok-po-kroku", changefreq: "monthly", priority: 0.9 },
+        { loc: "/blog/tiksotropia-w-zelach-do-stylizacji-paznokci", changefreq: "monthly", priority: 0.9 },
+        { loc: "/blog/zadbane-dlonie-jak-skutecznie-pielegnowac-skorki-wokol-paznokci", changefreq: "monthly", priority: 0.9 },
+        { loc: "/blog/koniec-tpo-w-produktach-do-paznokci-co-to-oznacza-dla-branzy-beauty", changefreq: "monthly", priority: 0.9 },
+        { loc: "/wyprzedaz", changefreq: "weekly", priority: 0.8 },
+        { loc: "/nowosci", changefreq: "weekly", priority: 0.8 },
+        { loc: "/promocje", changefreq: "weekly", priority: 0.9 },
         ...categoryUrls,
         ...productUrls,
       ];
