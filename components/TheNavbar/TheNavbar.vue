@@ -100,7 +100,12 @@ onMounted(async () => {
         <v-menu
           v-model="mobileMenu"
           location="start"
-          :width="width"
+          eager
+          scroll-strategy="block"
+          :width="100 + '%'"
+          :height="100 + '%'"
+          attach="body"
+          location-strategy="static"
           scrim="#FFFFFF"
           :close-on-content-click="false"
         >
@@ -154,12 +159,12 @@ onMounted(async () => {
                 >Wyprzedaż</v-btn
               >
               <v-btn
-                :to="`/kategoria/promocja-tygodnia`"
+                :to="`/promocje`"
                 @click="closeMenu"
                 class="mobile-menu-item"
                 variant="text"
               >
-                Promocja tygodnia
+                Promocje
               </v-btn>
               <v-btn
                 to="/blog"
@@ -249,10 +254,10 @@ onMounted(async () => {
           <v-btn
             class="menu-link"
             variant="text"
-            :to="`/kategoria/promocja-tygodnia`"
+            :to="`/promocje`"
             :active="false"
             size="small"
-            >Promocja tygodnia</v-btn
+            >Promocje</v-btn
           >
           <!--<v-menu>
             <template v-slot:activator="{ props }">
