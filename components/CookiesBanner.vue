@@ -19,7 +19,7 @@ const acceptCookies = () => {
     class="pa-6"
     max-width="400"
     elevation="2"
-    style="position: fixed; bottom: 16px; right: 16px; z-index: 1000"
+    style="position: fixed; bottom: 0px; right: 0px; z-index: 1000"
   >
     <h4 class="text-h5 font-weight-bold mb-4">Pliki cookies</h4>
     <p>
