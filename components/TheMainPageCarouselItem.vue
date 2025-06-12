@@ -24,7 +24,8 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
     :alt="alt"
     format="webp"
     quality="80"
-    class="w-full h-full object-cover"
+    class="w-full object-contain"
+    :class="isMobile ? 'h-[96%]' : 'h-full'"
     :sizes="[320, 640, 768, 1024, 1280, 2000]"
     fit="contain"
   />
