@@ -19,6 +19,11 @@ onMounted(() => {
     cycle
     class="carousel"
   >
+    <NuxtLink :to="'/promocje'" aria-label="promocje">
+      <v-carousel-item>
+        <TheMainPageCarouselItem desktop="/baner-desktop.webp" mobile="/baner-mobile.webp" alt="promocje" placeholder="/baner-desktop-placeholder.webp" mobile-placeholder="/baner-mobile-placeholder.webp" :is-first="true" />
+      </v-carousel-item>
+    </NuxtLink>
     <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'" aria-label="vitamin-boost-base">
       <v-carousel-item>
         <TheMainPageCarouselItem desktop="/vv-boost-base.webp" mobile="/vv-boost-base-mobile.webp" alt="vv-boost-base" placeholder="/vv-boost-base-placeholder.webp" mobile-placeholder="/vv-boost-base-mobile-placeholder.webp" :is-first="true" />
