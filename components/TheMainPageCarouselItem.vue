@@ -8,25 +8,45 @@ const props = defineProps<{
   isFirst?: boolean;
 }>();
 
-const {width} = useWindowSize({initialWidth: 390});
+const { width } = useWindowSize({ initialWidth: 390 });
 const isMobile = computed(() => width.value < 768);
 
-const loading = computed(() => props.isFirst ? 'eager' : 'lazy');
+const loading = ref(true);
+const onLoad = () => {
+  loading.value = false;
+};
+
+const src = computed(() => isMobile.value ? props.mobile : props.desktop);
+const placeholderSrc = computed(() =>
+  isMobile.value && props.mobilePlaceholder
+    ? props.mobilePlaceholder
+    : props.placeholder
+);
+
 const importance = computed(() => props.isFirst ? 'high' : 'low');
 </script>
 
 <template>
-    <nuxt-img
-    :src="isMobile ? mobile : desktop"
-    :loading="loading"
-    :importance="importance"
-    :placeholder="isMobile && mobilePlaceholder ? mobilePlaceholder : placeholder ? placeholder : undefined"
-    :alt="alt"
-    format="webp"
-    quality="80"
-    class="w-full object-contain"
+  <!-- <div
+    class="w-full"
     :class="isMobile ? 'h-[96%]' : 'h-full'"
-    :sizes="[320, 640, 768, 1024, 1280, 2000]"
-    fit="contain"
-  />
+  > -->
+    <img
+      v-if="loading && placeholderSrc"
+      :src="placeholderSrc"
+      :alt="alt"
+      class="w-full object-contain z-0"
+      :class="isMobile ? 'h-[96%]' : 'h-full'"
+    />
+    <img
+      :src="src"
+      loading="lazy"
+      @load="onLoad"
+      :importance="importance"
+      :alt="alt"
+      class="w-full object-contain transition-opacity duration-700 z-10"
+      :class="[isMobile ? 'h-[96%]' : 'h-full', loading ? 'opacity-0' : 'opacity-100']"
+      fit="contain"
+    />
+  <!-- </div> -->
 </template>
