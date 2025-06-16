@@ -13,9 +13,9 @@ const isMobile = computed(() => width.value < 768);
 
 const loading = ref(true);
 const onLoad = () => {
-  setTimeout(() => {
+  // setTimeout(() => {
     loading.value = false;
-  }, 3000);
+  // }, 2000);
 };
 
 const src = computed(() => isMobile.value ? props.mobile : props.desktop);
