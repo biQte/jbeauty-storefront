@@ -15,7 +15,7 @@ const loading = ref(true);
 const onLoad = () => {
   setTimeout(() => {
     loading.value = false;
-  }, 2000);
+  }, 3000);
 };
 
 const src = computed(() => isMobile.value ? props.mobile : props.desktop);
