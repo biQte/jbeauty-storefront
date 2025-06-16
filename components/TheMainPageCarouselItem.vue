@@ -29,16 +29,16 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
 </script>
 
 <template>
-  <!-- <div
+  <div
     class="w-full"
     :class="isMobile ? 'h-[96%]' : 'h-full'"
-  > -->
+  >
     <img
       v-if="loading && placeholderSrc"
       :src="placeholderSrc"
       :alt="alt"
-      class="w-full object-contain z-0"
-      :class="isMobile ? 'h-[96%]' : 'h-full'"
+      class="w-full object-contain absolute top-0 left-0"
+      :class="[isMobile ? 'h-[96%]' : 'h-full']"
     />
     <img
       :src="src"
@@ -50,5 +50,5 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
       :class="[isMobile ? 'h-[96%]' : 'h-full', loading ? 'opacity-0' : 'opacity-100']"
       fit="contain"
     />
-  <!-- </div> -->
+  </div>
 </template>
