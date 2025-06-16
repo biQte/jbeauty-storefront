@@ -46,32 +46,50 @@ const chunkedProducts = computed(() =>
 );
 
 const currentSlide = ref(0);
-let intervalId: ReturnType<typeof setInterval>;
+let intervalId: ReturnType<typeof setInterval> | null = null;
+
+function clearAutoplay() {
+  if (intervalId) clearInterval(intervalId);
+  intervalId = null;
+}
+
+function restartAutoplay() {
+  clearAutoplay();
+
+  intervalId = setInterval(() => {
+    if (!isPaused.value) nextSlide();
+  }, 6000);
+}
 
 onMounted(() => {
   isClient.value = true;
   nextTick(() => {
     currentSlide.value = 0;
   });
-  intervalId = setInterval(() => {
-    if (!isPaused.value) nextSlide();
-  }, 6000);
+  setTimeout(() => {
+    restartAutoplay();
+  }, 5000);
 });
 
-onUnmounted(() => clearInterval(intervalId));
+onUnmounted(() => {
+  clearAutoplay();
+});
 
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % chunkedProducts.value.length;
+  restartAutoplay(); // reset timer po ręcznym kliknięciu
 };
 
 const prevSlide = () => {
   currentSlide.value =
     (currentSlide.value - 1 + chunkedProducts.value.length) %
     chunkedProducts.value.length;
+  restartAutoplay();
 };
 
 const goToSlide = (index: number) => {
   currentSlide.value = index;
+  restartAutoplay();
 };
 
 const formatPrice = (value?: number | null) => {
@@ -141,7 +159,9 @@ const handleGesture = () => {
 </script>
 
 <template>
-  <div class="relative w-full overflow-hidden pb-20">
+  <div class="relative w-full overflow-hidden pb-20"
+    @mouseenter="isPaused = true"
+    @mouseleave="isPaused = false">
     <div
       class="flex transition-transform duration-700 ease-in-out"
       :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
@@ -228,9 +248,9 @@ const handleGesture = () => {
           <button
             class="text-sm w-full py-2 rounded-b-lg font-semibold transition-colors"
             :class="{
-      'bg-[#ff5c8a] hover:bg-pink-600 text-white': product.variants?.[0].inventory_quantity! > 0,
-      'bg-gray-300 text-gray-500 cursor-not-allowed': product.variants?.[0].inventory_quantity! < 1,
-    }"
+              'bg-[#ff5c8a] hover:bg-pink-600 text-white': product.variants?.[0].inventory_quantity! > 0,
+              'bg-gray-300 text-gray-500 cursor-not-allowed': product.variants?.[0].inventory_quantity! < 1,
+            }"
             :disabled="product.variants?.[0].inventory_quantity! < 1"
             @click="addToCart(product)"
           >
