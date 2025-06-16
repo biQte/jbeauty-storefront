@@ -13,7 +13,9 @@ const isMobile = computed(() => width.value < 768);
 
 const loading = ref(true);
 const onLoad = () => {
-  loading.value = false;
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
 };
 
 const src = computed(() => isMobile.value ? props.mobile : props.desktop);
@@ -31,16 +33,16 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
     class="w-full"
     :class="isMobile ? 'h-[96%]' : 'h-full'"
   > -->
-    <!-- <img
+    <img
       v-if="loading && placeholderSrc"
       :src="placeholderSrc"
       :alt="alt"
       class="w-full object-contain z-0"
       :class="isMobile ? 'h-[96%]' : 'h-full'"
-    /> -->
+    />
     <img
       :src="src"
-      :loading="isFirst ? 'eager' : 'lazy'"
+      loading="lazy"
       @load="onLoad"
       :importance="importance"
       :alt="alt"
