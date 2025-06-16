@@ -31,16 +31,16 @@ const importance = computed(() => props.isFirst ? 'high' : 'low');
     class="w-full"
     :class="isMobile ? 'h-[96%]' : 'h-full'"
   > -->
-    <img
+    <!-- <img
       v-if="loading && placeholderSrc"
       :src="placeholderSrc"
       :alt="alt"
       class="w-full object-contain z-0"
       :class="isMobile ? 'h-[96%]' : 'h-full'"
-    />
+    /> -->
     <img
       :src="src"
-      loading="lazy"
+      :loading="isFirst ? 'eager' : 'lazy'"
       @load="onLoad"
       :importance="importance"
       :alt="alt"
