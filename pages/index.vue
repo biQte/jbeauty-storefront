@@ -2,6 +2,10 @@
 useSeoMeta({
   title: "JBeauty - Z pasji do paznokci",
   ogTitle: "JBeauty - Z pasji do paznokci",
+  ogImage: "/android-chrome-512x512.png",
+  twitterImage: "/android-chrome-512x512.png",
+  twitterCard: "summary_large_image",
+  ogUrl: "https://jbeautysklep.pl",
   description:
     "JBeauty - Twój sklep z produktami do stylizacji paznokci. Oferujemy lakiery hybrydowe, bazy, topy, akcesoria, narzędzia i wszystko, czego potrzebujesz do pięknego manicure. Sprawdź nasze produkty i zadbaj o swoje paznokcie jak profesjonalistka!",
   ogDescription:
