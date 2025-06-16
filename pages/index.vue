@@ -54,7 +54,7 @@ if (results[2].status === "fulfilled") {
 const config = useRuntimeConfig();
 const route = useRoute();
 
-const { data: blogPosts } = await useAsyncData("blog", async () => {
+const { data: blogPosts } = await useAsyncData("blog-preview", async () => {
   return await queryCollection("blog")
     .where("draft", "<>", false)
     .order("date", "DESC")
