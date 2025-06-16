@@ -2,8 +2,8 @@
 useSeoMeta({
   title: "JBeauty - Z pasji do paznokci",
   ogTitle: "JBeauty - Z pasji do paznokci",
-  ogImage: "/android-chrome-512x512.png",
-  twitterImage: "/android-chrome-512x512.png",
+  ogImage: "https://jbeautysklep.pl/android-chrome-512x512.png",
+  twitterImage: "https://jbeautysklep.pl/android-chrome-512x512.png",
   twitterCard: "summary_large_image",
   ogUrl: "https://jbeautysklep.pl",
   description:
