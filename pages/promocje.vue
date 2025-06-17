@@ -35,7 +35,7 @@ const textPromotions: any[] = [
   <div class="max-w-screen-xl mx-auto px-4 py-10">
     <h1 class="text-3xl font-bold text-center mb-10 text-pink-600">PROMOCJE</h1>
 
-    <nuxt-img class="w-full h-auto object-cover rounded-2xl" src="/baner-strona-promocje.webp" placeholder="/baner-strona-promocje-placeholder.webp" />
+    <nuxt-img class="w-full h-auto object-cover rounded-2xl" src="/wyprzedaz-category.webp" placeholder="/wyprzedaz-category-placeholder.webp" />
     
     <h2 class="text-sm md:text-lg lg:text-2xl bg-[#ff007a] text-black font-bold text-center mt-5 mb-5 pb-2 pt-2 pl-4 pr-4 rounded-xl">Klikaj w banery i odkrywaj promocyjne produkty</h2>
 
