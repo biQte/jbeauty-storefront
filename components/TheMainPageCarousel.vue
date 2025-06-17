@@ -27,7 +27,7 @@ onMounted(() => {
   >
     <NuxtLink :to="'/promocje'" aria-label="promocje">
       <v-carousel-item>
-        <TheMainPageCarouselItem desktop="/baner-desktop.webp" mobile="/baner-mobile.webp" alt="promocje" placeholder="/baner-desktop-placeholder.webp" mobile-placeholder="/baner-mobile-placeholder.webp" :is-first="true" />
+        <TheMainPageCarouselItem desktop="/wyprzedaz-desktop.webp" mobile="/wyprzedaz-mobile.webp" alt="promocje" placeholder="/wyprzedaz-desktop-placeholder.webp" mobile-placeholder="/wyprzedaz-mobile-placeholder.webp" :is-first="true" />
       </v-carousel-item>
     </NuxtLink>
     <NuxtLink :to="'/kategoria/victoria-vynn-vitamin-boost-base'" aria-label="vitamin-boost-base">
