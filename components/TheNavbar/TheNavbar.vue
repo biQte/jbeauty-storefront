@@ -92,6 +92,7 @@ watch(mobileMenu, (open) => {
   if (open) {
     previousScrollY.value = window.scrollY;
 
+    if(window.scrollY > 0) {
     // Scroll to top, ale tylko jeśli nie jesteśmy już na górze
         window.scrollTo({
           top: 0,
@@ -100,15 +101,18 @@ watch(mobileMenu, (open) => {
         });
 
         scrollStrategy.value = "block";
+
+      }
   } else {
     // Przywróć poprzedni scroll
+    scrollStrategy.value = "none";
+
       window.scrollTo({
         top: previousScrollY.value,
         // behavior: "smooth",
         behavior: "instant"
       });
 
-    scrollStrategy.value = "none";
   }
 });
 
