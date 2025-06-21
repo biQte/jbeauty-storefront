@@ -105,7 +105,7 @@ watch(mobileMenu, (open) => {
       }
   } else {
     // Przywróć poprzedni scroll
-    scrollStrategy.value = "none";
+    scrollStrategy.value = "reposition";
 
       window.scrollTo({
         top: previousScrollY.value,
