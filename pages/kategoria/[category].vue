@@ -208,7 +208,7 @@ onMounted(() => {
       class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
       <div
-        v-for="product in products"
+        v-for="product in products.filter((p) => p.variants?.[0].inventory_quantity! > 0)"
         :key="product.id"
         class="bg-white rounded-lg shadow hover:shadow-md overflow-hidden flex flex-col transition-transform hover:-translate-y-1"
       >
