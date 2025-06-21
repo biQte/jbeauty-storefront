@@ -13,6 +13,8 @@ const brands = ref();
 
 const nuxtApp = useNuxtApp();
 const mobileMenu = ref<boolean>(false);
+const previousScrollY = ref(0);
+const scrollStrategy = ref<"block" | "close" | "none" | "reposition">("block");
 
 const config = useRuntimeConfig();
 const { width, height } = useWindowSize({
@@ -86,6 +88,30 @@ const closeMenu = () => {
 
 const cartId = useCookie("cart_id");
 
+watch(mobileMenu, (open) => {
+  if (open) {
+    previousScrollY.value = window.scrollY;
+
+    // Scroll to top, ale tylko jeśli nie jesteśmy już na górze
+        window.scrollTo({
+          top: 0,
+          // behavior: "smooth",
+          behavior: "instant"
+        });
+
+        scrollStrategy.value = "block";
+  } else {
+    // Przywróć poprzedni scroll
+      window.scrollTo({
+        top: previousScrollY.value,
+        // behavior: "smooth",
+        behavior: "instant"
+      });
+
+    scrollStrategy.value = "none";
+  }
+});
+
 onMounted(async () => {
   if (!cartStore.cartObject && cartId !== null) {
     cartStore.fetchCart();
@@ -101,7 +127,7 @@ onMounted(async () => {
           v-model="mobileMenu"
           location="start"
           eager
-          scroll-strategy="block"
+          :scroll-strategy="scrollStrategy"
           :width="100 + '%'"
           :height="100 + '%'"
           attach="body"
