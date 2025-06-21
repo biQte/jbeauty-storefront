@@ -155,6 +155,36 @@ font-src * data: blob: 'unsafe-inline';
         statusCode: 301,
       },
     },
+    "/kategoria/cążki-i-nożyczki": {
+      redirect: {
+        to: "/kategoria/cazki-i-nozyczki",
+        statusCode: 301,
+      }
+    },
+    "/kategoria/pędzelki": {
+      redirect: {
+        to: "/kategoria/pedzelki",
+        statusCode: 301,
+      }
+    },
+    "/kategoria/podkłady-i-rękawiczki": {
+      redirect: {
+        to: "/kategoria/podklady-i-rekawiczki",
+        statusCode: 301,
+      }
+    },
+    "/kategoria/pozostałe": {
+      redirect: {
+        to: "/kategoria/pozostale",
+        statusCode: 301,
+      }
+    },
+    "/kategoria/gadżety": {
+      redirect: {
+        to: "/kategoria/gadzety",
+        statusCode: 301,
+      }
+    },
   },
   runtimeConfig: {
     public: {
