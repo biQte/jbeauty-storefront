@@ -91,7 +91,6 @@ const cartId = useCookie("cart_id");
 watch(mobileMenu, (open) => {
   if (open) {
     previousScrollY.value = window.scrollY;
-
     if(window.scrollY > 0) {
     // Scroll to top, ale tylko jeśli nie jesteśmy już na górze
         window.scrollTo({
@@ -107,11 +106,12 @@ watch(mobileMenu, (open) => {
     // Przywróć poprzedni scroll
     scrollStrategy.value = "reposition";
 
-      window.scrollTo({
-        top: previousScrollY.value,
-        // behavior: "smooth",
-        behavior: "instant"
-      });
+      setTimeout(() => {
+        window.scrollTo({
+          top: previousScrollY.value,
+          behavior: "instant",
+        });
+      }, 50);
 
   }
 });
