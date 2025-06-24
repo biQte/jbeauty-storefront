@@ -39,7 +39,7 @@ const textPromotions: any[] = [
       <nuxt-img class="w-full h-auto object-cover rounded-2xl" src="/wyprzedaz-category.webp" placeholder="/wyprzedaz-category-placeholder.webp" />
     </a>
     
-    <h2 class="text-sm md:text-lg lg:text-2xl bg-[#ff007a] text-black font-bold text-center mt-5 mb-5 pb-2 pt-2 pl-4 pr-4 rounded-xl"><a href="#promo-banners">⬇️ Klikaj w banery i odkrywaj promocyjne produkty ⬇️</a></h2>
+    <h2 class="text-xs md:text-lg lg:text-2xl bg-[#ff007a] text-black font-bold text-center mt-5 mb-5 pb-2 pt-2 pl-4 pr-4 rounded-xl"><a href="#promo-banners">⬇️ Klikaj w banery i odkrywaj promocyjne produkty ⬇️</a></h2>
 
     <h3 class="text-sm md:text-lg lg:text-xl text-black text-center font-bold">Lakiery hybrydowe GRATIS💅🏼</h3>
 
