@@ -35,17 +35,18 @@ const textPromotions: any[] = [
   <div class="max-w-screen-xl mx-auto px-4 py-10">
     <h1 class="text-3xl font-bold text-center mb-10 text-pink-600">PROMOCJE</h1>
 
-    <a href="#promo-banners" class="block mb-10">
+    <a href="#promo-banners" class="block mb-2">
       <nuxt-img class="w-full h-auto object-cover rounded-2xl" src="/wyprzedaz-category.webp" placeholder="/wyprzedaz-category-placeholder.webp" />
     </a>
     
-    <h2 class="text-xs md:text-lg lg:text-2xl bg-[#ff007a] text-black font-bold text-center mt-5 mb-5 pb-2 pt-2 pl-4 pr-4 rounded-xl"><a href="#promo-banners">⬇️ Klikaj w banery i odkrywaj promocyjne produkty ⬇️</a></h2>
+    <p class="text-xs md:text-sm lg:text-lg text-black text-center"><v-icon icon="mdi-truck-check-outline" /> Darmowa dostawa paczkomatem <span class="font-bold">od 200zł</span></p>
+
+    <h2 class="text-xs md:text-lg lg:text-2xl bg-[#ff007a] text-black font-bold text-center mt-2 mb-4 pb-2 pt-2 pl-1 pr-1 md:pl-2 md:pr-2 lg:pl-4 lg:pr-4 rounded-xl"><a href="#promo-banners">⬇️ Klikaj w banery i odkrywaj promocyjne produkty ⬇️</a></h2>
 
     <h3 class="text-sm md:text-lg lg:text-xl text-black text-center font-bold">Lakiery hybrydowe GRATIS💅🏼</h3>
 
-    <p class="text-center text-black">Zrób zakupu za minimum 199 zł a otrzymasz losowy lakier hybrydowy 8 ml za darmo!</p>
+    <p class="text-center text-black text-xs md:text-sm lg:text-lg mb-4">Zrób zakupy za minimum 199 zł a otrzymasz losowy lakier hybrydowy 8 ml za darmo!</p>
 
-    <h4 class="text-xs md:text-sm lg:text-lg text-black text-center mb-10 mt-5"><v-icon icon="mdi-truck-check-outline" /> Darmowa dostawa paczkomatem <span class="font-bold">od 200zł</span></h4>
     <!-- Sekcja banerów -->
     <div class="grid grid-cols-1 gap-6 mb-12" id="promo-banners">
       <a
