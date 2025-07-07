@@ -247,13 +247,13 @@ const houseNumber = useField<string>("houseNumber");
 const phoneNumber = useField<string>("phoneNumber");
 const wantsInvoice = useField<boolean>("wantsInvoice");
 const differentThanShipping = useField<boolean>("differentThanShipping");
-const vatNumber = useField<string>("vatNumber");
-const companyName = useField<string>("companyName");
-const companyPostalCode = useField<string>("companyPostalCode");
-const companyCity = useField<string>("companyCity");
-const companyStreet = useField<string>("companyStreet");
-const companyhouseNumber = useField<string>("companyHouseNumber");
-const companyPhoneNumber = useField<string>("companyPhoneNumber");
+const vatNumber = useField<string | undefined>("vatNumber");
+const companyName = useField<string | undefined>("companyName");
+const companyPostalCode = useField<string | undefined>("companyPostalCode");
+const companyCity = useField<string | undefined>("companyCity");
+const companyStreet = useField<string | undefined>("companyStreet");
+const companyhouseNumber = useField<string | undefined>("companyHouseNumber");
+const companyPhoneNumber = useField<string | undefined>("companyPhoneNumber");
 
 const parcelLockerName = ref<string>("");
 const parcelLockerCity = ref<string>("");
@@ -371,11 +371,11 @@ watch(
           newOptions.cartObject.shipping_address.metadata.vatNumber
             ? (newOptions.cartObject.shipping_address.metadata
                 .vatNumber as string)
-            : "";
+            : undefined;
         companyName.value.value = newOptions.cartObject.shipping_address
           ?.company
           ? newOptions.cartObject.shipping_address.company
-          : "";
+          : undefined;
       }
 
       if (
@@ -387,29 +387,29 @@ watch(
         companyPostalCode.value.value = newOptions.cartObject.billing_address
           ?.postal_code
           ? newOptions.cartObject.billing_address.postal_code
-          : "";
+          : undefined;
         companyCity.value.value = newOptions.cartObject.billing_address?.city
           ? newOptions.cartObject.billing_address.city
-          : "";
+          : undefined;
         companyStreet.value.value = newOptions.cartObject.billing_address
           ?.address_1
           ? newOptions.cartObject.billing_address.address_1
-          : "";
+          : undefined;
         companyhouseNumber.value.value = newOptions.cartObject.billing_address
           ?.address_2
           ? newOptions.cartObject.billing_address.address_2
-          : "";
+          : undefined;
         companyPhoneNumber.value.value = newOptions.cartObject.billing_address
           ?.phone
           ? newOptions.cartObject.billing_address.phone
-          : "";
+          : undefined;
         vatNumber.value.value = newOptions.cartObject.billing_address?.metadata
           ?.vatNumber
           ? (newOptions.cartObject.billing_address.metadata.vatNumber as string)
-          : "";
+          : undefined;
         companyName.value.value = newOptions.cartObject.billing_address?.company
           ? newOptions.cartObject.billing_address.company
-          : "";
+          : undefined;
       }
 
       if (
@@ -777,20 +777,20 @@ const fillAddressFromSaved = (address: any) => {
     wantsInvoice.value.value = address.wantsInvoice || false;
     differentThanShipping.value.value =
       address.differentThanShipping || false;
-    vatNumber.value.value = address.vatNumber || "";
-    companyName.value.value = address.company || "";
-    companyPostalCode.value.value = address.companyPostalCode || "";
-    companyCity.value.value = address.companyCity || "";
-    companyStreet.value.value = address.companyStreet || "";
-    companyhouseNumber.value.value = address.companyHouseNumber || "";
-    companyPhoneNumber.value.value = address.companyPhoneNumber || "";
-    parcelLockerName.value = address.parcelLockerName || "";
-    parcelLockerCity.value = address.parcelLockerCity || "";
-    parcelLockerPostalCode.value = address.parcelLockerPostalCode || "";
+    vatNumber.value.value = address.vatNumber || undefined;
+    companyName.value.value = address.company || undefined;
+    companyPostalCode.value.value = address.companyPostalCode || undefined;
+    companyCity.value.value = address.companyCity || undefined;
+    companyStreet.value.value = address.companyStreet || undefined;
+    companyhouseNumber.value.value = address.companyHouseNumber || undefined;
+    companyPhoneNumber.value.value = address.companyPhoneNumber || undefined;
+    parcelLockerName.value = address.parcelLockerName || undefined;
+    parcelLockerCity.value = address.parcelLockerCity || undefined;
+    parcelLockerPostalCode.value = address.parcelLockerPostalCode || undefined;
     parcelLockerBuildingNumber.value =
-      address.parcelLockerBuildingNumber || "";
-    parcelLockerProvince.value = address.parcelLockerProvince || "";
-    parcelLockerStreet.value = address.parcelLockerStreet || "";
+      address.parcelLockerBuildingNumber || undefined;
+    parcelLockerProvince.value = address.parcelLockerProvince || undefined;
+    parcelLockerStreet.value = address.parcelLockerStreet || undefined;
 
     updatePhoneNumber(address.phoneNumber);
     updatePostalCode(address.postalCode);
@@ -1036,7 +1036,7 @@ const maybeSaveAddress = async () => {
               autocomplete="postal-code"
               v-model="companyPostalCode.value.value"
               :error-messages="companyPostalCode.errorMessage.value"
-              @input="updateCompanyPostalCode(companyPostalCode.value.value)"
+              @input="updateCompanyPostalCode(companyPostalCode!.value!.value!)"
               label="Kod pocztowy*"
             ></v-text-field>
             <v-text-field
@@ -1072,7 +1072,7 @@ const maybeSaveAddress = async () => {
               v-model="companyPhoneNumber.value.value"
               autocomplete="tel-national"
               :error-messages="companyPhoneNumber.errorMessage.value"
-              @input="updateCompanyPhoneNumber(companyPhoneNumber.value.value)"
+              @input="updateCompanyPhoneNumber(companyPhoneNumber!.value!.value!)"
               label="Numer telefonu*"
             ></v-text-field>
           </div>
