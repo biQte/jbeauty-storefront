@@ -40,7 +40,7 @@ useHead({
 <template>
   <div class="terms-of-service-wrapper">
     <h1>Regulamin sklepu JBeauty</h1>
-    <p>Ostatnia modyfikacja: 15.11.2024r.</p>
+    <p>Ostatnia modyfikacja: 07.07.2025r.</p>
     <h2>&#167; 1 Postanowienia wstępne</h2>
     <ol>
       <li>
@@ -579,9 +579,36 @@ useHead({
         Sprzedaży skutkuje brakiem możliwości zawarcia tejże umowy.
       </li>
     </ol>
+    <h2 id="loyalty">&#167; 15 Program lojalnościowy</h2>
+    <ol>
+      <li>
+        <p>Zbieranie punktów</p>
+        <ol class="alphanumeric-list">
+          <li>Za każde pełne 20 zł wydane na produkty w jednym zamówieniu otrzymasz 1 punkt lojalnościowy.</li>
+          <li>Punkty naliczane są od łącznej wartości produktów w koszyku, niezależnie od cen pojedynczych produktów.</li>
+          <li>Punkty przyznawane są tylko w przypadku, gdy nie wykorzystano punktów lojalnościowych w danym zamówieniu.</li>
+        </ol>
+      </li>
+      <li>
+        <p>Wykorzystywanie punktów</p>
+        <ol class="alphanumeric-list">
+          <li>1 punkt = 1 zł zniżki na produkty.</li>
+          <li>Punkty można wykorzystać do obniżenia ceny produktów w zamówieniu, maksymalnie do 50% ich wartości brutto (zgodnie z obowiązującym prawem).</li>
+          <li>Punkty nie obniżają kosztów dostawy.</li>
+        </ol>
+      </li>
+      <li>
+        <p>Pozostałe informacje</p>
+        <ol class="alphanumeric-list">
+          <li>Punkty łączą się z innymi promocjami i obowiązują na każdy produkt w sklepie.</li>
+          <li>Aktualny stan punktów można sprawdzić po zalogowaniu w swoim profilu.</li>
+          <li>Sposób naliczania i wykorzystywania punktów może ulec zmianie w przyszłości.</li>
+        </ol>
+      </li>
+    </ol>
     <h2>&#167; 14 Postanowienia końcowe</h2>
     <ol>
-      <li>Regulamin obowiązuje od dnia 15.11.2024r.</li>
+      <li>Regulamin obowiązuje od dnia 07.07.2025r.</li>
       <li>
         Sprzedawca zastrzega sobie prawo do zmiany Regulaminu z ważnych przyczyn
         to jest: zmiany przepisów prawa, zmiany sposobów płatności i dostaw - w
@@ -641,7 +668,7 @@ useHead({
 
   ol {
     max-width: 1200px;
-    padding: 0 5rem;
+    padding: 0 15px;
     list-style-type: decimal;
   }
 

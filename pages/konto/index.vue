@@ -13,7 +13,7 @@ const snackbarStore = useSnackbarStore();
 
 const router = useRouter();
 
-// const loyalty = useLoyaltyPoints();
+const loyalty = useLoyaltyPoints();
 
 const { width = 390, height = 500 } = useWindowSize();
 
@@ -111,19 +111,19 @@ onMounted(async () => {
   // }
   await nextTick();
 
-  // const { data, error } = await loyalty.getLoyaltyPoints();
-  // if(error.value){
-  //   console.error('Error fetching loyalty points:', error.value);
-  //   loyaltyPoints.value = null;
-  //   return;
-  // }
+  const { data, error } = await loyalty.getLoyaltyPoints();
+  if(error.value){
+    console.error('Error fetching loyalty points:', error.value);
+    loyaltyPoints.value = null;
+    return;
+  }
 
-  // if (data.value) {
-  //   // @ts-expect-error
-  //   loyaltyPoints.value = data.value.points;
-  // } else {
-  //   loyaltyPoints.value = null;
-  // }
+  if (data.value) {
+    // @ts-expect-error
+    loyaltyPoints.value = data.value.points;
+  } else {
+    loyaltyPoints.value = null;
+  }
 });
 
 useSeoMeta({
@@ -169,7 +169,7 @@ useHead({
       <v-card-title>
         Witaj, {{ sessionStore.session?.first_name }}
       </v-card-title>
-      <!-- <v-card-subtitle v-if="loyaltyPoints">Posiadasz {{ loyaltyPoints }}pkt.</v-card-subtitle> -->
+      <v-card-subtitle v-if="loyaltyPoints">Program lojalnościowy: {{ loyaltyPoints }}pkt.</v-card-subtitle>
       <v-card-text>
         <p>Imię: {{ sessionStore.session?.first_name }}</p>
         <p>Nazwisko: {{ sessionStore.session?.last_name }}</p>

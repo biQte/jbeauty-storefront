@@ -45,6 +45,10 @@ const formatPrice = (amount?: number) =>
       class="font-bold text-lg mt-4"
     />
 
+    <div class="mt-4 space-y-2">
+      <LoyaltyPoints />
+    </div>
+
     <!-- Kody rabatowe -->
     <div v-if="promotions?.length" class="mt-4 space-y-2">
       <div v-for="promo in promotions" :key="promo.code" class="flex items-center justify-between text-sm">
@@ -52,6 +56,7 @@ const formatPrice = (amount?: number) =>
         <button
           class="text-[#ff5c8a] hover:underline"
           @click="emit('remove-discount', promo.code)"
+          v-if="!promo.code.includes('LOYALTY_')"
         >
           Usuń
         </button>

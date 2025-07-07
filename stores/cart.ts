@@ -228,6 +228,12 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = cartResponse as unknown as StoreCart;
 
+      // @ts-expect-error
+      if(cartObject.value.promotions.find((promo) => promo.code.startsWith("LOYALTY"))) {
+        await removeLoyaltyPoints();
+        await applyLoyaltyPoints();
+      }
+
       const { gtag } = useGtag();
       gtag("event", "add_to_cart", {
         currency: "PLN",
@@ -306,6 +312,12 @@ export const useCartStore = defineStore("cart", () => {
               products[0].variants[0].inventory_quantity
             );
           }
+
+          // @ts-expect-error
+          if(cartObject.value.promotions.find((promo) => promo.code.startsWith("LOYALTY"))) {
+            await removeLoyaltyPoints();
+            await applyLoyaltyPoints();
+          }
         } catch (e) {
           throw e;
         }
@@ -357,6 +369,12 @@ export const useCartStore = defineStore("cart", () => {
 
       cartObject.value = response;
 
+      // @ts-expect-error
+      if(cartObject.value.promotions.find((promo) => promo.code.startsWith("LOYALTY"))) {
+        await removeLoyaltyPoints();
+        await applyLoyaltyPoints();
+      }
+
       calculateQuantity();
       getAvailableShippingOptions();
     } catch (e) {
@@ -387,6 +405,18 @@ export const useCartStore = defineStore("cart", () => {
           }),
         }
       );
+
+      const loyaltyPromo = currentPromoCodes.find(
+        (code) => code.startsWith("LOYALTY")
+      );
+
+      console.log("Loyalty promo found:", loyaltyPromo);
+
+      if(loyaltyPromo) {
+        promoCodes.push(loyaltyPromo);
+      }
+
+      console.log(promoCodes);
 
       const cart = await $fetch(
         `${config.public.storeUrl}/api/cart/${cartObject.value.id}/promotions`,
@@ -738,6 +768,38 @@ export const useCartStore = defineStore("cart", () => {
     }
   };
 
+  const applyLoyaltyPoints = async () => {
+    try {
+      if(!cartObject.value) return;
+
+      await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/loyalty-points`, {
+          credentials: "include",
+          method: "POST",
+      });
+
+      await fetchCart();
+    } catch(e) {
+      throw e;
+    }
+  }
+
+  const removeLoyaltyPoints = async () => {
+    try {
+      if(!cartObject.value) return;
+
+      await $fetch(
+        `${config.public.storeUrl}/api/cart/${cartObject.value.id}/loyalty-points`, {
+          credentials: "include",
+          method: "DELETE",
+      });
+
+      await fetchCart();
+    } catch(e) {
+      throw e;
+    }
+  }
+
   return {
     cartObject,
     triedToFetchCart,
@@ -759,5 +821,7 @@ export const useCartStore = defineStore("cart", () => {
     retrievePaymentProviders,
     selectPaymentProvider,
     completeCart,
+    applyLoyaltyPoints,
+    removeLoyaltyPoints,
   };
 });

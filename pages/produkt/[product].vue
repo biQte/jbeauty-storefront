@@ -11,6 +11,7 @@ const sessionStore = useSessionStore();
 const router = useRouter();
 const snackbarStore = useSnackbarStore();
 const config = useRuntimeConfig();
+const loyaltyPointsComposable = useLoyaltyPoints();
 
 const { width, height } = useWindowSize();
 const productsObject = ref<Product[]>();
@@ -22,7 +23,7 @@ const showDescription = ref<boolean>(true);
 const showDetails = ref<boolean>(true);
 const activeOverlay = ref<boolean>(false);
 const currentIndex = ref<number>(0);
-// const loyaltyPoints = ref<number | null>(null);
+const loyaltyPoints = ref<number | null>(null);
 
 const { data: products, error } = await useFetch(
   // `/api/products/${route.params.product}`,
@@ -184,22 +185,26 @@ const toggleDetails = () => {
 
 const { addProduct } = useRecentlyViewed();
 
-// const calculateLoyaltyPointsForProduct = async () => {
-//   const loyaltyPointsResponse = await $fetch(
-//     `/api/products/handle/${route.params.product}/calculate-loyalty-points`,
-//     {
-//       credentials: 'include',
-//       method: "GET",
-//     }
-//   );
+const calculateLoyaltyPointsForProduct = async () => {
+  // const loyaltyPointsResponse = await $fetch(
+  //   `/api/products/handle/${route.params.product}/calculate-loyalty-points`,
+  //   {
+  //     credentials: 'include',
+  //     method: "GET",
+  //   }
+  // );
 
-//   if(!loyaltyPointsResponse){
-//     return;
-//   }
+  const { data, error } = await useLoyaltyPoints().calculatePointsForProduct(route.params.product as string);
 
-//   // @ts-expect-error
-//   loyaltyPoints.value = loyaltyPointsResponse.points as number;
-// }
+  const loyaltyPointsResponse = data.value;
+
+  if(!loyaltyPointsResponse){
+    return;
+  }
+
+  // @ts-expect-error
+  loyaltyPoints.value = loyaltyPointsResponse.points as number;
+}
 
 addProduct(product.value.id);
 
@@ -241,7 +246,7 @@ useHead({
 });
 
 onMounted(() => {
-  // calculateLoyaltyPointsForProduct();
+  calculateLoyaltyPointsForProduct();
   const { gtag } = useGtag();
   gtag("event", "view_item", {
     currency: "PLN",
@@ -495,7 +500,7 @@ onMounted(() => {
               ></v-btn>
             </div>
           </div>
-          <!-- <p v-if="loyaltyPoints">Zyskujesz: {{ loyaltyPoints }} pkt.</p> -->
+          <p v-if="loyaltyPoints">Zyskujesz: {{ loyaltyPoints }} pkt.</p>
 
           <PaymentProviders />
         </div>

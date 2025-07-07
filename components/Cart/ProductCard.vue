@@ -3,15 +3,44 @@ const props = defineProps<{
   item: any;
 }>();
 
+const loyaltyPointsComposable = useLoyaltyPoints();
+
 const emit = defineEmits<{
   (e: 'increase', id: string): void;
   (e: 'decrease', id: string): void;
   (e: 'remove', id: string): void;
 }>();
 
-const increase = () => emit('increase', props.item.id);
-const decrease = () => emit('decrease', props.item.id);
+const loyaltyPoints = ref<number | null>(null);
+
+const calculateLoyaltyPointsForProduct = async (quantity: number, handle: string) => {
+  const { data, error } = await loyaltyPointsComposable.calculatePointsForProduct(handle);
+
+  const loyaltyPointsResponse = data.value;
+
+  if(!loyaltyPointsResponse){
+    return;
+  }
+
+  // @ts-expect-error
+  loyaltyPoints.value = loyaltyPointsResponse.points * quantity;
+}
+
+const increase = () => {
+  emit('increase', props.item.id);
+  calculateLoyaltyPointsForProduct(props.item.quantity + 1, props.item.product_handle);
+};
+const decrease = () => {
+  emit('decrease', props.item.id);
+  calculateLoyaltyPointsForProduct(props.item.quantity - 1, props.item.product_handle);
+};
 const remove = () => emit('remove', props.item.id);
+
+onMounted(async () => {
+  console.log(props.item);
+  await nextTick();
+  await calculateLoyaltyPointsForProduct(props.item.quantity, props.item.product_handle);
+});
 </script>
 
 <template>
@@ -50,6 +79,8 @@ const remove = () => emit('remove', props.item.id);
           +
         </button>
       </div>
+
+      <p v-if="loyaltyPoints" class="text-sm mt-1">Zyskujesz: {{ loyaltyPoints }} pkt.</p>
 
       <!-- Usuń -->
       <button
