@@ -518,6 +518,7 @@ onMounted(() => {
           <v-tab :value="2" v-if="product?.metadata?.gpsr"
             >Informacje dot. bezpieczeństwa</v-tab
           >
+          <v-tab :value="3" v-if="product?.metadata?.inci">INCI</v-tab>
         </v-tabs>
 
         <hr />
@@ -533,6 +534,14 @@ onMounted(() => {
           </v-tabs-window-item>
           <v-tabs-window-item :value="2">
             <div v-html="product?.metadata?.gpsr" style="padding: 8px"></div>
+          </v-tabs-window-item>
+          <v-tabs-window-item :value="3">
+            <div style="padding: 8px">
+              <p>{{ product?.metadata?.inci }}</p>
+              <br>
+              <p><b>UWAGA!</b> Za skład produktu odpowiada producent i może on ulec zmianie. Zalecane jest sprawdzenie składu bezpośrednio na opakowaniu, przed użyciem produktu.</p>
+               <!-- <p><b>UWAGA!</b> Podany skład może ulec zmianie. Za skład produktu odpowiada producent. Aktualny skład znajduje się bezpośrednio na opakowaniu produktu.</p> -->
+            </div>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card>
