@@ -228,7 +228,7 @@ font-src * data: blob: 'unsafe-inline';
         "/konto",
         "/resetowanie-hasla",
         "/wyprzedaz",
-        // "/nowosci",
+        "/nowosci",
         "/blog",
         "/blog/manicure-dla-poczatkujacych-co-jest-niezbedne-na-start",
         "/blog/manicure-hybrydowy-krok-po-kroku",
