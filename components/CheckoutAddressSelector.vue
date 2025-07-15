@@ -39,9 +39,9 @@ const fetchAddresses = async () => {
 
     const defaultBilling = addresses.value.find((addresses) => addresses.is_default_billing === true);
 
-    if(defaultShipping.id !== defaultBilling.id) {
+    if(defaultShipping.id !== defaultBilling?.id) {
       emit('fill-form', {
-        id: defaultBilling.id,
+        id: defaultBilling?.id,
         firstName: defaultBilling.first_name,
         lastName: defaultBilling.last_name,
         phoneNumber: defaultBilling.phone,
