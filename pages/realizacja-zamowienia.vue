@@ -784,13 +784,13 @@ const fillAddressFromSaved = (address: any) => {
     companyStreet.value.value = address.companyStreet || undefined;
     companyhouseNumber.value.value = address.companyHouseNumber || undefined;
     companyPhoneNumber.value.value = address.companyPhoneNumber || undefined;
-    parcelLockerName.value = address.parcelLockerName || undefined;
-    parcelLockerCity.value = address.parcelLockerCity || undefined;
-    parcelLockerPostalCode.value = address.parcelLockerPostalCode || undefined;
+    parcelLockerName.value = address.parcelLockerName && address.parcelLockerName.length > 0 ? address.parcelLockerName : '';
+    parcelLockerCity.value = address.parcelLockerCity && address.parcelLockerCity.length > 0 ? address.parcelLockerCity : '';
+    parcelLockerPostalCode.value = address.parcelLockerPostalCode && address.parcelLockerPostalCode.length > 0 ? address.parcelLockerPostalCode : '';
     parcelLockerBuildingNumber.value =
-      address.parcelLockerBuildingNumber || undefined;
-    parcelLockerProvince.value = address.parcelLockerProvince || undefined;
-    parcelLockerStreet.value = address.parcelLockerStreet || undefined;
+      address.parcelLockerBuildingNumber && address.parcelLockerBuildingNumber.length > 0 ? address.parcelLockerBuildingNumber : '';
+    parcelLockerProvince.value = address.parcelLockerProvince && address.parcelLockerProvince.length > 0 ? address.parcelLockerProvince : '';
+    parcelLockerStreet.value = address.parcelLockerStreet && address.parcelLockerStreet.length > 0 ? address.parcelLockerStreet : '';
 
     updatePhoneNumber(address.phoneNumber);
     updatePostalCode(address.postalCode);
